@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+# Ignore Eclipse metadata
+.metadata/
+Backend/logsheetmngsys/.metadata/
