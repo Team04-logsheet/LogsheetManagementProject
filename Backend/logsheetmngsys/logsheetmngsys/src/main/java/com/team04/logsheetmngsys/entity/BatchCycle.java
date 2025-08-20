@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "batch_cycles")
 public class BatchCycle {
@@ -32,5 +31,12 @@ public class BatchCycle {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+    
+    public BatchCycle(String title, String description, LocalDate startDate, LocalDate endDate) {
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
 }
