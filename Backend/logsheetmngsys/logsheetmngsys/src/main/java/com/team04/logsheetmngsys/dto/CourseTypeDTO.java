@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-
-public class PremiseDTO {
+public class CourseTypeDTO {
 	private String title;
-	private String address;
 	private String description;
+	
 }
