@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BatchCycleDTO {
+public class BatchCycleRequestDTO {
  private String title;
  private String description;
 
