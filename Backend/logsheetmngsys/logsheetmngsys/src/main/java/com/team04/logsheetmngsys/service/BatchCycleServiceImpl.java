@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.team04.logsheetmngsys.dto.BatchCycleRequestDTO;
+import com.team04.logsheetmngsys.dto.BatchCycleDTO;
 import com.team04.logsheetmngsys.entity.BatchCycle;
 import com.team04.logsheetmngsys.repository.BatchCycleRepository;
 
@@ -26,7 +26,7 @@ public class BatchCycleServiceImpl implements BatchCycleService {
 	}
 
 	@Override
-	public BatchCycle createBatchCycle(BatchCycleRequestDTO batchCycleDTO) {
+	public BatchCycle createBatchCycle(BatchCycleDTO batchCycleDTO) {
 		BatchCycle batchCycle = modelMapper.map(batchCycleDTO, BatchCycle.class);
 		return batchCycleRepository.save(batchCycle);
 	}
@@ -42,7 +42,7 @@ public class BatchCycleServiceImpl implements BatchCycleService {
 	}
 
 	@Override
-	public BatchCycle updateBatchCycle(Long id, BatchCycleRequestDTO batchCycleDTO) {
+	public BatchCycle updateBatchCycle(Long id, BatchCycleDTO batchCycleDTO) {
 		BatchCycle existingBatchCycle = batchCycleRepository.findById(id).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "BatchCycle not found with ID: " + id));
 
