@@ -5,9 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CourseTypeDTO {
+@NoArgsConstructor
+public class PremiseDTO {
+	
     private String title;
+
+    private String address;
+
     private String description;
+
+
 }
