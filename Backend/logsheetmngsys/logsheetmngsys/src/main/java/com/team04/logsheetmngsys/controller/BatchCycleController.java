@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.team04.logsheetmngsys.dto.BatchCycleRequestDTO;
+import com.team04.logsheetmngsys.dto.BatchCycleDTO;
 import com.team04.logsheetmngsys.entity.BatchCycle;
 import com.team04.logsheetmngsys.service.BatchCycleService;
 
@@ -31,7 +31,7 @@ public class BatchCycleController {
 	}
 
 	@PostMapping
-	public ResponseEntity<BatchCycle> createBatchCycle(@RequestBody BatchCycleRequestDTO batchCycleDTO) {
+	public ResponseEntity<BatchCycle> createBatchCycle(@RequestBody BatchCycleDTO batchCycleDTO) {
 		BatchCycle createdBatchCycle = batchCycleService.createBatchCycle(batchCycleDTO);
 		return new ResponseEntity<>(createdBatchCycle, HttpStatus.CREATED);
 	}
@@ -51,14 +51,23 @@ public class BatchCycleController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<BatchCycle> updateBatchCycle(@PathVariable Long id,
-			@RequestBody BatchCycleRequestDTO batchCycleDTO) {
+			@RequestBody BatchCycleDTO batchCycleDTO) {
 		BatchCycle updatedBatchCycle = batchCycleService.updateBatchCycle(id, batchCycleDTO);
 		return new ResponseEntity<>(updatedBatchCycle, HttpStatus.OK);
 	}
-
+	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteBatchCycle(@PathVariable Long id) {
-		batchCycleService.deleteBatchCycle(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content indicates successful deletion with no body
-	}
+    public ResponseEntity<String> deleteBatchCycle(@PathVariable Long id) {
+        try {
+            batchCycleService.deleteBatchCycle(id);
+            return new ResponseEntity<>("BatchCycle deleted successfully.", HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
+        } catch (Exception e) {
+            return new ResponseEntity<>("An internal server error occurred during deletion.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

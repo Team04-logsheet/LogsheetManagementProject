@@ -24,21 +24,21 @@ import com.team04.logsheetmngsys.service.CourseTypeService;
 public class CourseTypeController {
 
 	private final CourseTypeService courseTypeService;
-	
+
 	@Autowired
 	public CourseTypeController(CourseTypeService courseTypeService) {
 		this.courseTypeService = courseTypeService;
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<CourseType>createCourseType(@RequestBody CourseTypeDTO courseTypeDTO){
-		CourseType createCourseType = courseTypeService.createCourseType(courseTypeDTO);
-		return new ResponseEntity<>(createCourseType, HttpStatus.CREATED);
+	public ResponseEntity<CourseType> createCourseType(@RequestBody CourseTypeDTO courseTypeDTO) {
+		CourseType createdCourseType = courseTypeService.createCourseType(courseTypeDTO);
+		return new ResponseEntity<>(createdCourseType, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<List<CourseType>>getAllCourseType(){
-		List<CourseType> courseTypes = courseTypeService.getAllCourseType();
+		List<CourseType> courseTypes = courseTypeService.getAllCourseTypes();
 		return new ResponseEntity<>(courseTypes,HttpStatus.OK);
 	}
 	
@@ -58,7 +58,14 @@ public class CourseTypeController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteCourseType(@PathVariable Long id) {
-		courseTypeService.deleteCourseType(id);
-		return new ResponseEntity<>("Course Type is deleted successfully " + id, HttpStatus.NO_CONTENT); 
+		try {
+			courseTypeService.deleteCourseType(id);
+			return new ResponseEntity<>("CourseType deleted successfully.", HttpStatus.OK);
+		} catch (ResponseStatusException e) {
+			return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>("An internal server error occurred during deletion.",
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }

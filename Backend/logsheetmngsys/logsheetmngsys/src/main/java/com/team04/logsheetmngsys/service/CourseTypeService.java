@@ -7,14 +7,14 @@ import com.team04.logsheetmngsys.dto.CourseTypeDTO;
 import com.team04.logsheetmngsys.entity.CourseType;
 
 public interface CourseTypeService {
-	
+
 	CourseType createCourseType(CourseTypeDTO courseTypeDTO);
-	
-	List<CourseType> getAllCourseType();
-	
+
+	List<CourseType> getAllCourseTypes();
+
 	Optional<CourseType> getCourseTypeById(Long id);
-	
+
 	CourseType updateCourseType(Long id, CourseTypeDTO courseTypeDTO);
-	
+
 	void deleteCourseType(Long id);
 }
