@@ -4,9 +4,6 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,27 +12,25 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Table(name = "batch_cycles")
-public class BatchCycle {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class BatchCycle extends BaseEntity {
 
-    private String title;
-    
-    @Column(length = 100)
-    private String description;
+	@Column(length = 100)
+	private String title;
 
-    @Column(name = "start_date")
-    private LocalDate startDate;
+	@Column(columnDefinition = "TEXT")
+	private String description;
 
-    @Column(name = "end_date")
-    private LocalDate endDate;
-    
-    public BatchCycle(String title, String description, LocalDate startDate, LocalDate endDate) {
-        this.title = title;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
+	@Column(name = "start_date")
+	private LocalDate startDate;
+
+	@Column(name = "end_date")
+	private LocalDate endDate;
+
+	public BatchCycle(String title, String description, LocalDate startDate, LocalDate endDate) {
+		this.title = title;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
 
 }

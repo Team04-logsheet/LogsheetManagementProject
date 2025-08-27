@@ -9,15 +9,12 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "course_types")
-public class CourseType extends BaseEntity {
+@AllArgsConstructor
+@Table(name = "subjects")
+public class Subject extends BaseEntity {
 
-	@Column(length = 100)
-	private String title;
-
-	@Column(columnDefinition = "TEXT")
-	private String description;
-
+	@Column(name = "subject_name", length = 100)
+	private String subjectName;
+	
 }

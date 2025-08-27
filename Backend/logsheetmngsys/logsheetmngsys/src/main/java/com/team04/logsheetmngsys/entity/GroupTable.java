@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "course_types")
-public class CourseType extends BaseEntity {
+@AllArgsConstructor
+@Table(name = "groups_table")
+public class GroupTable extends BaseEntity {
 
 	@Column(length = 100)
-	private String title;
+	private String name;
 
 	@Column(columnDefinition = "TEXT")
 	private String description;
