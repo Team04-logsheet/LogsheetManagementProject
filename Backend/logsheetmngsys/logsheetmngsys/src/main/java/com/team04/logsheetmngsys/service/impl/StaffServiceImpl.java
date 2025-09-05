@@ -5,17 +5,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.team04.logsheetmngsys.constant.ErrorCode;
 import com.team04.logsheetmngsys.dto.ChangePasswordDTO;
 import com.team04.logsheetmngsys.dto.StaffDTO;
 import com.team04.logsheetmngsys.dto.responseDto.StaffResponseDTO;
 import com.team04.logsheetmngsys.entity.Role;
 import com.team04.logsheetmngsys.entity.Staff;
+import com.team04.logsheetmngsys.exception.CustomException;
 import com.team04.logsheetmngsys.repository.RoleRepository;
 import com.team04.logsheetmngsys.repository.StaffRepository;
-import com.team04.logsheetmngsys.service.EmailService;
 import com.team04.logsheetmngsys.service.StaffService;
 
 import jakarta.transaction.Transactional;
@@ -68,7 +70,13 @@ public class StaffServiceImpl implements StaffService {
 		staff.setIsAccountLocked(dto.getIsAccountLocked());
 
 		if (dto.getRoleId() != null) {
-			roleRepository.findById(dto.getRoleId()).ifPresent(staff::setRole);
+		    Role role = roleRepository.findById(dto.getRoleId())
+		    			.orElseThrow(() -> new CustomException(
+		                    ErrorCode.ROLE_NOT_FOUND.getCode(),
+		                    ErrorCode.ROLE_NOT_FOUND.getMessage() + dto.getRoleId(),
+		                    HttpStatus.NOT_FOUND));
+
+		    staff.setRole(role);
 		}
 		return staff;
 	}
@@ -95,7 +103,11 @@ public class StaffServiceImpl implements StaffService {
 	        //Check if email already exists
 	        Optional<Staff> existingStaff = staffRepository.findByEmail(staffDTO.getEmail());
 	        if (existingStaff.isPresent()) {
-	            throw new RuntimeException("User with email " + staffDTO.getEmail() + " already exists.");
+	            throw new CustomException(
+                    ErrorCode.EMAIL_ALREADY_EXISTS.getCode(),
+                    ErrorCode.EMAIL_ALREADY_EXISTS.getMessage() + staffDTO.getEmail(),
+                    HttpStatus.BAD_REQUEST
+                );
 	        }
 
 	        Staff staff = convertToEntity(staffDTO);
@@ -118,8 +130,13 @@ public class StaffServiceImpl implements StaffService {
 	            );
 	        } catch (Exception e) {
 	            // Email failed → rollback DB insert
-	            throw new RuntimeException("Failed to send email. Transaction rolled back.", e);
-	        }
+	            throw new 
+	            CustomException(
+                    ErrorCode.EMAIL_SEND_FAILURE.getCode(),
+                    ErrorCode.EMAIL_SEND_FAILURE.getMessage() + staff.getEmail(),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                );
+	        }    
 
 	        return convertToResponseDTO(savedStaff);
 	    }
@@ -127,7 +144,11 @@ public class StaffServiceImpl implements StaffService {
 	 @Override
 	 public StaffResponseDTO patchUpdateStaff(Long id, StaffDTO staffDTO) {
 	     Staff existingStaff = staffRepository.findById(id)
-	             .orElseThrow(() -> new RuntimeException("Staff not found with id: " + id));
+	             .orElseThrow(() -> new CustomException(
+                         ErrorCode.STAFF_NOT_FOUND.getCode(),
+                         ErrorCode.STAFF_NOT_FOUND.getMessage() + id,
+                         HttpStatus.NOT_FOUND
+                 ));
 
 	     // Only update provided fields
 	     if (staffDTO.getFirstName() != null) {
@@ -166,32 +187,60 @@ public class StaffServiceImpl implements StaffService {
 	@Override
 	public StaffResponseDTO getStaffById(Long id) {
 		Staff staff = staffRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Staff not found with id " + id));
+				.orElseThrow(() -> new CustomException(
+                    ErrorCode.STAFF_NOT_FOUND.getCode(),
+                    ErrorCode.STAFF_NOT_FOUND.getMessage() + id,
+                    HttpStatus.NOT_FOUND
+            ));
+		
 		return convertToResponseDTO(staff);
 	}
 
 	@Override
 	public List<StaffResponseDTO> getAllStaffs() {
-		return staffRepository.findAll().stream().map(this::convertToResponseDTO).collect(Collectors.toList());
+		return staffRepository.findAll()
+					.stream()
+					.map(this::convertToResponseDTO)
+					.collect(Collectors.toList());
 	}
 
 	@Override
 	public void deleteStaff(Long id) {
+		if (!staffRepository.existsById(id)) {
+            throw new CustomException(
+                ErrorCode.STAFF_NOT_FOUND.getCode(),
+                ErrorCode.STAFF_NOT_FOUND.getMessage() + id,
+                HttpStatus.NOT_FOUND
+        );
+        
+		}
 		staffRepository.deleteById(id);
 	}
 
 	@Override
 	public void changePassword(Long staffId, ChangePasswordDTO changePasswordDTO) {
 		Staff staff = staffRepository.findById(staffId)
-				.orElseThrow(() -> new RuntimeException("Staff not found with id " + staffId));
+				.orElseThrow(() -> new CustomException(
+                    ErrorCode.STAFF_NOT_FOUND.getCode(),
+                    ErrorCode.STAFF_NOT_FOUND.getMessage() + staffId,
+                    HttpStatus.NOT_FOUND
+            ));
 
 		if (!changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmPassword())) {
-			throw new RuntimeException("New password and confirm password do not match");
+			throw new CustomException(
+                ErrorCode.PASSWORD_MISMATCH.getCode(),
+                ErrorCode.PASSWORD_MISMATCH.getMessage(),
+                HttpStatus.BAD_REQUEST
+			);
 		}
 
 		// verify old password
 		if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), staff.getPasswordHash())) {
-			throw new RuntimeException("Old password does not match");
+			throw new CustomException(
+                ErrorCode.INVALID_PASSWORD.getCode(),
+                ErrorCode.INVALID_PASSWORD.getMessage(),
+                HttpStatus.BAD_REQUEST
+            );
 		}
 
 		// set new password

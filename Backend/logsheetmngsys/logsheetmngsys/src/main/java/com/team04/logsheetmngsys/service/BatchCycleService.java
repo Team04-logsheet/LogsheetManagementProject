@@ -12,7 +12,7 @@ public interface BatchCycleService {
 
 	List<BatchCycle> getAllBatchCycles();
 
-	Optional<BatchCycle> getBatchCycleById(Long id);
+	BatchCycle getBatchCycleById(Long id);
 
 	BatchCycle updateBatchCycle(Long id, BatchCycleDTO batchCycleDTO);
 

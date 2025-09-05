@@ -1,4 +1,4 @@
-package com.team04.logsheetmngsys.service;
+package com.team04.logsheetmngsys.service.impl;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

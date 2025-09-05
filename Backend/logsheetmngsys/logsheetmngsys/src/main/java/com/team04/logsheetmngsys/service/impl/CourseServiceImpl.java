@@ -1,18 +1,20 @@
 package com.team04.logsheetmngsys.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.team04.logsheetmngsys.constant.ErrorCode;
 import com.team04.logsheetmngsys.dto.CourseDTO;
 import com.team04.logsheetmngsys.dto.responseDto.CourseResponseDTO;
 import com.team04.logsheetmngsys.entity.BatchCycle;
 import com.team04.logsheetmngsys.entity.Course;
 import com.team04.logsheetmngsys.entity.CourseType;
 import com.team04.logsheetmngsys.entity.Premise;
+import com.team04.logsheetmngsys.exception.CustomException;
 import com.team04.logsheetmngsys.repository.BatchCycleRepository;
 import com.team04.logsheetmngsys.repository.CourseRepository;
 import com.team04.logsheetmngsys.repository.CourseTypeRepository;
@@ -43,13 +45,22 @@ public class CourseServiceImpl implements CourseService {
 	public Course createCourse(CourseDTO courseDTO) {
 
 		BatchCycle batchCycle = batchCycleRepository.findById(courseDTO.getBatchCycleId()).orElseThrow(
-				() -> new IllegalArgumentException("Batch Cycle not found with ID: " + courseDTO.getBatchCycleId()));
+				() -> new CustomException(
+						ErrorCode.BATCH_CYCLE_NOT_FOUND.getCode(),
+						ErrorCode.BATCH_CYCLE_NOT_FOUND.getMessage()+courseDTO.getBatchCycleId(),
+						HttpStatus.BAD_REQUEST));
 
 		Premise premise = premiseRepository.findById(courseDTO.getPremiseId()).orElseThrow(
-				() -> new IllegalArgumentException("Premise not found with ID: " + courseDTO.getPremiseId()));
+				() -> new CustomException(
+                        ErrorCode.PREMISES_NOT_FOUND.getCode(),
+                        ErrorCode.PREMISES_NOT_FOUND.getMessage()+courseDTO.getPremiseId(),
+                        HttpStatus.BAD_REQUEST));
 
 		CourseType courseType = courseTypeRepository.findById(courseDTO.getCourseTypeId()).orElseThrow(
-				() -> new IllegalArgumentException("Course Type not found with ID: " + courseDTO.getCourseTypeId()));
+				() -> new CustomException(
+						ErrorCode.COURSE_TYPE_NOT_FOUND.getCode(),
+                        ErrorCode.COURSE_TYPE_NOT_FOUND.getMessage()+courseDTO.getCourseTypeId(),
+                        HttpStatus.BAD_REQUEST));
 
 		Course course = new Course();
 		course.setName(courseDTO.getName());
@@ -93,8 +104,16 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	@Transactional
-	public Optional<CourseResponseDTO> getCourseById(Long id) {
-		return courseRepository.findById(id).map(course -> this.convertToDTO(course));// .map(this::convertToDto);
+	public CourseResponseDTO getCourseById(Long id) {
+		return courseRepository.findById(id)
+				.map(course -> this.convertToDTO(course))
+				.orElseThrow(()-> 
+				new CustomException(
+                        ErrorCode.COURSE_NOT_FOUND.getCode(),
+                        ErrorCode.COURSE_NOT_FOUND.getMessage()+id,
+                        HttpStatus.NOT_FOUND)
+				);
+		// .map(this::convertToDto);
 		// Convert entity to DTO if found
 	}
 
@@ -109,7 +128,10 @@ public class CourseServiceImpl implements CourseService {
 	public CourseResponseDTO updateCourse(Long id, CourseDTO courseDTO) {
 
 		Course existingCourse = courseRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Course not found with ID: " + id));
+				.orElseThrow(() -> new CustomException(
+                        ErrorCode.COURSE_NOT_FOUND.getCode(),
+                        ErrorCode.COURSE_NOT_FOUND.getMessage()+id,
+                        HttpStatus.NOT_FOUND));
 
 		existingCourse.setName(courseDTO.getName());
 		existingCourse.setDescription(courseDTO.getDescription());
@@ -126,23 +148,30 @@ public class CourseServiceImpl implements CourseService {
 		if (courseDTO.getBatchCycleId() != null && (existingCourse.getBatchCycle() == null
 				|| !existingCourse.getBatchCycle().getId().equals(courseDTO.getBatchCycleId()))) {
 			BatchCycle batchCycle = batchCycleRepository.findById(courseDTO.getBatchCycleId())
-					.orElseThrow(() -> new IllegalArgumentException(
-							"Batch Cycle not found with ID: " + courseDTO.getBatchCycleId()));
+					.orElseThrow(() -> new CustomException(
+                            ErrorCode.BATCH_CYCLE_NOT_FOUND.getCode(),
+                            ErrorCode.BATCH_CYCLE_NOT_FOUND.getMessage()+courseDTO.getBatchCycleId(),
+                            HttpStatus.BAD_REQUEST));
 			existingCourse.setBatchCycle(batchCycle);
 		}
 
 		if (courseDTO.getPremiseId() != null && (existingCourse.getPremise() == null
 				|| !existingCourse.getPremise().getId().equals(courseDTO.getPremiseId()))) {
 			Premise premise = premiseRepository.findById(courseDTO.getPremiseId()).orElseThrow(
-					() -> new IllegalArgumentException("Premise not found with ID: " + courseDTO.getPremiseId()));
+					() -> new CustomException(
+                            ErrorCode.PREMISES_NOT_FOUND.getCode(),
+                            ErrorCode.PREMISES_NOT_FOUND.getMessage()+courseDTO.getPremiseId(),
+                            HttpStatus.BAD_REQUEST));
 			existingCourse.setPremise(premise);
 		}
 
 		if (courseDTO.getCourseTypeId() != null && (existingCourse.getCourseType() == null
 				|| !existingCourse.getCourseType().getId().equals(courseDTO.getCourseTypeId()))) {
 			CourseType courseType = courseTypeRepository.findById(courseDTO.getCourseTypeId())
-					.orElseThrow(() -> new IllegalArgumentException(
-							"Course Type not found with ID: " + courseDTO.getCourseTypeId()));
+					.orElseThrow(() -> new CustomException(
+                            ErrorCode.COURSE_TYPE_NOT_FOUND.getCode(),
+                            ErrorCode.COURSE_TYPE_NOT_FOUND.getMessage()+courseDTO.getCourseTypeId(),
+                            HttpStatus.BAD_REQUEST));
 			existingCourse.setCourseType(courseType);
 		}
 
@@ -154,7 +183,10 @@ public class CourseServiceImpl implements CourseService {
 	@Transactional
 	public void deleteCourse(Long id) {
 		if (!courseRepository.existsById(id)) {
-			throw new IllegalArgumentException("Course not found with ID: " + id);
+			throw new CustomException(
+                    ErrorCode.COURSE_NOT_FOUND.getCode(),
+                    ErrorCode.COURSE_NOT_FOUND.getMessage()+id,
+                    HttpStatus.NOT_FOUND);
 		}
 		courseRepository.deleteById(id);
 	}

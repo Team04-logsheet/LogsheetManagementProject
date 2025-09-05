@@ -35,23 +35,14 @@ public class CourseController {
 
 	@PostMapping
 	public ResponseEntity<Course> createCourse(@Valid @RequestBody CourseDTO courseDTO) {
-		try {
 			Course createdCourse = courseService.createCourse(courseDTO);
 			return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
-		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 	}
 
 	@GetMapping("/{id}")
     public ResponseEntity<CourseResponseDTO> getCourseById(@PathVariable Long id) {
-        Optional<CourseResponseDTO> courseDTO = courseService.getCourseById(id);
-        return courseDTO.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        // course.map(...) executes only if the Optional contains a Course object, while
-        // orElseGet(...) executes if it's empty
+        CourseResponseDTO courseDTO = courseService.getCourseById(id);
+        return new ResponseEntity<>(courseDTO, HttpStatus.OK);
     }
 
 	@GetMapping
@@ -62,30 +53,16 @@ public class CourseController {
 
 	@PutMapping("/{id}")
     public ResponseEntity<CourseResponseDTO> updateCourse(@PathVariable Long id, @Valid @RequestBody CourseDTO courseDTO) {
-        try {
+
             CourseResponseDTO updatedCourseDTO = courseService.updateCourse(id, courseDTO);
             return new ResponseEntity<>(updatedCourseDTO, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            if (e.getMessage().contains("Course not found")) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable Long id) {
-        try {
+
             courseService.deleteCourse(id);
             return new ResponseEntity<>("Course deleted successfully.", HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("Course not found with ID: " + id, HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>("An internal server error occurred during deletion.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
 }

@@ -44,8 +44,7 @@ public class CourseTypeController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<CourseType> getCourseTypeById(@PathVariable Long id){
-		CourseType courseType = courseTypeService.getCourseTypeById(id).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course Type not found with ID: " + id));
+		CourseType courseType = courseTypeService.getCourseTypeById(id);
 		return new ResponseEntity<>(courseType, HttpStatus.OK);
 	}
 	
@@ -58,14 +57,7 @@ public class CourseTypeController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteCourseType(@PathVariable Long id) {
-		try {
 			courseTypeService.deleteCourseType(id);
 			return new ResponseEntity<>("CourseType deleted successfully.", HttpStatus.OK);
-		} catch (ResponseStatusException e) {
-			return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			return new ResponseEntity<>("An internal server error occurred during deletion.",
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 	}
 }

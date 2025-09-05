@@ -9,8 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.team04.logsheetmngsys.constant.ErrorCode;
 import com.team04.logsheetmngsys.dto.CourseTypeDTO;
 import com.team04.logsheetmngsys.entity.CourseType;
+import com.team04.logsheetmngsys.exception.CustomException;
 import com.team04.logsheetmngsys.repository.CourseTypeRepository;
 import com.team04.logsheetmngsys.service.CourseTypeService;
 
@@ -38,14 +40,21 @@ public class CourseTypeServiceImpl implements CourseTypeService {
 	}
 
 	@Override
-	public Optional<CourseType> getCourseTypeById(Long id) {
-		return courseTypeRepository.findById(id);
+	public CourseType getCourseTypeById(Long id) {
+		return courseTypeRepository.findById(id).orElseThrow(
+                () -> new CustomException(
+                		ErrorCode.COURSE_TYPE_NOT_FOUND.getCode(),
+                		ErrorCode.COURSE_TYPE_NOT_FOUND.getMessage()+id,
+                		HttpStatus.NOT_FOUND));
 	}
 
 	@Override
 	public CourseType updateCourseType(Long id, CourseTypeDTO courseTypeDTO) {
 		CourseType existingCourseType = courseTypeRepository.findById(id).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CourseType not found with ID: " + id));
+				() -> new CustomException(
+                        ErrorCode.COURSE_TYPE_NOT_FOUND.getCode(),
+                        ErrorCode.COURSE_TYPE_NOT_FOUND.getMessage() + id,
+                        HttpStatus.NOT_FOUND));
 		modelMapper.map(courseTypeDTO, existingCourseType);
 		return courseTypeRepository.save(existingCourseType);
 	}
@@ -53,7 +62,10 @@ public class CourseTypeServiceImpl implements CourseTypeService {
 	@Override
 	public void deleteCourseType(Long id) {
 		if (!courseTypeRepository.existsById(id)) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "CourseType not found with ID: " + id);
+			throw new CustomException(
+                    ErrorCode.COURSE_TYPE_NOT_FOUND.getCode(),
+                    ErrorCode.COURSE_TYPE_NOT_FOUND.getMessage() + id,
+                    HttpStatus.NOT_FOUND);
 		}
 		courseTypeRepository.deleteById(id);
 	}
