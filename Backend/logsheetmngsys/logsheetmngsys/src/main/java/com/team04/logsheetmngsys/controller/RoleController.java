@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.team04.logsheetmngsys.dto.RoleDTO;
 import com.team04.logsheetmngsys.entity.Role;
@@ -56,14 +55,7 @@ public class RoleController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteRole(@PathVariable Long id) {
-		try {
-			roleService.deleteRole(id);
-			return new ResponseEntity<>("Role deleted successfully", HttpStatus.OK);
-		} catch (ResponseStatusException e) {
-			return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			return new ResponseEntity<>("An internal server error occurred during deletion.",
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		roleService.deleteRole(id);
+		return new ResponseEntity<>("Role deleted successfully", HttpStatus.OK);
 	}
 }

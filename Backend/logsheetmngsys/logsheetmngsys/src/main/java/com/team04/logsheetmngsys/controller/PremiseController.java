@@ -56,14 +56,7 @@ public class PremiseController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deletePremise(@PathVariable Long id) {
-		try {
-			premiseService.deletePremise(id);
-			return new ResponseEntity<>("Premise deleted successfully", HttpStatus.OK);
-		} catch (ResponseStatusException e) {
-			return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			return new ResponseEntity<>("An internal server error occurred during deletion.",
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		premiseService.deletePremise(id);
+		return new ResponseEntity<>("Premise deleted successfully", HttpStatus.OK);
 	}
 }

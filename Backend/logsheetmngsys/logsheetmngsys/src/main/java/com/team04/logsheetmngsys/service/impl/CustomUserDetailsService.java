@@ -1,4 +1,4 @@
-package com.team04.logsheetmngsys.service;
+package com.team04.logsheetmngsys.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;

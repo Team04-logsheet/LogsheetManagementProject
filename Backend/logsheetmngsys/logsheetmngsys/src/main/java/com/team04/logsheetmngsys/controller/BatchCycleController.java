@@ -44,8 +44,7 @@ public class BatchCycleController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<BatchCycle> getBatchCycleById(@PathVariable Long id) {
-		BatchCycle batchCycle = batchCycleService.getBatchCycleById(id).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "BatchCycle not found with ID: " + id));
+		BatchCycle batchCycle = batchCycleService.getBatchCycleById(id);
 		return new ResponseEntity<>(batchCycle, HttpStatus.OK);
 	}
 
@@ -57,17 +56,8 @@ public class BatchCycleController {
 	}
 	
 	@DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBatchCycle(@PathVariable Long id) {
-        try {
-            batchCycleService.deleteBatchCycle(id);
-            return new ResponseEntity<>("BatchCycle deleted successfully.", HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-        } catch (Exception e) {
-            return new ResponseEntity<>("An internal server error occurred during deletion.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+	public ResponseEntity<String> deleteBatchCycle(@PathVariable Long id) {
+	    batchCycleService.deleteBatchCycle(id);
+	    return new ResponseEntity<>("BatchCycle deleted successfully.", HttpStatus.OK);
+	}
 }

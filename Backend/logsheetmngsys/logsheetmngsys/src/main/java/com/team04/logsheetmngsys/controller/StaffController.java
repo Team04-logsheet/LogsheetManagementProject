@@ -3,6 +3,8 @@ package com.team04.logsheetmngsys.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,32 +28,38 @@ public class StaffController {
 	private StaffService staffService;
 
 	@PostMapping
-	public StaffResponseDTO createStaff(@RequestBody StaffDTO staffDTO) {
-		return staffService.createStaff(staffDTO);
+	public ResponseEntity<StaffResponseDTO> createStaff(@RequestBody StaffDTO staffDTO) {
+	    StaffResponseDTO response = staffService.createStaff(staffDTO);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
-
-	@PatchMapping("/{id}")
-	public StaffResponseDTO patchUpdateStaff(@PathVariable Long id, @RequestBody StaffDTO staffDTO) {
-	    return staffService.patchUpdateStaff(id, staffDTO);
+	
+	@GetMapping
+	public ResponseEntity<List<StaffResponseDTO>> getAllStaffs() {
+	    List<StaffResponseDTO> response = staffService.getAllStaffs();
+	    return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{id}")
-	public StaffResponseDTO getStaffById(@PathVariable Long id) {
-		return staffService.getStaffById(id);
+	public ResponseEntity<StaffResponseDTO> getStaffById(@PathVariable Long id) {
+	    StaffResponseDTO response = staffService.getStaffById(id);
+	    return ResponseEntity.ok(response);
 	}
-
-	@GetMapping
-	public List<StaffResponseDTO> getAllStaffs() {
-		return staffService.getAllStaffs();
+	
+	@PatchMapping("/{id}")
+	public ResponseEntity<StaffResponseDTO> patchUpdateStaff(@PathVariable Long id, @RequestBody StaffDTO staffDTO) {
+	    StaffResponseDTO response = staffService.patchUpdateStaff(id, staffDTO);
+	    return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteStaff(@PathVariable Long id) {
-		staffService.deleteStaff(id);
+	public ResponseEntity<String> deleteStaff(@PathVariable Long id) {
+	    staffService.deleteStaff(id);
+	    return ResponseEntity.ok("Staff deleted successfully with ID: " + id);
 	}
-	
+
 	@PutMapping("/{id}/change-password")
-	public void changePassword(@PathVariable Long id, @RequestBody ChangePasswordDTO dto) {
+	public ResponseEntity<String> changePassword(@PathVariable Long id, @RequestBody ChangePasswordDTO dto) {
 	    staffService.changePassword(id, dto);
+	    return ResponseEntity.ok("Password changed successfully for Staff ID: " + id);
 	}
 }

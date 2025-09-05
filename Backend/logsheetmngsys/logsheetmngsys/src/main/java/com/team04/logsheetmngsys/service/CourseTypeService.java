@@ -12,7 +12,7 @@ public interface CourseTypeService {
 
 	List<CourseType> getAllCourseTypes();
 
-	Optional<CourseType> getCourseTypeById(Long id);
+	CourseType getCourseTypeById(Long id);
 
 	CourseType updateCourseType(Long id, CourseTypeDTO courseTypeDTO);
 

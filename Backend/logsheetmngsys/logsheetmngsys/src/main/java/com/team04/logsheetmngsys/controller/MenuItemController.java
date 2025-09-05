@@ -56,14 +56,7 @@ public class MenuItemController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteMenuItem(@PathVariable Long id) {
-		try {
-			menuItemService.deleteMenuItem(id);
-			return new ResponseEntity<>("MenuItem deleted successfully", HttpStatus.OK);
-		} catch (ResponseStatusException e) {
-			return new ResponseEntity<>(e.getReason(), HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			return new ResponseEntity<>("An internal server error occurred during deletion.",
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		menuItemService.deleteMenuItem(id);
+		return new ResponseEntity<>("MenuItem deleted successfully", HttpStatus.OK);
 	}
 }
