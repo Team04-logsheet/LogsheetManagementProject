@@ -13,6 +13,7 @@ public enum ErrorCode {
 	PREMISES_NOT_FOUND(1301,"premises not found with ID :"),
 	COURSE_TYPE_NOT_FOUND(1401,"course type not found with ID :"),
 	COURSE_COORDINATOR_NOT_FOUND(1501,"course coordinator not found with ID :"),
+	INVALID_GROUP_IDS(1601,"course group not found with ID :"),
 	
     //Course_Module related Errors
 	SUBJECT_NOT_FOUND(2101,"Subject not found with ID :"),
@@ -32,6 +33,7 @@ public enum ErrorCode {
 	//Group related Errors
 	GROUP_NOT_FOUND(4101,"Group not found with ID :"),
 	COURSE_GROUP_NOT_FOUND(4201,"Course group not found with ID :"),
+	COURSE_GROUP_ALREADY_ASSIGNED(4202,"Course group already assigned for Course ID :"),
 	
 	
 	//Logsheet related Errors
@@ -46,6 +48,9 @@ public enum ErrorCode {
 	INVALID_TOKEN(6202,"Invalid token"),
 	UNAUTHORIZED_ACCESS(6301,"Unauthorized access to this resource"),
 	
+	//Fields Validation related Errors
+	ID_SHOULD_BE_NULL(7101, "ID must not be provided when creating a new resource"),
+
 	
 	//Database related Errors
 	EMAIL_SEND_FAILURE(9101,"Failed to send email to : ");

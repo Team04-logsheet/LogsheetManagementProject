@@ -1,14 +1,18 @@
 package com.team04.logsheetmngsys.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class CourseGroupDTO {
-    private Long id;
+
     private Long courseId;
-    private Long groupId;
+
+    private List<Long> groupIds;
+
 }
