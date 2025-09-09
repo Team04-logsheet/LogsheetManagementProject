@@ -7,7 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.team04.logsheetmngsys.service.CustomUserDetailsService;
+import com.team04.logsheetmngsys.service.impl.CustomUserDetailsService;
 
 @Configuration
 public class SecurityConfig {

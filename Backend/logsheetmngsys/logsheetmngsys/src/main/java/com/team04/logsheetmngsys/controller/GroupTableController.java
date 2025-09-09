@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/groups")
+@RequestMapping("/api/groups")
 public class GroupTableController {
 
     private final GroupTableService service;
@@ -17,29 +17,29 @@ public class GroupTableController {
         this.service = service;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<GroupTableDTO> createGroup(@RequestBody GroupTableDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createGroup(dto));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<GroupTableDTO> updateGroup(@PathVariable Long id, @RequestBody GroupTableDTO dto) {
         return ResponseEntity.ok(service.updateGroup(id, dto));
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<GroupTableDTO> getGroup(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<GroupTableDTO> getGroupById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getGroupById(id));
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<GroupTableDTO>> getAllGroups() {
         return ResponseEntity.ok(service.getAllGroups());
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteGroup(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteGroup(@PathVariable Long id) {
         service.deleteGroup(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>("Group deleted successfully.", HttpStatus.OK);
     }
 }

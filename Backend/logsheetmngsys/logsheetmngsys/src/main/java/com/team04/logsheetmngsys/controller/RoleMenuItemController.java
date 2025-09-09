@@ -44,13 +44,13 @@ public class RoleMenuItemController {
 		return new ResponseEntity<>(roleMenuItemService.getMenuItemsByRoleId(roleId), HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{roleId}/menu-items")
+	@DeleteMapping("/role/{roleId}/menu-items")
 	public ResponseEntity<String> deleteMenuItemsByRole(@PathVariable Long roleId) {
 	    roleMenuItemService.deleteMenuItemsByRoleId(roleId);
 	    return ResponseEntity.ok("All menu items removed for role ID: " + roleId);
 	}
 	
-	@DeleteMapping("/{roleId}/menu-items/{menuItemId}")
+	@DeleteMapping("/role/{roleId}/menu-items/{menuItemId}")
 	public ResponseEntity<String> deleteMenuItemForRole(
 	        @PathVariable Long roleId,
 	        @PathVariable Long menuItemId) {
