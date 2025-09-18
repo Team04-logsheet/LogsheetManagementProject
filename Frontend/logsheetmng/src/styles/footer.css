@@ -1,0 +1,47 @@
+:root{
+  --footer-bg: linear-gradient(180deg, #0f172a 0%, #111827 60%, #0b1220 100%);
+  --footer-text: #e2e8f0;
+  --footer-link: #cbd5e1;
+  --footer-link-hover: #3b82f6;
+  --page-max: 1200px;  /* match adminHome.css */
+  --page-gutter: 20px; /* match adminHome.css */
+}
+
+.site-footer{
+  width: 100vw;
+  margin: 0;
+  left: 0;
+  right: 0;
+  position: relative;
+  background: var(--footer-bg);
+  color: var(--footer-text);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ✅ center inner content to same width as main page */
+.site-footer-inner{
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding-left: var(--page-gutter);
+  padding-right: var(--page-gutter);
+}
+
+.site-footer a{
+  color: var(--footer-link);
+  text-decoration: none;
+  transition: color .3s ease;
+}
+.site-footer a:hover{
+  color: var(--footer-link-hover);
+  text-decoration: underline;
+}
+
+.site-footer .bi{
+  font-size: 1.3rem;
+  color: var(--footer-link);
+  transition: transform .3s ease, color .3s ease;
+}
+.site-footer .bi:hover{
+  transform: scale(1.1);
+  color: var(--footer-link-hover);
+}

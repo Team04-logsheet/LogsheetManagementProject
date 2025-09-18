@@ -1,0 +1,192 @@
+:root {
+  --navbar-h: 64px; /* height of AdminNavbar */
+  --sidebar-w: 260px; /* sidebar width */
+
+  --sb-bg: linear-gradient(180deg, #0f172a 0%, #111827 60%, #0b1220 100%);
+  --sb-card: rgba(255, 255, 255, 0.04);
+  --sb-hover: rgba(255, 255, 255, 0.08);
+  --sb-accent: #2563eb;   /* active */
+  --sb-accent-2: #3b82f6; /* hover */
+  --sb-text: #cbd5e1;
+  --sb-text-strong: #f1f5f9;
+  --sb-border: rgba(255, 255, 255, 0.08);
+  --sb-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--navbar-h));
+  background: var(--sb-bg);
+  color: var(--sb-text);
+  padding: 16px 12px;
+  position: fixed;
+  top: var(--navbar-h); /* ✅ start below navbar */
+  left: 0;
+  box-shadow: var(--sb-shadow);
+  backdrop-filter: blur(6px);
+  transition: width 0.25s ease;
+  overflow-y: auto; /* ✅ scroll if content overflows */
+}
+
+.admin-sidebar.mini {
+  width: 84px;
+}
+
+/* Header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.sidebar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--sb-text-strong);
+  margin: 0;
+}
+
+.mini-toggle {
+  border: 1px solid var(--sb-border);
+  background: var(--sb-card);
+  color: var(--sb-text);
+  border-radius: 10px;
+  width: 36px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s ease;
+}
+.mini-toggle:hover { background: var(--sb-hover); }
+
+/* Search */
+.sidebar-search { margin-bottom: 12px; }
+.sidebar-search.hidden { display: none; }
+.sidebar-search .form-control {
+  background: var(--sb-card);
+  color: var(--sb-text);
+  border: 1px solid var(--sb-border);
+  border-radius: 10px;
+}
+.sidebar-search .form-control:focus {
+  box-shadow: none;
+  border-color: var(--sb-accent-2);
+}
+
+/* Accordion / sections */
+.sidebar-accordion .accordion-item {
+  background: transparent;
+  border: none;
+  margin-bottom: 6px;
+}
+.sidebar-accordion .accordion-button {
+  background: var(--sb-card);
+  color: var(--sb-text);
+  padding: 12px 12px;
+  border-radius: 12px;
+  box-shadow: none;
+  border: 1px solid var(--sb-border);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.sidebar-accordion .accordion-button:hover {
+  background: var(--sb-hover);
+}
+.sidebar-accordion .accordion-button:not(.collapsed) {
+  background: var(--sb-accent);
+  color: white;
+  border-color: var(--sb-accent);
+}
+.sidebar-accordion .accordion-button:focus { box-shadow: none; }
+.label-compact { font-weight: 600; }
+
+/* Submenu */
+.submenu {
+  padding: 6px 0 10px 6px;
+  border-left: 2px solid var(--sb-border);
+  margin-left: 6px;
+}
+.submenu .nav-link {
+  color: var(--sb-text);
+  padding: 10px 12px;
+  margin: 6px 6px;
+  border-radius: 10px;
+  background: transparent;
+  transition: transform 0.06s ease, background 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.submenu .nav-link:hover {
+  background: var(--sb-hover);
+  color: white;
+  transform: translateX(2px);
+}
+.submenu .nav-link.active {
+  background: var(--sb-accent);
+  color: white;
+}
+.submenu-empty {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  padding: 8px 14px 12px;
+}
+.leaf-badge {
+  background: rgba(255,255,255,0.2) !important;
+  color: #fff !important;
+}
+
+/* Top-level links */
+.nav-top {
+  color: var(--sb-text);
+  padding: 12px 12px;
+  margin: 6px 0;
+  border-radius: 12px;
+  background: var(--sb-card);
+  border: 1px solid var(--sb-border);
+  transition: background 0.2s ease, transform 0.06s ease, color 0.2s ease;
+}
+.nav-top:hover {
+  background: var(--sb-hover);
+  color: white;
+  transform: translateX(2px);
+}
+.nav-top.active {
+  background: var(--sb-accent);
+  color: white;
+  border-color: var(--sb-accent);
+}
+
+/* Footer */
+.sidebar-footer {
+  position: absolute;
+  bottom: 14px; left: 12px; right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  border-top: 1px dashed var(--sb-border);
+  padding-top: 10px;
+}
+.sidebar-footer.mini {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.help-link {
+  border: 1px solid var(--sb-border);
+  background: var(--sb-card);
+  color: var(--sb-text);
+  border-radius: 10px;
+  padding: 6px 10px;
+  transition: all 0.2s ease;
+}
+.help-link:hover {
+  background: var(--sb-hover);
+  color: white;
+}
+.version-badge {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
