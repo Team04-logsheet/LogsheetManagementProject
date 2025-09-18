@@ -1,0 +1,14 @@
+/* header.css */
+.header {
+  height: 64px;
+  border-bottom: 1px solid #e9ecef;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(16, 24, 40, 0.03);
+}
+
+.header-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+}
