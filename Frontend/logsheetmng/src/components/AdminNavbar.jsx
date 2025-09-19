@@ -9,7 +9,12 @@ export default function AdminNavbar() {
   };
 
   return (
-    <Navbar bg="light" expand="lg" fixed="top" className="shadow-sm admin-navbar">
+    <Navbar
+      bg="light"
+      expand="lg"
+      fixed="top"
+      className="shadow-sm admin-navbar"
+    >
       <Container /* fluid if you want full width: fluid */>
         <Navbar.Brand href="/admin" className="d-flex align-items-center">
           <img src={logo} alt="Logo" width="40" height="40" className="me-2" />
@@ -24,5 +29,3 @@ export default function AdminNavbar() {
     </Navbar>
   );
 }
-
-

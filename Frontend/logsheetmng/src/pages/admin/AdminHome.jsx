@@ -1,7 +1,5 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminNavbar from "../../components/AdminNavbar";
-import AdminSidebar from "../../components/AdminSidebar";
 import { Row, Col, Card } from "react-bootstrap";
 import { Pie, Bar } from "react-chartjs-2";
 import {
@@ -19,11 +17,18 @@ import {
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../styles/adminHome.css";
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+);
 
 export default function AdminHome() {
   const navigate = useNavigate();
-  const handleSelect = (key) => navigate(`/admin/${key}`);
 
   // dummy counts
   const activeCourses = 12;
@@ -41,7 +46,7 @@ export default function AdminHome() {
         v: activeCourses + pastCourses,
         sub: `${activeCourses} Active · ${pastCourses} Past`,
         goto: "courses/courses",
-        icon: "bi bi-journal-bookmark",   // 📘
+        icon: "bi bi-journal-bookmark", // 📘
         accent: "kpi-blue",
       },
       {
@@ -50,7 +55,7 @@ export default function AdminHome() {
         v: totalStaff,
         sub: "Instructors & Admin",
         goto: "users",
-        icon: "bi bi-person-gear",        // 🧑‍🏫
+        icon: "bi bi-person-gear", // 🧑‍🏫
         accent: "kpi-purple",
       },
       {
@@ -59,7 +64,7 @@ export default function AdminHome() {
         v: totalUsers,
         sub: "Learners & Guests",
         goto: "users",
-        icon: "bi bi-people",             // 👥
+        icon: "bi bi-people", // 👥
         accent: "kpi-teal",
       },
       {
@@ -68,7 +73,7 @@ export default function AdminHome() {
         v: totalReports,
         sub: "Generated this month",
         goto: "reports",
-        icon: "bi bi-clipboard-data",     // 📊
+        icon: "bi bi-clipboard-data", // 📊
         accent: "kpi-amber",
       },
     ],
@@ -114,73 +119,66 @@ export default function AdminHome() {
     },
     scales: {
       x: { grid: { display: false } },
-      y: { beginAtZero: true, grid: { color: "rgba(0,0,0,0.06)" }, ticks: { stepSize: 5 } },
+      y: {
+        beginAtZero: true,
+        grid: { color: "rgba(0,0,0,0.06)" },
+        ticks: { stepSize: 5 },
+      },
     },
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100">
-      <AdminNavbar />
-
-      <div className="d-flex flex-grow-1">
-        <AdminSidebar onSelect={handleSelect} openKey="courses" />
-
-        <div className="admin-content w-100">
-          <div className="admin-inner">
-            {/* header */}
-            <div className="content-header">
-              <div>
-                <h3 className="mb-1">Welcome back 👋</h3>
-                <div className="text-muted small">
-                  Here’s what’s happening across your courses today.
-                </div>
-              </div>
-            </div>
-
-            {/* KPI tiles with icons */}
-            <Row className="g-3 mb-2 kpi-row">
-              {metrics.map((m) => (
-                <Col key={m.k} xs={12} sm={6} lg={3}>
-                  <Card
-                    className={`kpi-card shadow-sm ${m.accent}`}
-                    role="button"
-                    onClick={() => handleSelect(m.goto)}
-                  >
-                    <Card.Body className="py-3">
-                      <div className="kpi-top">
-                        <div className="kpi-icon">
-                          <i className={m.icon} />
-                        </div>
-                        <div className="kpi-value">{m.v}</div>
-                      </div>
-                      <div className="kpi-title">{m.title}</div>
-                      <div className="kpi-sub">{m.sub}</div>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-
-            {/* Charts */}
-            <Row className="g-3 charts-row">
-              <Col xs={12} lg={6}>
-                <Card className="shadow-sm h-100">
-                  <Card.Body className="chart-wrap">
-                    <Pie data={pieData} options={pieOptions} />
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col xs={12} lg={6}>
-                <Card className="shadow-sm h-100">
-                  <Card.Body className="chart-wrap">
-                    <Bar data={barData} options={barOptions} />
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
+    <>
+      <div className="content-header">
+        <div>
+          <h3 className="mb-1">Welcome back 👋</h3>
+          <div className="text-muted small">
+            Here’s what’s happening across your courses today.
           </div>
         </div>
       </div>
-    </div>
+
+      {/* KPI tiles with icons */}
+      <Row className="g-3 mb-2 kpi-row">
+        {metrics.map((m) => (
+          <Col key={m.k} xs={12} sm={6} lg={3}>
+            <Card
+              className={`kpi-card shadow-sm ${m.accent}`}
+              role="button"
+              onClick={() => handleSelect(m.goto)}
+            >
+              <Card.Body className="py-3">
+                <div className="kpi-top">
+                  <div className="kpi-icon">
+                    <i className={m.icon} />
+                  </div>
+                  <div className="kpi-value">{m.v}</div>
+                </div>
+                <div className="kpi-title">{m.title}</div>
+                <div className="kpi-sub">{m.sub}</div>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+
+      {/* Charts */}
+      <Row className="g-3 charts-row">
+        <Col xs={12} lg={6}>
+          <Card className="shadow-sm h-100">
+            <Card.Body className="chart-wrap">
+              <Pie data={pieData} options={pieOptions} />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col xs={12} lg={6}>
+          <Card className="shadow-sm h-100">
+            <Card.Body className="chart-wrap">
+              <Bar data={barData} options={barOptions} />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </>
   );
 }
