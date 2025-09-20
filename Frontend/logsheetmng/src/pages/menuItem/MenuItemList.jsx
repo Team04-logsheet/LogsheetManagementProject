@@ -1,65 +1,66 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Table } from "react-bootstrap";
-import "../../styles/batchCycle.css";
-const BatchCycleList = () => {
-  const [batchCycles, setBatchCycles] = useState([]);
+import "../../styles/menuItem.css";
+
+const MenuItemList = () => {
+  const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch menu items from the backend
     axios
-      .get("http://localhost:8080/api/batch-cycles")
+      .get("http://localhost:8080/api/menu-items")
       .then((response) => {
-        setBatchCycles(response.data);
+        setMenuItems(response.data);
         setLoading(false);
       })
       .catch((err) => {
-        setError("Failed to fetch batch cycles");
+        setError("Failed to fetch menu items.");
         setLoading(false);
+        console.error("Error fetching menu items:", err);
       });
   }, []);
 
   const handleEdit = (id) => {
-    console.log("Edit batch cycle with id:", id);
-    navigate(`/courses/batch-cycle/edit/${id}`);
+    // You'll need to create an EditMenuItem component and a corresponding route
+    navigate(`/users/menu-item/edit/${id}`);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this batch cycle?")) {
+    if (window.confirm("Are you sure you want to delete this menu item?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/batch-cycles/${id}`);
-        alert("Batch cycle deleted successfully!");
-        // Refresh list after deletion
-        setBatchCycles(batchCycles.filter((cycle) => cycle.id !== id));
+        await axios.delete(`http://localhost:8080/api/menu-items/${id}`);
+        alert("Menu item deleted successfully!");
+        setMenuItems(menuItems.filter((item) => item.id !== id));
       } catch (error) {
-        console.error("Error deleting batch cycle:", error);
-        alert("Failed to delete batch cycle");
-        navigate("/courses/batch-cycle");
+        console.error("Error deleting menu item:", error);
+        alert("Failed to delete menu item.");
       }
     }
   };
 
-  if (loading) return <p>Loading batch cycles...</p>;
+  if (loading) return <p>Loading menu items...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div className="batch-cycle-list-container">
+    <div className="menu-item-list-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Batch Cycles</h2>
+        <h2>Menu Items</h2>
         <Button
           variant="primary"
-          onClick={() => navigate("/courses/batch-cycle/add")}
+          onClick={() => navigate("/users/menu-item/add")}
         >
           + Add New
         </Button>
       </div>
 
-      {batchCycles.length === 0 ? (
-        <p>No batch cycles available.</p>
+      {menuItems.length === 0 ? (
+        <p>No menu items available.</p>
       ) : (
         <Table striped bordered hover responsive>
           <thead>
@@ -67,24 +68,22 @@ const BatchCycleList = () => {
               <th>Sr. No.</th>
               <th>Title</th>
               <th>Description</th>
-              <th>Start Date</th>
-              <th>End Date</th>
+              <th>Path</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {batchCycles.map((cycle, index) => (
-              <tr key={cycle.id}>
+            {menuItems.map((item, index) => (
+              <tr key={item.id}>
                 <td>{index + 1}</td>
-                <td>{cycle.title}</td>
-                <td>{cycle.description}</td>
-                <td>{cycle.startDate}</td>
-                <td>{cycle.endDate}</td>
+                <td>{item.title}</td>
+                <td>{item.description}</td>
+                <td>{item.path}</td>
                 <td>
                   <Button
                     variant="warning"
                     size="sm"
-                    onClick={() => handleEdit(cycle.id)}
+                    onClick={() => handleEdit(item.id)}
                     className="me-2"
                   >
                     Edit
@@ -92,7 +91,7 @@ const BatchCycleList = () => {
                   <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => handleDelete(cycle.id)}
+                    onClick={() => handleDelete(item.id)}
                   >
                     Delete
                   </Button>
@@ -106,4 +105,4 @@ const BatchCycleList = () => {
   );
 };
 
-export default BatchCycleList;
+export default MenuItemList;
