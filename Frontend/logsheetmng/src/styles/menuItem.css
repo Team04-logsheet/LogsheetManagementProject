@@ -1,0 +1,56 @@
+/* Container for the entire page content */
+.menu-item-list-container {
+  padding: 2rem;
+  background-color: #f8f9fa; /* Light gray background */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading for the page */
+.menu-item-list-container h2 {
+  color: #343a40;
+  margin-bottom: 1.5rem;
+}
+
+/* Styling for the table */
+.table {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* Table header cells */
+.table thead th {
+  background-color: #e9ecef; /* Lighter gray for header */
+  color: #495057;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+}
+
+/* Table body rows */
+.table tbody tr {
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Hover effect on table rows */
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Styles for table cells to ensure consistency */
+.table td,
+.table th {
+  vertical-align: middle;
+  padding: 1rem;
+}
+
+/* Button group within table cells */
+.table td .btn {
+  margin-right: 0.5rem;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .menu-item-list-container {
+    padding: 1rem;
+  }
+}

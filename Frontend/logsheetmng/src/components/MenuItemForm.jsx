@@ -1,11 +1,10 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
-import "../styles/batchCycle.css";
+import "../styles/menuItem.css";
 import FormInputField from "./FormInputField";
 
-const BatchCycleForm = ({
-  cycle,
+const MenuItemForm = ({
+  menuItem,
   handleChange,
   handleSubmit,
   formTitle,
@@ -14,7 +13,7 @@ const BatchCycleForm = ({
   const navigate = useNavigate();
 
   return (
-    <div className="batch-cycle-form-container">
+    <div className="menu-item-form-container">
       <h2>{formTitle}</h2>
       <Form onSubmit={handleSubmit}>
         <FormInputField
@@ -22,7 +21,7 @@ const BatchCycleForm = ({
           label="Title:"
           type="text"
           name="title"
-          value={cycle.title}
+          value={menuItem.title}
           onChange={handleChange}
           required
         />
@@ -31,25 +30,16 @@ const BatchCycleForm = ({
           label="Description:"
           type="text"
           name="description"
-          value={cycle.description}
+          value={menuItem.description}
           onChange={handleChange}
           required
         />
         <FormInputField
-          id="formStartDate"
-          label="Start Date:"
-          type="date"
-          name="startDate"
-          value={cycle.startDate}
-          onChange={handleChange}
-          required
-        />
-        <FormInputField
-          id="formEndDate"
-          label="End Date:"
-          type="date"
-          name="endDate"
-          value={cycle.endDate}
+          id="formPath"
+          label="Path:"
+          type="text"
+          name="path"
+          value={menuItem.path}
           onChange={handleChange}
           required
         />
@@ -59,7 +49,7 @@ const BatchCycleForm = ({
           </Button>
           <Button
             variant="secondary"
-            onClick={() => navigate("/courses/batch-cycle")}
+            onClick={() => navigate("/users/menu-item")}
           >
             Cancel
           </Button>
@@ -69,4 +59,4 @@ const BatchCycleForm = ({
   );
 };
 
-export default BatchCycleForm;
+export default MenuItemForm;

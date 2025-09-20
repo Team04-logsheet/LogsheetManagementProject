@@ -5,6 +5,9 @@ import AddBatchCycle from "../pages/batchCycle/AddBatchCycle";
 import Login from "../pages/Login";
 import AdminHome from "../pages/admin/AdminHome";
 import Layout from "../Layout";
+import MenuItemList from "../pages/menuItem/MenuItemList";
+import AddMenuItem from "../pages/menuItem/AddMenuItem";
+import EditMenuItem from "../pages/menuItem/EditMenuItem";
 
 const AppRoutes = () => {
   return (
@@ -21,6 +24,10 @@ const AppRoutes = () => {
           element={<EditBatchCycle />}
         />
         <Route path="/courses/batch-cycle/add" element={<AddBatchCycle />} />
+
+        <Route path="/users/menu-item" element={<MenuItemList />} />
+        <Route path="/users/menu-item/add" element={<AddMenuItem />} />
+        <Route path="/users/menu-item/edit/:id" element={<EditMenuItem />} />
       </Route>
     </Routes>
   );
