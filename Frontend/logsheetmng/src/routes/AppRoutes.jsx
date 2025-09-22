@@ -8,6 +8,9 @@ import Layout from "../Layout";
 import MenuItemList from "../pages/menuItem/MenuItemList";
 import AddMenuItem from "../pages/menuItem/AddMenuItem";
 import EditMenuItem from "../pages/menuItem/EditMenuItem";
+import RoleList from "../pages/role/RoleList";
+import AddRole from "../pages/role/AddRole";
+import EditRole from "../pages/role/EditRole";
 
 const AppRoutes = () => {
   return (
@@ -28,6 +31,10 @@ const AppRoutes = () => {
         <Route path="/users/menu-item" element={<MenuItemList />} />
         <Route path="/users/menu-item/add" element={<AddMenuItem />} />
         <Route path="/users/menu-item/edit/:id" element={<EditMenuItem />} />
+
+        <Route path="/users/role" element={<RoleList />} />
+        <Route path="/users/role/add" element={<AddRole />} />
+        <Route path="/users/role/edit/:id" element={<EditRole />} />
       </Route>
     </Routes>
   );

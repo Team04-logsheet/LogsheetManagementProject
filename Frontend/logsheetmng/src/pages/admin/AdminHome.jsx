@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card } from "react-bootstrap";
 import { Pie, Bar } from "react-chartjs-2";

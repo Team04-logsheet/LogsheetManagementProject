@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Table } from "react-bootstrap";
-import "../../styles/batchCycle.css";
+import "../../styles/listPage.css";
+
 const BatchCycleList = () => {
   const [batchCycles, setBatchCycles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +48,7 @@ const BatchCycleList = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div className="batch-cycle-list-container">
+    <div className="list-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Batch Cycles</h2>
         <Button

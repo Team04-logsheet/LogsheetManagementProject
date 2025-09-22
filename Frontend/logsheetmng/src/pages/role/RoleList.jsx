@@ -2,64 +2,62 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Table } from "react-bootstrap";
+// Using the consolidated CSS file for list views
 import "../../styles/listPage.css";
 
-const MenuItemList = () => {
-  const [menuItems, setMenuItems] = useState([]);
+const RoleList = () => {
+  const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch menu items from the backend
+    // Fetch roles from the backend
     axios
-      .get("http://localhost:8080/api/menu-items")
+      .get("http://localhost:8080/api/roles")
       .then((response) => {
-        setMenuItems(response.data);
+        setRoles(response.data);
         setLoading(false);
       })
       .catch((err) => {
-        setError("Failed to fetch menu items.");
+        setError("Failed to fetch roles.");
         setLoading(false);
-        console.error("Error fetching menu items:", err);
+        console.error("Error fetching roles:", err);
       });
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/users/menu-item/edit/${id}`);
+    navigate(`/users/role/edit/${id}`);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this menu item?")) {
+    if (window.confirm("Are you sure you want to delete this role?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/menu-items/${id}`);
-        alert("Menu item deleted successfully!");
-        setMenuItems(menuItems.filter((item) => item.id !== id));
+        await axios.delete(`http://localhost:8080/api/roles/${id}`);
+        alert("Role deleted successfully!");
+        setRoles(roles.filter((role) => role.id !== id));
       } catch (error) {
-        console.error("Error deleting menu item:", error);
-        alert("Failed to delete menu item.");
+        console.error("Error deleting role:", error);
+        alert("Failed to delete role.");
       }
     }
   };
 
-  if (loading) return <p>Loading menu items...</p>;
+  if (loading) return <p>Loading roles...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="list-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Menu Items</h2>
-        <Button
-          variant="primary"
-          onClick={() => navigate("/users/menu-item/add")}
-        >
+        <h2>Roles</h2>
+        <Button variant="primary" onClick={() => navigate("/users/role/add")}>
           + Add New
         </Button>
       </div>
 
-      {menuItems.length === 0 ? (
-        <p>No menu items available.</p>
+      {roles.length === 0 ? (
+        <p>No roles available.</p>
       ) : (
         <Table striped bordered hover responsive>
           <thead>
@@ -67,22 +65,20 @@ const MenuItemList = () => {
               <th>Sr. No.</th>
               <th>Title</th>
               <th>Description</th>
-              <th>Path</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {menuItems.map((item, index) => (
-              <tr key={item.id}>
+            {roles.map((role, index) => (
+              <tr key={role.id}>
                 <td>{index + 1}</td>
-                <td>{item.title}</td>
-                <td>{item.description}</td>
-                <td>{item.path}</td>
+                <td>{role.title}</td>
+                <td>{role.description}</td>
                 <td>
                   <Button
                     variant="warning"
                     size="sm"
-                    onClick={() => handleEdit(item.id)}
+                    onClick={() => handleEdit(role.id)}
                     className="me-2"
                   >
                     Edit
@@ -90,7 +86,7 @@ const MenuItemList = () => {
                   <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(role.id)}
                   >
                     Delete
                   </Button>
@@ -104,4 +100,4 @@ const MenuItemList = () => {
   );
 };
 
-export default MenuItemList;
+export default RoleList;

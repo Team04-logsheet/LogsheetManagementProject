@@ -3,8 +3,8 @@ import { Form, Button } from "react-bootstrap";
 import FormInputField from "./FormInputField";
 import "../styles/listPage.css";
 
-const BatchCycleForm = ({
-  cycle,
+const RoleForm = ({
+  role,
   handleChange,
   handleSubmit,
   formTitle,
@@ -21,7 +21,7 @@ const BatchCycleForm = ({
           label="Title:"
           type="text"
           name="title"
-          value={cycle.title}
+          value={role.title}
           onChange={handleChange}
           required
         />
@@ -30,25 +30,7 @@ const BatchCycleForm = ({
           label="Description:"
           type="text"
           name="description"
-          value={cycle.description}
-          onChange={handleChange}
-          required
-        />
-        <FormInputField
-          id="formStartDate"
-          label="Start Date:"
-          type="date"
-          name="startDate"
-          value={cycle.startDate}
-          onChange={handleChange}
-          required
-        />
-        <FormInputField
-          id="formEndDate"
-          label="End Date:"
-          type="date"
-          name="endDate"
-          value={cycle.endDate}
+          value={role.description}
           onChange={handleChange}
           required
         />
@@ -56,10 +38,7 @@ const BatchCycleForm = ({
           <Button variant="primary" type="submit" className="me-2">
             {buttonLabel}
           </Button>
-          <Button
-            variant="secondary"
-            onClick={() => navigate("/courses/batch-cycle")}
-          >
+          <Button variant="secondary" onClick={() => navigate("/users/role")}>
             Cancel
           </Button>
         </div>
@@ -68,4 +47,4 @@ const BatchCycleForm = ({
   );
 };
 
-export default BatchCycleForm;
+export default RoleForm;
