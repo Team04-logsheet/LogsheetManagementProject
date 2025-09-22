@@ -14,6 +14,9 @@ import EditRole from "../pages/role/EditRole";
 import PremisesList from "../pages/premises/PremisesList";
 import AddPremises from "../pages/premises/AddPremises";
 import EditPremises from "../pages/premises/EditPremises";
+import CourseTypeList from "../pages/courseType/CourseTypeList";
+import AddCourseType from "../pages/courseType/AddCourseType";
+import EditCourseType from "../pages/courseType/EditCourseType";
 
 const AppRoutes = () => {
   return (
@@ -35,6 +38,13 @@ const AppRoutes = () => {
         <Route path="/courses/premises" element={<PremisesList />} />
         <Route path="/courses/premises/add" element={<AddPremises />} />
         <Route path="/courses/premises/edit/:id" element={<EditPremises />} />
+
+        <Route path="/courses/course-type" element={<CourseTypeList />} />
+        <Route path="/courses/course-type/add" element={<AddCourseType />} />
+        <Route
+          path="/courses/course-type/edit/:id"
+          element={<EditCourseType />}
+        />
 
         <Route path="/users/menu-item" element={<MenuItemList />} />
         <Route path="/users/menu-item/add" element={<AddMenuItem />} />
