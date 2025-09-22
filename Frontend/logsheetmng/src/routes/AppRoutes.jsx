@@ -11,6 +11,9 @@ import EditMenuItem from "../pages/menuItem/EditMenuItem";
 import RoleList from "../pages/role/RoleList";
 import AddRole from "../pages/role/AddRole";
 import EditRole from "../pages/role/EditRole";
+import PremisesList from "../pages/premises/PremisesList";
+import AddPremises from "../pages/premises/AddPremises";
+import EditPremises from "../pages/premises/EditPremises";
 
 const AppRoutes = () => {
   return (
@@ -21,12 +24,17 @@ const AppRoutes = () => {
       {/* This is the nested route with the common layout */}
       <Route element={<Layout />}>
         <Route path="/home" element={<AdminHome />} />
+
         <Route path="/courses/batch-cycle" element={<BatchCycleList />} />
         <Route
           path="/courses/batch-cycle/edit/:id"
           element={<EditBatchCycle />}
         />
         <Route path="/courses/batch-cycle/add" element={<AddBatchCycle />} />
+
+        <Route path="/courses/premises" element={<PremisesList />} />
+        <Route path="/courses/premises/add" element={<AddPremises />} />
+        <Route path="/courses/premises/edit/:id" element={<EditPremises />} />
 
         <Route path="/users/menu-item" element={<MenuItemList />} />
         <Route path="/users/menu-item/add" element={<AddMenuItem />} />
