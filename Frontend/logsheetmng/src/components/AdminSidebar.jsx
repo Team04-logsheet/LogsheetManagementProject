@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import { Accordion, Nav } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import menuData from "../data/menuData";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import logo from "../assets/mainlogo.png"; // your logo
@@ -74,7 +74,9 @@ export default function Login() {
           </button>
         </form>
         <div className="text-center mt-3">
-          <a href="#" className="forgot-link">Forgot Password?</a>
+          <a href="#" className="forgot-link">
+            Forgot Password?
+          </a>
         </div>
       </div>
     </div>

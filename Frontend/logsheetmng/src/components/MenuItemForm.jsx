@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
-import "../styles/menuItem.css";
 import FormInputField from "./FormInputField";
+import "../styles/listPage.css";
 
 const MenuItemForm = ({
   menuItem,
@@ -13,7 +13,7 @@ const MenuItemForm = ({
   const navigate = useNavigate();
 
   return (
-    <div className="menu-item-form-container">
+    <div className="form-container">
       <h2>{formTitle}</h2>
       <Form onSubmit={handleSubmit}>
         <FormInputField
