@@ -11,6 +11,7 @@ import EditMenuItem from "../pages/menuItem/EditMenuItem";
 import RoleList from "../pages/role/RoleList";
 import AddRole from "../pages/role/AddRole";
 import EditRole from "../pages/role/EditRole";
+import RoleDetail from "../pages/role/RoleDetail";
 import PremisesList from "../pages/premises/PremisesList";
 import AddPremises from "../pages/premises/AddPremises";
 import EditPremises from "../pages/premises/EditPremises";
@@ -67,6 +68,7 @@ const AppRoutes = () => {
         <Route path="/users/role" element={<RoleList />} />
         <Route path="/users/role/add" element={<AddRole />} />
         <Route path="/users/role/edit/:id" element={<EditRole />} />
+        <Route path="/users/role/:id" element={<RoleDetail />} />
       </Route>
     </Routes>
   );

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Table } from "react-bootstrap";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaTrash, FaInfoCircle } from "react-icons/fa";
 import "../../styles/listPage.css";
 
 const RoleList = () => {
@@ -13,18 +13,18 @@ const RoleList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch roles from the backend
-    axios
-      .get("http://localhost:8080/api/roles")
-      .then((response) => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/roles");
         setRoles(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         setError("Failed to fetch roles.");
-        setLoading(false);
         console.error("Error fetching roles:", err);
-      });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRoles();
   }, []);
 
   const handleEdit = (id) => {
@@ -42,6 +42,10 @@ const RoleList = () => {
         alert("Failed to delete role.");
       }
     }
+  };
+
+  const handleViewDetails = (id) => {
+    navigate(`/users/role/${id}`);
   };
 
   if (loading) return <p>Loading roles...</p>;
@@ -75,6 +79,14 @@ const RoleList = () => {
                 <td>{role.title}</td>
                 <td>{role.description}</td>
                 <td>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    onClick={() => handleViewDetails(role.id)}
+                    className="me-2"
+                  >
+                    <FaInfoCircle />
+                  </Button>
                   <Button
                     variant="warning"
                     size="sm"
