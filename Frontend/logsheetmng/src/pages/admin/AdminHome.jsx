@@ -45,7 +45,7 @@ export default function AdminHome() {
         title: "Total Courses",
         v: activeCourses + pastCourses,
         sub: `${activeCourses} Active · ${pastCourses} Past`,
-        goto: "courses/courses",
+        goto: "courses",
         icon: "bi bi-journal-bookmark", // 📘
         accent: "kpi-blue",
       },
@@ -54,7 +54,7 @@ export default function AdminHome() {
         title: "Total Staff",
         v: totalStaff,
         sub: "Instructors & Admin",
-        goto: "users",
+        goto: "staff",
         icon: "bi bi-person-gear", // 🧑‍🏫
         accent: "kpi-purple",
       },

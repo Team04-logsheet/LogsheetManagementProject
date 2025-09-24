@@ -6,7 +6,7 @@ const menuData = [
       { key: "batch-cycle", label: "Batch Cycle" },
       { key: "premises", label: "Premises" },
       { key: "course-type", label: "Course Type" },
-      { key: "courses", label: "Courses" },
+      { key: "", label: "Courses" },
     ],
   },
   {
