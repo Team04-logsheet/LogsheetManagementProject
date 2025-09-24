@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Table } from "react-bootstrap";
-// Using the consolidated CSS file for list views
+import { FaPen, FaTrash } from "react-icons/fa";
 import "../../styles/listPage.css";
 
 const RoleList = () => {
@@ -81,14 +81,14 @@ const RoleList = () => {
                     onClick={() => handleEdit(role.id)}
                     className="me-2"
                   >
-                    Edit
+                    <FaPen />
                   </Button>
                   <Button
                     variant="danger"
                     size="sm"
                     onClick={() => handleDelete(role.id)}
                   >
-                    Delete
+                    <FaTrash />
                   </Button>
                 </td>
               </tr>

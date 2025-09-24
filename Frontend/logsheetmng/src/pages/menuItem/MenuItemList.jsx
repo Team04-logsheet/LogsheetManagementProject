@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Table } from "react-bootstrap";
+import { FaPen, FaTrash } from "react-icons/fa";
 import "../../styles/listPage.css";
 
 const MenuItemList = () => {
@@ -85,14 +86,14 @@ const MenuItemList = () => {
                     onClick={() => handleEdit(item.id)}
                     className="me-2"
                   >
-                    Edit
+                    <FaPen />
                   </Button>
                   <Button
                     variant="danger"
                     size="sm"
                     onClick={() => handleDelete(item.id)}
                   >
-                    Delete
+                    <FaTrash />
                   </Button>
                 </td>
               </tr>
