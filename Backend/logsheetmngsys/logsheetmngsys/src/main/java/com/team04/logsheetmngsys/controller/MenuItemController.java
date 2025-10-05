@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.team04.logsheetmngsys.dto.MenuItemDTO;
-import com.team04.logsheetmngsys.entity.MenuItem;
+import com.team04.logsheetmngsys.dto.responseDto.MenuItemResponseDTO;
 import com.team04.logsheetmngsys.service.MenuItemService;
 
 @RestController
@@ -31,26 +30,26 @@ public class MenuItemController {
 	}
 
 	@PostMapping
-	public ResponseEntity<MenuItem> createMenuItem(@RequestBody MenuItemDTO menuItemDTO) {
-		MenuItem createdMenuItem = menuItemService.createMenuItem(menuItemDTO);
+	public ResponseEntity<MenuItemResponseDTO> createMenuItem(@RequestBody MenuItemDTO menuItemDTO) {
+		MenuItemResponseDTO createdMenuItem = menuItemService.createMenuItem(menuItemDTO);
 		return new ResponseEntity<>(createdMenuItem, HttpStatus.CREATED);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<MenuItem>> getAllMenuItems() {
-		List<MenuItem> menuItems = menuItemService.getAllMenuItems();
+	public ResponseEntity<List<MenuItemResponseDTO>> getAllMenuItems() {
+		List<MenuItemResponseDTO> menuItems = menuItemService.getAllMenuItems();
 		return new ResponseEntity<>(menuItems, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<MenuItem> getMenuItemById(@PathVariable Long id) {
-		MenuItem menuItem = menuItemService.getMenuItemById(id);
+	public ResponseEntity<MenuItemResponseDTO> getMenuItemById(@PathVariable Long id) {
+		MenuItemResponseDTO menuItem = menuItemService.getMenuItemById(id);
 		return new ResponseEntity<>(menuItem, HttpStatus.OK);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<MenuItem> updateMenuItem(@PathVariable Long id, @RequestBody MenuItemDTO menuItemDTO) {
-		MenuItem updatedMenuItem = menuItemService.updateMenuItem(id, menuItemDTO);
+	public ResponseEntity<MenuItemResponseDTO> updateMenuItem(@PathVariable Long id, @RequestBody MenuItemDTO menuItemDTO) {
+		MenuItemResponseDTO updatedMenuItem = menuItemService.updateMenuItem(id, menuItemDTO);
 		return new ResponseEntity<>(updatedMenuItem, HttpStatus.OK);
 	}
 

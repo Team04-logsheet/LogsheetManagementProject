@@ -13,6 +13,8 @@ public class MenuItemDTO {
 
 	private String description;
 
-	private String path;
+	private String backendApiUrlPath;
+	
+	private String frontendPageUrl;
 
 }
