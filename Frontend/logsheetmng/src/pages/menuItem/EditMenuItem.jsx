@@ -9,7 +9,8 @@ const EditMenuItem = () => {
   const [menuItem, setMenuItem] = useState({
     title: "",
     description: "",
-    path: "",
+    backendApiUrlPath: "",
+    frontendPageUrl: "",
   });
   const [loading, setLoading] = useState(true);
 
