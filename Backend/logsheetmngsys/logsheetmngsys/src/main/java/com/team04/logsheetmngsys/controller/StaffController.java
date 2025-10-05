@@ -62,4 +62,29 @@ public class StaffController {
 	    staffService.changePassword(id, dto);
 	    return ResponseEntity.ok("Password changed successfully for Staff ID: " + id);
 	}
+	
+	@PatchMapping("/{id}/toggle-active")
+	public ResponseEntity<StaffResponseDTO> toggleStaffActiveStatus(@PathVariable Long id) {
+		StaffResponseDTO response = staffService.toggleStaffActiveStatus(id);
+		return ResponseEntity.ok(response);
+	}
+	
+	@PatchMapping("/{id}/toggle-lock")
+	public ResponseEntity<StaffResponseDTO> toggleAccountLockStatus(@PathVariable Long id) {
+		StaffResponseDTO response = staffService.toggleAccountLockStatus(id);
+		return ResponseEntity.ok(response);
+	}
+	
+	@PatchMapping("/{id}/toggle-delete")
+	public ResponseEntity<StaffResponseDTO> toggleStaffDeleteStatus(@PathVariable Long id) {
+		StaffResponseDTO response = staffService.toggleStaffDeleteStatus(id);
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping("/deleted")
+	public ResponseEntity<List<StaffResponseDTO>> getAllDeletedStaffs() {
+		List<StaffResponseDTO> response = staffService.getAllDeletedStaffs();
+		return ResponseEntity.ok(response);
+	}
+	
 }

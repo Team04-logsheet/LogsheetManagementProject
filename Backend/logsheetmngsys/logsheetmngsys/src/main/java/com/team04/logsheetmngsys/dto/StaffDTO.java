@@ -12,8 +12,8 @@ public class StaffDTO {
 	private String contact;
 	private String staffType;
 	private Long roleId;
-	private String activityStatus;
-	private LocalDateTime lastLogin;
-	private Integer failedAttempts;
-	private Boolean isAccountLocked;
+    private Boolean isActive; 
+    private LocalDateTime lastLogin;
+    private Integer failedAttempts;
+    private Boolean isAccountLocked;
 }

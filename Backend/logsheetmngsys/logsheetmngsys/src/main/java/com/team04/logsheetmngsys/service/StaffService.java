@@ -20,5 +20,16 @@ public interface StaffService {
 
 	StaffResponseDTO patchUpdateStaff(Long id, StaffDTO staffDTO);
 
+	StaffResponseDTO toggleStaffActiveStatus(Long id);
+	
+	StaffResponseDTO toggleAccountLockStatus(Long id);
+
+	StaffResponseDTO toggleStaffDeleteStatus(Long id);
+
+	List<StaffResponseDTO> getAllDeletedStaffs();
+
+	void resetFailedAttempts(String email);
+	
+	void handleFailedLoginAttempt(String email);
 
 }

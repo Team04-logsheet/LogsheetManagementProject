@@ -13,10 +13,11 @@ public class StaffResponseDTO {
 	private String contact;
 	private String staffType;
 	private Long roleId;
-	private String activityStatus;
+	private Boolean isActive;
 	private LocalDateTime lastLogin;
 	private Integer failedAttempts;
 	private Boolean isAccountLocked;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+    private Boolean isDeleted;
 }
