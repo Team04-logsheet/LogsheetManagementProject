@@ -38,7 +38,7 @@ const EditMenuItem = () => {
       .put(`http://localhost:8080/api/menu-items/${id}`, menuItem)
       .then(() => {
         alert("Menu item updated successfully!");
-        navigate("/users/menu-item");
+        navigate("/staffs/menu-item");
       })
       .catch((err) => {
         console.error("Error updating menu item:", err);

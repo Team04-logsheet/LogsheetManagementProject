@@ -38,7 +38,7 @@ const RoleForm = ({
           <Button variant="primary" type="submit" className="me-2">
             {buttonLabel}
           </Button>
-          <Button variant="secondary" onClick={() => navigate("/users/role")}>
+          <Button variant="secondary" onClick={() => navigate("/staffs/role")}>
             Cancel
           </Button>
         </div>

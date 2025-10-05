@@ -36,12 +36,12 @@ const menuData = [
     ],
   },
   {
-    key: "users",
+    key: "staffs",
     label: "👤 User Management",
     children: [
       { key: "menu-item", label: "Menu Item" },
       { key: "role", label: "Role" },
-      { key: "staff", label: "Staff" },
+      { key: "", label: "Staff" },
       { key: "course-coordinator", label: "Course Coordinator" },
     ],
   },

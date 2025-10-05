@@ -49,7 +49,7 @@ const MenuItemForm = ({
           </Button>
           <Button
             variant="secondary"
-            onClick={() => navigate("/users/menu-item")}
+            onClick={() => navigate("/staffs/menu-item")}
           >
             Cancel
           </Button>

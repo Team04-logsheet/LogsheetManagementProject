@@ -37,7 +37,7 @@ const EditRole = () => {
       .put(`http://localhost:8080/api/roles/${id}`, role)
       .then(() => {
         alert("Role updated successfully!");
-        navigate("/users/role");
+        navigate("/staffs/role");
       })
       .catch((err) => {
         console.error("Error updating role:", err);

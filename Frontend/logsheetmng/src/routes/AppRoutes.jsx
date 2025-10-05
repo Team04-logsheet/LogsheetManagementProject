@@ -22,6 +22,10 @@ import CourseList from "../pages/course/CourseList";
 import CourseDetail from "../pages/course/CourseDetail";
 import AddCourse from "../pages/course/AddCourse";
 import EditCourse from "../pages/course/EditCourse";
+import StaffList from "../pages/staff/StaffList";
+import AddStaff from "../pages/staff/AddStaff";
+import EditStaff from "../pages/staff/EditStaff";
+import StaffDetail from "../pages/staff/StaffDetails";
 
 const AppRoutes = () => {
   return (
@@ -32,7 +36,7 @@ const AppRoutes = () => {
       <Route element={<Layout />}>
         <Route path="/home" element={<AdminHome />} />
 
-        {/* ✅ Start of the fix: Group all specific 'courses' routes first */}
+        {/* Batch Cycle Routes */}
         <Route path="/courses/batch-cycle/add" element={<AddBatchCycle />} />
         <Route
           path="/courses/batch-cycle/edit/:id"
@@ -40,10 +44,12 @@ const AppRoutes = () => {
         />
         <Route path="/courses/batch-cycle" element={<BatchCycleList />} />
 
+        {/* Premises Routes */}
         <Route path="/courses/premises/add" element={<AddPremises />} />
         <Route path="/courses/premises/edit/:id" element={<EditPremises />} />
         <Route path="/courses/premises" element={<PremisesList />} />
 
+        {/* Course types Routes */}
         <Route path="/courses/course-type/add" element={<AddCourseType />} />
         <Route
           path="/courses/course-type/edit/:id"
@@ -51,24 +57,29 @@ const AppRoutes = () => {
         />
         <Route path="/courses/course-type" element={<CourseTypeList />} />
 
+        {/* Courses Routes */}
         <Route path="/courses/add" element={<AddCourse />} />
         <Route path="/courses/edit/:id" element={<EditCourse />} />
 
-        {/* ✅ The general course list route should come after more specific paths */}
         <Route path="/courses" element={<CourseList />} />
-        {/* ✅ The wildcard route must be last in the /courses group */}
         <Route path="/courses/:id" element={<CourseDetail />} />
 
         {/* Menu Item Routes */}
-        <Route path="/users/menu-item" element={<MenuItemList />} />
-        <Route path="/users/menu-item/add" element={<AddMenuItem />} />
-        <Route path="/users/menu-item/edit/:id" element={<EditMenuItem />} />
+        <Route path="/staffs/menu-item" element={<MenuItemList />} />
+        <Route path="/staffs/menu-item/add" element={<AddMenuItem />} />
+        <Route path="/staffs/menu-item/edit/:id" element={<EditMenuItem />} />
 
         {/* Role Routes */}
-        <Route path="/users/role" element={<RoleList />} />
-        <Route path="/users/role/add" element={<AddRole />} />
-        <Route path="/users/role/edit/:id" element={<EditRole />} />
-        <Route path="/users/role/:id" element={<RoleDetail />} />
+        <Route path="/staffs/role" element={<RoleList />} />
+        <Route path="/staffs/role/add" element={<AddRole />} />
+        <Route path="/staffs/role/edit/:id" element={<EditRole />} />
+        <Route path="/staffs/role/:id" element={<RoleDetail />} />
+
+        {/* Staff Routes */}
+        <Route path="/staffs" element={<StaffList />} />
+        <Route path="/staffs/add" element={<AddStaff />} />
+        <Route path="/staffs/edit/:id" element={<EditStaff />} />
+        <Route path="/staffs/:id" element={<StaffDetail />} />
       </Route>
     </Routes>
   );
