@@ -17,11 +17,11 @@ const RoleForm = ({
       <h2>{formTitle}</h2>
       <Form onSubmit={handleSubmit}>
         <FormInputField
-          id="formTitle"
-          label="Title:"
+          id="formName"
+          label="Name:"
           type="text"
-          name="title"
-          value={role.title}
+          name="name"
+          value={role.name}
           onChange={handleChange}
           required
         />

@@ -148,7 +148,7 @@ const RoleDetail = () => {
           </Button>
         </div>
         <Card className="mb-4">
-          <Card.Header as="h5">{role.title}</Card.Header>
+          <Card.Header as="h5">{role.name}</Card.Header>
           <Card.Body>
             <ListGroup variant="flush">
               <ListGroup.Item>
@@ -203,7 +203,7 @@ const RoleDetail = () => {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Menu Items to "{role.title}"</Modal.Title>
+          <Modal.Title>Add Menu Items to "{role.name}"</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {allItems.length > 0 ? (

@@ -67,7 +67,7 @@ const RoleList = () => {
           <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>Title</th>
+              <th>Name</th>
               <th>Description</th>
               <th>Actions</th>
             </tr>
@@ -76,7 +76,7 @@ const RoleList = () => {
             {roles.map((role, index) => (
               <tr key={role.id}>
                 <td>{index + 1}</td>
-                <td>{role.title}</td>
+                <td>{role.name}</td>
                 <td>{role.description}</td>
                 <td>
                   <Button

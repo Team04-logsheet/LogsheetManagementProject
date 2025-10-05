@@ -1,39 +1,32 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
-import logo from "../assets/mainlogo.png"; // your logo
+import logo from "../assets/mainlogo.png";
+import AuthContext from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const [userid, setUserid] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
     try {
-      const response = await fetch("http://localhost:8080/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userid, password }),
-      });
-
-      const data = await response.json();
+      await login(userid, password);
+      // Navigation will be handled by the AuthContext
+    } catch (err) {
+      setError(err.message);
+      console.error("Login failed:", err.message);
+    } finally {
+      // Always stop loading, whether it succeeded or failed
       setLoading(false);
-
-      if (response.ok) {
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("token", data.token);
-        navigate("/home");
-      } else {
-        alert(data.message || "Login failed");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error(error);
-      alert("Server error. Please try again.");
     }
   };
 
