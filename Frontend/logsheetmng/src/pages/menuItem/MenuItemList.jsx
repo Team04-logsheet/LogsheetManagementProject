@@ -68,7 +68,8 @@ const MenuItemList = () => {
               <th>Sr. No.</th>
               <th>Title</th>
               <th>Description</th>
-              <th>Path</th>
+              <th>Backend API Path</th>
+              <th>Frontend Page URL</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -78,7 +79,8 @@ const MenuItemList = () => {
                 <td>{index + 1}</td>
                 <td>{item.title}</td>
                 <td>{item.description}</td>
-                <td>{item.path}</td>
+                <td>{item.backendApiUrlPath}</td>
+                <td>{item.frontendPageUrl}</td>
                 <td>
                   <Button
                     variant="warning"

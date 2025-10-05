@@ -35,11 +35,20 @@ const MenuItemForm = ({
           required
         />
         <FormInputField
-          id="formPath"
-          label="Path:"
+          id="formBackendApiUrlPath"
+          label="Backend API Path:"
           type="text"
-          name="path"
-          value={menuItem.path}
+          name="backendApiUrlPath"
+          value={menuItem.backendApiUrlPath}
+          onChange={handleChange}
+          required
+        />
+        <FormInputField
+          id="formFrontendPageUrl"
+          label="Frontend Page URL:"
+          type="text"
+          name="frontendPageUrl"
+          value={menuItem.frontendPageUrl}
           onChange={handleChange}
           required
         />

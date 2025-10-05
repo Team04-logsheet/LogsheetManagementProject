@@ -8,7 +8,8 @@ const AddMenuItem = () => {
   const [menuItem, setMenuItem] = useState({
     title: "",
     description: "",
-    path: "",
+    backendApiUrlPath: "",
+    frontendPageUrl: "",
   });
 
   const handleChange = (e) => {
