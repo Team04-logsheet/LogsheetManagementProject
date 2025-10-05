@@ -28,7 +28,7 @@ const RoleList = () => {
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/users/role/edit/${id}`);
+    navigate(`/staffs/role/edit/${id}`);
   };
 
   const handleDelete = async (id) => {
@@ -45,7 +45,7 @@ const RoleList = () => {
   };
 
   const handleViewDetails = (id) => {
-    navigate(`/users/role/${id}`);
+    navigate(`/staffs/role/${id}`);
   };
 
   if (loading) return <p>Loading roles...</p>;
@@ -55,7 +55,7 @@ const RoleList = () => {
     <div className="list-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Roles</h2>
-        <Button variant="primary" onClick={() => navigate("/users/role/add")}>
+        <Button variant="primary" onClick={() => navigate("/staffs/role/add")}>
           + Add New
         </Button>
       </div>

@@ -28,7 +28,7 @@ const MenuItemList = () => {
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/users/menu-item/edit/${id}`);
+    navigate(`/staffs/menu-item/edit/${id}`);
   };
 
   const handleDelete = async (id) => {
@@ -53,7 +53,7 @@ const MenuItemList = () => {
         <h2>Menu Items</h2>
         <Button
           variant="primary"
-          onClick={() => navigate("/users/menu-item/add")}
+          onClick={() => navigate("/staffs/menu-item/add")}
         >
           + Add New
         </Button>

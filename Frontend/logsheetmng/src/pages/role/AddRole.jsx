@@ -20,7 +20,7 @@ const AddRole = () => {
     try {
       await axios.post("http://localhost:8080/api/roles", role);
       alert("Role created successfully!");
-      navigate("/users/role");
+      navigate("/staffs/role");
     } catch (error) {
       console.error("Error creating role:", error);
       alert("Failed to create role.");

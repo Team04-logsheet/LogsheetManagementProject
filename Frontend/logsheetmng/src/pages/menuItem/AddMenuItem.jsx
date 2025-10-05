@@ -21,7 +21,7 @@ const AddMenuItem = () => {
     try {
       await axios.post("http://localhost:8080/api/menu-items", menuItem);
       alert("Menu item created successfully!");
-      navigate("/users/menu-item");
+      navigate("/staffs/menu-item");
     } catch (error) {
       console.error("Error creating menu item:", error);
       alert("Failed to create menu item.");
