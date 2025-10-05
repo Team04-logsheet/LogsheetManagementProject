@@ -6,7 +6,7 @@ import RoleForm from "../../components/RoleForm";
 const AddRole = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState({
-    title: "",
+    name: "",
     description: "",
   });
 

@@ -7,7 +7,7 @@ const EditRole = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [role, setRole] = useState({
-    title: "",
+    name: "",
     description: "",
   });
   const [loading, setLoading] = useState(true);
