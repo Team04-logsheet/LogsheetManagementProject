@@ -20,7 +20,10 @@ public class MenuItem extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String description;
 
-	@Column(length = 200)
-	private String path;
+	@Column(name = "backend_api_url_path", length = 200)
+	private String backendApiUrlPath;
+	
+    @Column(name = "frontend_page_url", length = 200)  
+    private String frontendPageUrl;
 
 }
