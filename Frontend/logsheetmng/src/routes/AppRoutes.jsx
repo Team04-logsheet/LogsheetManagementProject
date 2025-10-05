@@ -27,6 +27,11 @@ import AddStaff from "../pages/staff/AddStaff";
 import EditStaff from "../pages/staff/EditStaff";
 import StaffDetail from "../pages/staff/StaffDetails";
 
+import GroupTableList from "../pages/grouptable/GroupTableList";
+import AddGroupTable from "../pages/grouptable/AddGroupTable";
+import EditGroupTable from "../pages/grouptable/EditGroupTable";
+
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -80,6 +85,14 @@ const AppRoutes = () => {
         <Route path="/staffs/add" element={<AddStaff />} />
         <Route path="/staffs/edit/:id" element={<EditStaff />} />
         <Route path="/staffs/:id" element={<StaffDetail />} />
+
+        
+        {/*GroupTable Routes*/}
+        <Route path="/groups/groups" element={<GroupTableList />} />
+        <Route path="/groups/add" element={<AddGroupTable />} />
+        <Route path="/groups/edit/:id" element={<EditGroupTable />} />
+
+
       </Route>
     </Routes>
   );
