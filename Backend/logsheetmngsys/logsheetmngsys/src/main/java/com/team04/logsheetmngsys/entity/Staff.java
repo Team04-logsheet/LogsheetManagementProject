@@ -37,8 +37,8 @@ public class Staff extends BaseEntity {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @Column(name="activity_status",length = 20)
-    private String activityStatus;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
 
     @Column(name="password_hash",length = 255)
     private String passwordHash;
@@ -51,6 +51,9 @@ public class Staff extends BaseEntity {
 
     @Column(name="is_account_locked")
     private Boolean isAccountLocked;
+    
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
     
 }
 

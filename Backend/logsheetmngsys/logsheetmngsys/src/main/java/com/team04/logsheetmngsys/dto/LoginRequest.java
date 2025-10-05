@@ -5,10 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RoleDTO {
-   
-    private String name;
-    private String description;
+@NoArgsConstructor
+public class LoginRequest {
+    private String email;
+    private String password;
 }

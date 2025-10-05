@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "roles")
 public class Role extends BaseEntity {
 
-	@Column(length = 100)
-	private String title;
+	@Column(length = 100, unique=true,nullable = false )
+	private String name;
 
 	@Column(columnDefinition = "TEXT")
 	private String description;
