@@ -81,42 +81,44 @@ export default function EditRoleMenuItem() {
   };
 
   return (
-  <div className="form-wrap">
-    <div className="form-card">
-      <div className="card-header">Edit Role Menu Items</div>
+    <div className="rmi-scope">
+      <div className="form-wrap">
+        <div className="form-card">
+          <div className="card-header">Edit Role Menu Items</div>
 
-      {loading && <div className="status">Loading...</div>}
-      {err && <div className="error">{err}</div>}
+          {loading && <div className="status">Loading...</div>}
+          {err && <div className="error">{err}</div>}
 
-      <form onSubmit={onSubmit}>
-        <div className="card-body">
-          <div className="row">
-            <label>Role</label>
-            <input type="text" value={role?.name || `Role ID: ${roleId}`} disabled />
-          </div>
+          <form onSubmit={onSubmit}>
+            <div className="card-body">
+              <div className="row">
+                <label>Role</label>
+                <input type="text" value={role?.name || `Role ID: ${roleId}`} disabled />
+              </div>
 
-          <div className="row">
-            <label>Menu Items (multi-select)</label>
-            <select
-              multiple
-              value={selectedMenuItemIds}
-              onChange={(e) => setSelectedMenuItemIds(Array.from(e.target.selectedOptions).map(o => o.value))}
-            >
-              {menuItems?.map(mi => (
-                <option key={mi.id} value={mi.id}>{mi.title}</option>
-              ))}
-            </select>
-            <div className="hint">Hold Ctrl/Cmd to select multiple</div>
-          </div>
+              <div className="row">
+                <label>Menu Items (multi-select)</label>
+                <select
+                  multiple
+                  value={selectedMenuItemIds}
+                  onChange={(e) => setSelectedMenuItemIds(Array.from(e.target.selectedOptions).map(o => o.value))}
+                >
+                  {menuItems?.map(mi => (
+                    <option key={mi.id} value={mi.id}>{mi.title}</option>
+                  ))}
+                </select>
+                <div className="hint">Hold Ctrl/Cmd to select multiple</div>
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button type="submit" className="btn btn-primary" disabled={loading}>Update</button>
+              <button type="button" className="btn btn-ghost" onClick={() => navigate("/staffs/role-menu-item")}>Cancel</button>
+            </div>
+          </form>
         </div>
-
-        <div className="form-actions">
-          <button type="submit" className="btn btn-primary" disabled={loading}>Update</button>
-          <button type="button" className="btn btn-ghost" onClick={() => navigate("/staffs/role-menu-item")}>Cancel</button>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
-);
+  );
 
 }
