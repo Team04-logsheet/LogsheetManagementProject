@@ -1,52 +1,67 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import BatchCycleList from "../pages/batchCycle/BatchCycleList";
 import EditBatchCycle from "../pages/batchCycle/EditBatchCycle";
 import AddBatchCycle from "../pages/batchCycle/AddBatchCycle";
+
 import Login from "../pages/Login";
 import AdminHome from "../pages/admin/AdminHome";
 import Layout from "../Layout";
+
+/* Menu Item */
 import MenuItemList from "../pages/menuItem/MenuItemList";
 import AddMenuItem from "../pages/menuItem/AddMenuItem";
 import EditMenuItem from "../pages/menuItem/EditMenuItem";
+
+/* Role */
 import RoleList from "../pages/role/RoleList";
 import AddRole from "../pages/role/AddRole";
 import EditRole from "../pages/role/EditRole";
 import RoleDetail from "../pages/role/RoleDetail";
+
+/* Premises */
 import PremisesList from "../pages/premises/PremisesList";
 import AddPremises from "../pages/premises/AddPremises";
 import EditPremises from "../pages/premises/EditPremises";
+
+/* Course Type */
 import CourseTypeList from "../pages/courseType/CourseTypeList";
 import AddCourseType from "../pages/courseType/AddCourseType";
 import EditCourseType from "../pages/courseType/EditCourseType";
+
+/* Courses */
 import CourseList from "../pages/course/CourseList";
 import CourseDetail from "../pages/course/CourseDetail";
 import AddCourse from "../pages/course/AddCourse";
 import EditCourse from "../pages/course/EditCourse";
+
+/* Staff */
 import StaffList from "../pages/staff/StaffList";
 import AddStaff from "../pages/staff/AddStaff";
 import EditStaff from "../pages/staff/EditStaff";
 import StaffDetail from "../pages/staff/StaffDetails";
 
+/* Groups */
 import GroupTableList from "../pages/grouptable/GroupTableList";
 import AddGroupTable from "../pages/grouptable/AddGroupTable";
 import EditGroupTable from "../pages/grouptable/EditGroupTable";
 
-// Subject
+/* Modules */
 import SubjectList from "../pages/admin/subject/SubjectList";
 import AddSubject from "../pages/admin/subject/AddSubject";
 import EditSubject from "../pages/admin/subject/EditSubject";
 
-// Section
 import SectionList from "../pages/admin/section/SectionList";
 import AddSection from "../pages/admin/section/AddSection";
 import EditSection from "../pages/admin/section/EditSection";
 
-
-// Topic
 import TopicList from "../pages/admin/topic/TopicList";
 import AddTopic from "../pages/admin/topic/AddTopic";
 
-
+/* Role ↔ Menu Item */
+import ListRoleMenuItem from "../pages/roleMenuItem/ListRoleMenuItem";
+import AddRoleMenuItem from "../pages/roleMenuItem/AddRoleMenuItem";
+import EditRoleMenuItem from "../pages/roleMenuItem/EditRoleMenuItem";
 
 const AppRoutes = () => {
   return (
@@ -57,72 +72,69 @@ const AppRoutes = () => {
       <Route element={<Layout />}>
         <Route path="/home" element={<AdminHome />} />
 
-        {/* Batch Cycle Routes */}
+        {/* Batch Cycle */}
         <Route path="/courses/batch-cycle/add" element={<AddBatchCycle />} />
-        <Route
-          path="/courses/batch-cycle/edit/:id"
-          element={<EditBatchCycle />}
-        />
+        <Route path="/courses/batch-cycle/edit/:id" element={<EditBatchCycle />} />
         <Route path="/courses/batch-cycle" element={<BatchCycleList />} />
 
-        {/* Premises Routes */}
+        {/* Premises */}
         <Route path="/courses/premises/add" element={<AddPremises />} />
         <Route path="/courses/premises/edit/:id" element={<EditPremises />} />
         <Route path="/courses/premises" element={<PremisesList />} />
 
-        {/* Course types Routes */}
+        {/* Course Types */}
         <Route path="/courses/course-type/add" element={<AddCourseType />} />
-        <Route
-          path="/courses/course-type/edit/:id"
-          element={<EditCourseType />}
-        />
+        <Route path="/courses/course-type/edit/:id" element={<EditCourseType />} />
         <Route path="/courses/course-type" element={<CourseTypeList />} />
 
-        {/* Courses Routes */}
+        {/* Courses */}
         <Route path="/courses/add" element={<AddCourse />} />
         <Route path="/courses/edit/:id" element={<EditCourse />} />
-
         <Route path="/courses" element={<CourseList />} />
         <Route path="/courses/:id" element={<CourseDetail />} />
 
-        {/* Menu Item Routes */}
+        {/* Role-Menu-Item (keep BEFORE any staff wildcard/param routes) */}
+        <Route path="/staffs/role-menu-item" element={<ListRoleMenuItem />} />
+        <Route path="/staffs/role-menu-item/add" element={<AddRoleMenuItem />} />
+        <Route path="/staffs/role-menu-item/edit/:roleId" element={<EditRoleMenuItem />} />
+
+        {/* Menu Item */}
         <Route path="/staffs/menu-item" element={<MenuItemList />} />
         <Route path="/staffs/menu-item/add" element={<AddMenuItem />} />
         <Route path="/staffs/menu-item/edit/:id" element={<EditMenuItem />} />
 
-        {/* Role Routes */}
+        {/* Role */}
         <Route path="/staffs/role" element={<RoleList />} />
         <Route path="/staffs/role/add" element={<AddRole />} />
         <Route path="/staffs/role/edit/:id" element={<EditRole />} />
         <Route path="/staffs/role/:id" element={<RoleDetail />} />
 
-        {/* Staff Routes */}
+        {/* Redirect to fix bad sidebar link /staffs/staff → /staffs */}
+        <Route path="/staffs/staff" element={<Navigate to="/staffs" replace />} />
+
+        {/* Staff */}
         <Route path="/staffs" element={<StaffList />} />
         <Route path="/staffs/add" element={<AddStaff />} />
         <Route path="/staffs/edit/:id" element={<EditStaff />} />
-        <Route path="/staffs/:id" element={<StaffDetail />} />
+        {/* Unambiguous detail route so it never conflicts with /staffs/role-menu-item */}
+        <Route path="/staffs/view/:id" element={<StaffDetail />} />
 
-        
-        {/*GroupTable Routes*/}
+        {/* Groups */}
         <Route path="/groups/groups" element={<GroupTableList />} />
         <Route path="/groups/add" element={<AddGroupTable />} />
         <Route path="/groups/edit/:id" element={<EditGroupTable />} />
 
-        {/* Modules → Subject */}
-          <Route path="/modules/subject" element={<SubjectList />} />
-          <Route path="/modules/subject/add" element={<AddSubject />} />
-          <Route path="/modules/subject/edit/:id" element={<EditSubject />} />
+        {/* Modules */}
+        <Route path="/modules/subject" element={<SubjectList />} />
+        <Route path="/modules/subject/add" element={<AddSubject />} />
+        <Route path="/modules/subject/edit/:id" element={<EditSubject />} />
 
-        {/* Modules → Section */}
-          <Route path="/modules/section" element={<SectionList />} />
-          <Route path="/modules/section/add" element={<AddSection />} />
-          <Route path="/modules/section/edit/:id" element={<EditSection />} />
+        <Route path="/modules/section" element={<SectionList />} />
+        <Route path="/modules/section/add" element={<AddSection />} />
+        <Route path="/modules/section/edit/:id" element={<EditSection />} />
 
-        {/* Modules → Topic (no edit) */}
-          <Route path="/modules/topic" element={<TopicList />} />
-          <Route path="/modules/topic/add" element={<AddTopic />} />
-
-
+        <Route path="/modules/topic" element={<TopicList />} />
+        <Route path="/modules/topic/add" element={<AddTopic />} />
       </Route>
     </Routes>
   );
