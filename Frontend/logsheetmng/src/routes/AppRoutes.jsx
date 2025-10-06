@@ -31,6 +31,12 @@ import GroupTableList from "../pages/grouptable/GroupTableList";
 import AddGroupTable from "../pages/grouptable/AddGroupTable";
 import EditGroupTable from "../pages/grouptable/EditGroupTable";
 
+// Subject
+import SubjectList from "../pages/admin/subject/SubjectList";
+import AddSubject from "../pages/admin/subject/AddSubject";
+import EditSubject from "../pages/admin/subject/EditSubject";
+
+
 
 const AppRoutes = () => {
   return (
@@ -91,6 +97,11 @@ const AppRoutes = () => {
         <Route path="/groups/groups" element={<GroupTableList />} />
         <Route path="/groups/add" element={<AddGroupTable />} />
         <Route path="/groups/edit/:id" element={<EditGroupTable />} />
+
+         {/* Modules → Subject */}
+          <Route path="/modules/subject" element={<SubjectList />} />
+          <Route path="/modules/subject/add" element={<AddSubject />} />
+          <Route path="/modules/subject/edit/:id" element={<EditSubject />} />
 
 
       </Route>
