@@ -59,47 +59,49 @@ export default function ListRoleMenuItem() {
   };
 
   return (
-  <div className="list-container">
-    <div className="list-header">
-      <h2>Assign Menu Items to Role</h2>
-      <button className="btn btn-primary" onClick={() => navigate("/staffs/role-menu-item/add")}>
-        + Add Mapping
-      </button>
-    </div>
+    <div className="rmi-scope">
+      <div className="list-container">
+        <div className="list-header">
+          <h2>Assign Menu Items to Role</h2>
+          <button className="btn btn-primary" onClick={() => navigate("/staffs/role-menu-item/add")}>
+            + Add Mapping
+          </button>
+        </div>
 
-    {loading && <div className="status">Loading...</div>}
-    {err && <div className="error">{err}</div>}
+        {loading && <div className="status">Loading...</div>}
+        {err && <div className="error">{err}</div>}
 
-    {!loading && !err && (
-      <div className="list-card">
-        <table className="list-table">
-          <thead>
-            <tr>
-              <th style={{ width: "22%" }}>Role</th>
-              <th>Menu Items</th>
-              <th className="actions-col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {grouped.length === 0 ? (
-              <tr><td colSpan="3" className="empty">No mappings found.</td></tr>
-            ) : (
-              grouped.map(({ role, menuItems }) => (
-                <tr key={role.id}>
-                  <td><strong>{role.name}</strong></td>
-                  <td>{menuItems?.length ? menuItems.map(mi => mi.title).join(", ") : <em>— None —</em>}</td>
-                  <td className="actions">
-                    <button className="btn" onClick={() => navigate(`/staffs/role-menu-item/edit/${role.id}`)}>Edit</button>
-                    <button className="btn btn-danger" onClick={() => handleDeleteAllForRole(role.id)}>Delete</button>
-                  </td>
+        {!loading && !err && (
+          <div className="list-card">
+            <table className="list-table">
+              <thead>
+                <tr>
+                  <th style={{ width: "22%" }}>Role</th>
+                  <th>Menu Items</th>
+                  <th className="actions-col">Actions</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {grouped.length === 0 ? (
+                  <tr><td colSpan="3" className="empty">No mappings found.</td></tr>
+                ) : (
+                  grouped.map(({ role, menuItems }) => (
+                    <tr key={role.id}>
+                      <td><strong>{role.name}</strong></td>
+                      <td>{menuItems?.length ? menuItems.map(mi => mi.title).join(", ") : <em>— None —</em>}</td>
+                      <td className="actions">
+                        <button className="btn" onClick={() => navigate(`/staffs/role-menu-item/edit/${role.id}`)}>Edit</button>
+                        <button className="btn btn-danger" onClick={() => handleDeleteAllForRole(role.id)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-    )}
-  </div>
-);
+    </div>
+  );
 
 }
