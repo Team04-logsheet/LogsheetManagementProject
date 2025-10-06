@@ -63,6 +63,10 @@ import ListRoleMenuItem from "../pages/roleMenuItem/ListRoleMenuItem";
 import AddRoleMenuItem from "../pages/roleMenuItem/AddRoleMenuItem";
 import EditRoleMenuItem from "../pages/roleMenuItem/EditRoleMenuItem";
 
+import AddLogsheetType from "../pages/logsheetTypes/AddLogsheetType";
+import EditLogsheetType from "../pages/logsheetTypes/EditLogsheetType";
+import LogsheetTypeList from "../pages/logsheetTypes/LogsheetTypeList";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -74,7 +78,10 @@ const AppRoutes = () => {
 
         {/* Batch Cycle */}
         <Route path="/courses/batch-cycle/add" element={<AddBatchCycle />} />
-        <Route path="/courses/batch-cycle/edit/:id" element={<EditBatchCycle />} />
+        <Route
+          path="/courses/batch-cycle/edit/:id"
+          element={<EditBatchCycle />}
+        />
         <Route path="/courses/batch-cycle" element={<BatchCycleList />} />
 
         {/* Premises */}
@@ -84,7 +91,10 @@ const AppRoutes = () => {
 
         {/* Course Types */}
         <Route path="/courses/course-type/add" element={<AddCourseType />} />
-        <Route path="/courses/course-type/edit/:id" element={<EditCourseType />} />
+        <Route
+          path="/courses/course-type/edit/:id"
+          element={<EditCourseType />}
+        />
         <Route path="/courses/course-type" element={<CourseTypeList />} />
 
         {/* Courses */}
@@ -95,8 +105,14 @@ const AppRoutes = () => {
 
         {/* Role-Menu-Item (keep BEFORE any staff wildcard/param routes) */}
         <Route path="/staffs/role-menu-item" element={<ListRoleMenuItem />} />
-        <Route path="/staffs/role-menu-item/add" element={<AddRoleMenuItem />} />
-        <Route path="/staffs/role-menu-item/edit/:roleId" element={<EditRoleMenuItem />} />
+        <Route
+          path="/staffs/role-menu-item/add"
+          element={<AddRoleMenuItem />}
+        />
+        <Route
+          path="/staffs/role-menu-item/edit/:roleId"
+          element={<EditRoleMenuItem />}
+        />
 
         {/* Menu Item */}
         <Route path="/staffs/menu-item" element={<MenuItemList />} />
@@ -110,7 +126,10 @@ const AppRoutes = () => {
         <Route path="/staffs/role/:id" element={<RoleDetail />} />
 
         {/* Redirect to fix bad sidebar link /staffs/staff → /staffs */}
-        <Route path="/staffs/staff" element={<Navigate to="/staffs" replace />} />
+        <Route
+          path="/staffs/staff"
+          element={<Navigate to="/staffs" replace />}
+        />
 
         {/* Staff */}
         <Route path="/staffs" element={<StaffList />} />
@@ -135,6 +154,17 @@ const AppRoutes = () => {
 
         <Route path="/modules/topic" element={<TopicList />} />
         <Route path="/modules/topic/add" element={<AddTopic />} />
+
+        {/* Logsheet Type Routes */}
+        <Route
+          path="/logsheet/logsheet-type/add"
+          element={<AddLogsheetType />}
+        />
+        <Route
+          path="/logsheet/logsheet-type/edit/:id"
+          element={<EditLogsheetType />}
+        />
+        <Route path="/logsheet/logsheet-type" element={<LogsheetTypeList />} />
       </Route>
     </Routes>
   );
