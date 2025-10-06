@@ -15,8 +15,7 @@ const menuData = [
     children: [
       { key: "subject", label: "Subject" },
       { key: "section", label: "Section" },
-      { key: "topic", label: "Topic" },
-      { key: "module", label: "Module" },
+      { key: "Topic", label: "Topic" },
     ],
   },
   {

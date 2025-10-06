@@ -1,0 +1,4 @@
+.form-wrap { padding: 16px; display: grid; place-items: start; }
+.form-card { width: min(560px, 100%); border-radius: 14px; }
+.form-card .card-header { font-weight: 700; }
+.form-actions { display: flex; gap: 10px; justify-content: flex-end; }
