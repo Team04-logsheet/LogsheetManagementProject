@@ -36,6 +36,11 @@ import SubjectList from "../pages/admin/subject/SubjectList";
 import AddSubject from "../pages/admin/subject/AddSubject";
 import EditSubject from "../pages/admin/subject/EditSubject";
 
+// Section
+import SectionList from "../pages/admin/section/SectionList";
+import AddSection from "../pages/admin/section/AddSection";
+import EditSection from "../pages/admin/section/EditSection";
+
 
 
 const AppRoutes = () => {
@@ -102,6 +107,11 @@ const AppRoutes = () => {
           <Route path="/modules/subject" element={<SubjectList />} />
           <Route path="/modules/subject/add" element={<AddSubject />} />
           <Route path="/modules/subject/edit/:id" element={<EditSubject />} />
+
+          {/* Modules → Section */}
+          <Route path="/modules/section" element={<SectionList />} />
+          <Route path="/modules/section/add" element={<AddSection />} />
+          <Route path="/modules/section/edit/:id" element={<EditSection />} />
 
 
       </Route>

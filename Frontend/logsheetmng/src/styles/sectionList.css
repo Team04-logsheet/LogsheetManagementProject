@@ -1,0 +1,6 @@
+.list-container { padding: 16px; }
+.list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.list-header h2 { margin: 0; font-weight: 700; }
+.list-actions { display: flex; gap: 8px; }
+.list-table thead th { background: #f6f7f9; }
+.actions-col, .actions { text-align: center; width: 160px; }
