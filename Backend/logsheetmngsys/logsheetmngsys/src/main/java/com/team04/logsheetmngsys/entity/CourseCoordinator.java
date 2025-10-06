@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "course_coordinators")
+@Table(name = "course_coordinators",
+uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"course_id", "staff_id", "is_active"})
+    }
+		)
 public class CourseCoordinator extends BaseEntity {
 
     @ManyToOne
