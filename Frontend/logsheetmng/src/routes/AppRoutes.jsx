@@ -42,6 +42,11 @@ import AddSection from "../pages/admin/section/AddSection";
 import EditSection from "../pages/admin/section/EditSection";
 
 
+// Topic
+import TopicList from "../pages/admin/topic/TopicList";
+import AddTopic from "../pages/admin/topic/AddTopic";
+
+
 
 const AppRoutes = () => {
   return (
@@ -103,15 +108,19 @@ const AppRoutes = () => {
         <Route path="/groups/add" element={<AddGroupTable />} />
         <Route path="/groups/edit/:id" element={<EditGroupTable />} />
 
-         {/* Modules → Subject */}
+        {/* Modules → Subject */}
           <Route path="/modules/subject" element={<SubjectList />} />
           <Route path="/modules/subject/add" element={<AddSubject />} />
           <Route path="/modules/subject/edit/:id" element={<EditSubject />} />
 
-          {/* Modules → Section */}
+        {/* Modules → Section */}
           <Route path="/modules/section" element={<SectionList />} />
           <Route path="/modules/section/add" element={<AddSection />} />
           <Route path="/modules/section/edit/:id" element={<EditSection />} />
+
+        {/* Modules → Topic (no edit) */}
+          <Route path="/modules/topic" element={<TopicList />} />
+          <Route path="/modules/topic/add" element={<AddTopic />} />
 
 
       </Route>
