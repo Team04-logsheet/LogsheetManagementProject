@@ -66,6 +66,10 @@ import EditRoleMenuItem from "../pages/roleMenuItem/EditRoleMenuItem";
 import AddLogsheetType from "../pages/logsheetTypes/AddLogsheetType";
 import EditLogsheetType from "../pages/logsheetTypes/EditLogsheetType";
 import LogsheetTypeList from "../pages/logsheetTypes/LogsheetTypeList";
+/* Course Coordinator */
+import CourseCoordinatorList from "../pages/courseCoordinator/CourseCoordinatorList";
+import AddCourseCoordinator from "../pages/courseCoordinator/AddCourseCoordinator";
+import EditCourseCoordinator from "../pages/courseCoordinator/EditCourseCoordinator";
 
 const AppRoutes = () => {
   return (
@@ -103,7 +107,7 @@ const AppRoutes = () => {
         <Route path="/courses" element={<CourseList />} />
         <Route path="/courses/:id" element={<CourseDetail />} />
 
-        {/* Role-Menu-Item (keep BEFORE any staff wildcard/param routes) */}
+        {/* Role-Menu-Item (keep BEFORE any staff routes) */}
         <Route path="/staffs/role-menu-item" element={<ListRoleMenuItem />} />
         <Route
           path="/staffs/role-menu-item/add"
@@ -125,6 +129,11 @@ const AppRoutes = () => {
         <Route path="/staffs/role/edit/:id" element={<EditRole />} />
         <Route path="/staffs/role/:id" element={<RoleDetail />} />
 
+        {/* Course Coordinator */}
+        <Route path="/staffs/course-coordinator" element={<CourseCoordinatorList />} />
+        <Route path="/staffs/course-coordinator/add" element={<AddCourseCoordinator />} />
+        <Route path="/staffs/course-coordinator/edit/:id" element={<EditCourseCoordinator />} />
+
         {/* Redirect to fix bad sidebar link /staffs/staff → /staffs */}
         <Route
           path="/staffs/staff"
@@ -135,7 +144,7 @@ const AppRoutes = () => {
         <Route path="/staffs" element={<StaffList />} />
         <Route path="/staffs/add" element={<AddStaff />} />
         <Route path="/staffs/edit/:id" element={<EditStaff />} />
-        {/* Unambiguous detail route so it never conflicts with /staffs/role-menu-item */}
+        {/* Unambiguous detail route so it never conflicts */}
         <Route path="/staffs/view/:id" element={<StaffDetail />} />
 
         {/* Groups */}
