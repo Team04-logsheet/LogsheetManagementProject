@@ -66,10 +66,16 @@ import EditRoleMenuItem from "../pages/roleMenuItem/EditRoleMenuItem";
 import AddLogsheetType from "../pages/logsheetTypes/AddLogsheetType";
 import EditLogsheetType from "../pages/logsheetTypes/EditLogsheetType";
 import LogsheetTypeList from "../pages/logsheetTypes/LogsheetTypeList";
+
 /* Course Coordinator */
 import CourseCoordinatorList from "../pages/courseCoordinator/CourseCoordinatorList";
 import AddCourseCoordinator from "../pages/courseCoordinator/AddCourseCoordinator";
 import EditCourseCoordinator from "../pages/courseCoordinator/EditCourseCoordinator";
+
+/*CourseGroup */
+import AddCourseGroup from "../pages/coursegroup/AddCourseGroup";
+import EditCourseGroup from "../pages/coursegroup/EditCourseGroup";
+import CourseGroupList from "../pages/coursegroup/CourseGroupList";
 
 const AppRoutes = () => {
   return (
@@ -174,6 +180,12 @@ const AppRoutes = () => {
           element={<EditLogsheetType />}
         />
         <Route path="/logsheet/logsheet-type" element={<LogsheetTypeList />} />
+      
+        {/*CourseGroup Route */}
+        <Route path="/groups/course-group" element={<CourseGroupList />} />
+        <Route path="/groups/course-group/add" element={<AddCourseGroup />} />
+        <Route path="/groups/course-group/edit/:id" element={<EditCourseGroup />} />
+
       </Route>
     </Routes>
   );
