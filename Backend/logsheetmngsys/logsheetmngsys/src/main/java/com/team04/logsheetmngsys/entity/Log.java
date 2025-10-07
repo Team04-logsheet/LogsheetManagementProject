@@ -18,21 +18,21 @@ import lombok.NoArgsConstructor;
 @Table(name = "logs")
 public class Log extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "logsheet_type_id")
-    private LogsheetType logsheetType;
-
-    @ManyToOne
-    @JoinColumn(name = "staff_id")
-    private Staff staff;
-
+	@ManyToOne
+	@JoinColumn(name = "staff_id")
+	private Staff staff;
+	
+	@ManyToOne
+	@JoinColumn(name = "logsheet_type_id")
+	private LogsheetType logsheetType;
+	
+	@ManyToOne
+	@JoinColumn(name = "course_id")
+	private Course course;
+	
     @ManyToOne
     @JoinColumn(name = "module_id")
     private Module module;
-
-    @ManyToOne
-    @JoinColumn(name = "course_group_id")
-    private CourseGroup courseGroup;
 
     @ManyToOne
     @JoinColumn(name = "topic_id")
@@ -53,6 +53,7 @@ public class Log extends BaseEntity {
     @Column(name = "is_approved")
     private Boolean isApproved;
 
+    @Column(name = "verified_at")
     private LocalDateTime approvedAt;
     
 }

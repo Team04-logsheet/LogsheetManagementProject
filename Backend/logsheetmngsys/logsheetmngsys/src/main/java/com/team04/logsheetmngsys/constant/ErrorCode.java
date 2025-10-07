@@ -38,6 +38,7 @@ public enum ErrorCode {
 	
 	//Logsheet related Errors
 	LOG_NOT_FOUND(5101,"Log not found with ID :"),
+	LOGSHEET_TYPE_NOT_FOUND(5201, "Logsheet Type not found with ID: "),
 	
 	//Authentication and Authorization related Errors
 	INVALID_CREDENTIALS(6101,"Invalid credentials"),
