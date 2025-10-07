@@ -16,6 +16,7 @@ const menuData = [
       { key: "subject", label: "Subject" },
       { key: "section", label: "Section" },
       { key: "Topic", label: "Topic" },
+      { key: "module", label: "Module"},
     ],
   },
   {

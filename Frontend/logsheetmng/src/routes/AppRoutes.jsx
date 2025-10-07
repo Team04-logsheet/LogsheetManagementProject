@@ -58,6 +58,11 @@ import EditSection from "../pages/admin/section/EditSection";
 import TopicList from "../pages/admin/topic/TopicList";
 import AddTopic from "../pages/admin/topic/AddTopic";
 
+import ModuleList from "../pages/admin/module/ModuleList";
+import AddModule from "../pages/admin/module/AddModule";
+import EditModule from "../pages/admin/module/EditModule";
+
+
 /* Role ↔ Menu Item */
 import ListRoleMenuItem from "../pages/roleMenuItem/ListRoleMenuItem";
 import AddRoleMenuItem from "../pages/roleMenuItem/AddRoleMenuItem";
@@ -136,9 +141,18 @@ const AppRoutes = () => {
         <Route path="/staffs/role/:id" element={<RoleDetail />} />
 
         {/* Course Coordinator */}
-        <Route path="/staffs/course-coordinator" element={<CourseCoordinatorList />} />
-        <Route path="/staffs/course-coordinator/add" element={<AddCourseCoordinator />} />
-        <Route path="/staffs/course-coordinator/edit/:id" element={<EditCourseCoordinator />} />
+        <Route
+          path="/staffs/course-coordinator"
+          element={<CourseCoordinatorList />}
+        />
+        <Route
+          path="/staffs/course-coordinator/add"
+          element={<AddCourseCoordinator />}
+        />
+        <Route
+          path="/staffs/course-coordinator/edit/:id"
+          element={<EditCourseCoordinator />}
+        />
 
         {/* Redirect to fix bad sidebar link /staffs/staff → /staffs */}
         <Route
@@ -170,6 +184,10 @@ const AppRoutes = () => {
         <Route path="/modules/topic" element={<TopicList />} />
         <Route path="/modules/topic/add" element={<AddTopic />} />
 
+        <Route path="/modules/module" element={<ModuleList />} />
+        <Route path="/modules/module/add" element={<AddModule />} />
+        <Route path="/modules/module/edit/:id" element={<EditModule />} />
+
         {/* Logsheet Type Routes */}
         <Route
           path="/logsheet/logsheet-type/add"
@@ -180,12 +198,14 @@ const AppRoutes = () => {
           element={<EditLogsheetType />}
         />
         <Route path="/logsheet/logsheet-type" element={<LogsheetTypeList />} />
-      
+
         {/*CourseGroup Route */}
         <Route path="/groups/course-group" element={<CourseGroupList />} />
         <Route path="/groups/course-group/add" element={<AddCourseGroup />} />
-        <Route path="/groups/course-group/edit/:id" element={<EditCourseGroup />} />
-
+        <Route
+          path="/groups/course-group/edit/:id"
+          element={<EditCourseGroup />}
+        />
       </Route>
     </Routes>
   );
