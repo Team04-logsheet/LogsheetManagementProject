@@ -1,0 +1,26 @@
+/* Scope wrapper so nothing leaks outside Role-Menu-Item pages */
+.rmi-scope .list-container { padding: 16px; }
+
+.rmi-scope .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.rmi-scope .list-header h2 { margin: 0; font-weight: 700; }
+
+.rmi-scope .list-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow-x: auto; }
+.rmi-scope .list-table { width: 100%; border-collapse: collapse; }
+.rmi-scope .list-table thead th { background: #f6f7f9; font-weight: 600; }
+.rmi-scope .list-table th, 
+.rmi-scope .list-table td { padding: 12px 14px; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
+
+.rmi-scope .empty { text-align: center; color: #666; padding: 22px; }
+.rmi-scope .error { color: #c00; margin: 10px 0; }
+.rmi-scope .status { margin: 10px 0; }
+
+.rmi-scope .actions-col, 
+.rmi-scope .actions { text-align: center; width: 180px; }
+.rmi-scope .actions { display: flex; gap: 8px; justify-content: center; }
+
+.rmi-scope .btn { padding: 8px 12px; border-radius: 10px; border: 1px solid #e1e4ea; background: #fff; cursor: pointer; }
+.rmi-scope .btn:hover { background: #f5f6f8; }
+.rmi-scope .btn-primary { background: #2f7dff; border-color: #2f7dff; color: #fff; }
+.rmi-scope .btn-primary:hover { background: #246af0; }
+.rmi-scope .btn-danger { background: #ffe9e9; border-color: #ffd0d0; color: #a40000; }
+.rmi-scope .btn-danger:hover { background: #ffdede; }
