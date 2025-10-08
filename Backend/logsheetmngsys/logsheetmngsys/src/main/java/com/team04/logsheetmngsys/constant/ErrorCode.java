@@ -20,6 +20,8 @@ public enum ErrorCode {
 	SECTION_NOT_FOUND(2201,"Section not found with ID :"),
 	TOPIC_NOT_FOUND(2301,"Topic not found with ID :"),
 	MODULE_NOT_FOUND(2401,"Module not found with ID :"),
+	INVALID_MODULE_IDS(2402, "Invalid Module IDs provided: "),
+	COURSE_MODULE_NOT_FOUND(2403, "Course-Module mapping not found."),
 	
 	//User Management related Errors
 	STAFF_NOT_FOUND(3101,"Staff not found with ID :"),
