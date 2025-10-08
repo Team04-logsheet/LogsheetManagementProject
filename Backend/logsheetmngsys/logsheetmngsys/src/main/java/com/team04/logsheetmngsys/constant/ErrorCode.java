@@ -22,6 +22,9 @@ public enum ErrorCode {
 	MODULE_NOT_FOUND(2401,"Module not found with ID :"),
 	INVALID_MODULE_IDS(2402, "Invalid Module IDs provided: "),
 	COURSE_MODULE_NOT_FOUND(2403, "Course-Module mapping not found."),
+    //Data Integrity & Assignment Errors
+    DUPLICATE_ASSIGNMENT(2501, "This assignment already exists."),
+    ASSIGNMENT_NOT_FOUND(2502, "The specified assignment could not be found."),
 	
 	//User Management related Errors
 	STAFF_NOT_FOUND(3101,"Staff not found with ID :"),

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team04.logsheetmngsys.dto.CourseModuleDTO;
 import com.team04.logsheetmngsys.dto.responseDto.CourseModuleResponseDTO;
-import com.team04.logsheetmngsys.entity.CourseModule;
 import com.team04.logsheetmngsys.service.CourseModuleService;
 
 @RestController
@@ -27,6 +26,12 @@ public class CourseModuleController {
     @Autowired
     public CourseModuleController(CourseModuleService courseModuleService) {
         this.courseModuleService = courseModuleService;
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<CourseModuleResponseDTO>> getAllCourseModules() {
+        List<CourseModuleResponseDTO> assignments = courseModuleService.getAllCourseModules();
+        return ResponseEntity.ok(assignments);
     }
 
     @PostMapping
