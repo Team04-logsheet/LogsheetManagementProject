@@ -74,7 +74,7 @@ public class CourseModuleServiceImpl implements CourseModuleService {
     }
     
     @Override
-    @Transactional // <-- ADD THIS ANNOTATION
+    @Transactional 
     public List<CourseModuleResponseDTO> getAllCourseModules() {
         return courseModuleRepository.findAll().stream()
                 .map(this::convertToResponseDTO)
