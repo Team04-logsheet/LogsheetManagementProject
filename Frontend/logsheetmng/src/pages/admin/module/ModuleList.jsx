@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Table } from "react-bootstrap";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaTrash, FaInfoCircle } from "react-icons/fa";
 import "../../../styles/listPage.css";
 
 const ModuleList = () => {
@@ -30,6 +30,10 @@ const ModuleList = () => {
     navigate(`/modules/module/edit/${id}`);
   };
 
+  const handleViewDetails = (id) => {
+    navigate(`/modules/module/${id}`);
+  };
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this module?")) {
       try {
@@ -50,7 +54,10 @@ const ModuleList = () => {
     <div className="list-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Modules</h2>
-        <Button variant="primary" onClick={() => navigate("/modules/module/add")}>
+        <Button
+          variant="primary"
+          onClick={() => navigate("/modules/module/add")}
+        >
           + Add New
         </Button>
       </div>
@@ -63,7 +70,6 @@ const ModuleList = () => {
             <tr>
               <th>Sr. No.</th>
               <th>Title</th>
-              <th>Description</th>
               <th>Theory Hours</th>
               <th>Practical Hours</th>
               <th>Actions</th>
@@ -74,10 +80,18 @@ const ModuleList = () => {
               <tr key={mod.id}>
                 <td>{index + 1}</td>
                 <td>{mod.title}</td>
-                <td>{mod.description}</td>
                 <td>{mod.theoryHours}</td>
                 <td>{mod.practicalHours}</td>
                 <td>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    onClick={() => handleViewDetails(mod.id)}
+                    className="me-2"
+                  >
+                    <FaInfoCircle />
+                  </Button>
+
                   <Button
                     variant="warning"
                     size="sm"
