@@ -34,23 +34,45 @@ const RoleDetail = () => {
   // Fetch role details and assigned menu items on component mount
   useEffect(() => {
     const fetchRoleData = async () => {
-      try {
-        setLoading(true);
-        const roleRes = await axios.get(
-          `http://localhost:8080/api/roles/${id}`
-        );
-        const assignedItemsRes = await axios.get(
-          `http://localhost:8080/api/role-menu-items/role/${id}`
-        );
-        setRole(roleRes.data);
-        setAssignedItems(assignedItemsRes.data);
-      } catch (err) {
+      setLoading(true);
+      setError(null); // Reset error on new fetch
+
+      const rolePromise = axios.get(`http://localhost:8080/api/roles/${id}`);
+      const itemsPromise = axios.get(
+        `http://localhost:8080/api/role-menu-items/role/${id}`
+      );
+
+      const [roleResult, itemsResult] = await Promise.allSettled([
+        rolePromise,
+        itemsPromise,
+      ]);
+
+      // Handle the result of the role API call
+      if (roleResult.status === "fulfilled") {
+        setRole(roleResult.value.data);
+      } else {
+        // If fetching the role itself fails, it's a critical error.
+        console.error("Failed to fetch role:", roleResult.reason);
         setError("Failed to load role details.");
-        console.error(err);
-      } finally {
         setLoading(false);
+        return; // Stop execution
       }
+
+      // Handle the result of the assigned items API call
+      if (itemsResult.status === "fulfilled") {
+        setAssignedItems(itemsResult.value.data);
+      } else {
+        // If it fails (e.g., 404 Not Found), just set an empty array.
+        console.warn(
+          "Could not fetch assigned menu items, treating as empty.",
+          itemsResult.reason
+        );
+        setAssignedItems([]);
+      }
+
+      setLoading(false);
     };
+
     fetchRoleData();
   }, [id]);
 
