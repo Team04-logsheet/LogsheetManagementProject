@@ -61,7 +61,7 @@ import AddTopic from "../pages/admin/topic/AddTopic";
 import ModuleList from "../pages/admin/module/ModuleList";
 import AddModule from "../pages/admin/module/AddModule";
 import EditModule from "../pages/admin/module/EditModule";
-
+import ModuleDetail from "../pages/admin/module/ModuleDetail";
 
 /* Role ↔ Menu Item */
 import ListRoleMenuItem from "../pages/roleMenuItem/ListRoleMenuItem";
@@ -187,6 +187,7 @@ const AppRoutes = () => {
         <Route path="/modules/module" element={<ModuleList />} />
         <Route path="/modules/module/add" element={<AddModule />} />
         <Route path="/modules/module/edit/:id" element={<EditModule />} />
+        <Route path="/modules/module/:id" element={<ModuleDetail />} />
 
         {/* Logsheet Type Routes */}
         <Route
