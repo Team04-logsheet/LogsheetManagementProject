@@ -106,6 +106,19 @@ public class ModuleRouterServiceImpl implements ModuleRouterService {
         router.setIsActive(false); // deactivate
         return mapToDto(moduleRouterRepository.save(router));
     }
+    
+    @Override
+    public boolean isStaffAnActiveRouter(Long staffId) {
+        return moduleRouterRepository.existsByStaffIdAndIsActiveTrue(staffId);
+    }
+    
+    @Override
+    public List<ModuleRouterResponseDTO> getActiveModuleRouters() {
+        return moduleRouterRepository.findByIsActiveTrue()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
     private ModuleRouterResponseDTO mapToDto(ModuleRouter entity) {
         return new ModuleRouterResponseDTO(

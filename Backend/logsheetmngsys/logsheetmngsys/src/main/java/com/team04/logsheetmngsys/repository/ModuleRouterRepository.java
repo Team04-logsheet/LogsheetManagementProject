@@ -24,4 +24,8 @@ public interface ModuleRouterRepository extends JpaRepository<ModuleRouter, Long
 
     @Transactional
     void deleteByModuleIdAndStaffId(Long moduleId, Long staffId);
+    
+    List<ModuleRouter> findByIsActiveTrue();
+    
+    boolean existsByStaffIdAndIsActiveTrue(Long staffId);
 }

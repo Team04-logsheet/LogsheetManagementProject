@@ -26,6 +26,11 @@ public class ModuleRouterController {
     public ResponseEntity<List<ModuleRouterResponseDTO>> getAllRouters() {
         return ResponseEntity.ok(moduleRouterService.getAllModuleRouters());
     }
+    
+    @GetMapping("/active")
+    public ResponseEntity<List<ModuleRouterResponseDTO>> getActiveRouters() {
+        return ResponseEntity.ok(moduleRouterService.getActiveModuleRouters());
+    }
 
     @GetMapping("/module/{moduleId}")
     public ResponseEntity<List<ModuleRouterResponseDTO>> getByModule(@PathVariable Long moduleId) {
@@ -59,4 +64,10 @@ public class ModuleRouterController {
 		String responseMsg = moduleRouterService.deleteModuleRouterById(id);
 		return ResponseEntity.ok(responseMsg);
 	}
+    
+    @GetMapping("/is-active/staff/{staffId}")
+    public ResponseEntity<Boolean> isStaffAnActiveRouter(@PathVariable Long staffId) {
+        boolean isActive = moduleRouterService.isStaffAnActiveRouter(staffId);
+        return ResponseEntity.ok(isActive);
+    }
 }
