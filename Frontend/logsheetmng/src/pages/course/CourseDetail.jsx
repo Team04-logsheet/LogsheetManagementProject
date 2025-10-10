@@ -11,7 +11,13 @@ import {
   Col,
   Alert,
 } from "react-bootstrap";
-import { FaArrowLeft, FaPlus, FaTrash } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaPlus,
+  FaTrash,
+  FaUserTie,
+  FaUserPlus,
+} from "react-icons/fa";
 import "../../styles/listPage.css";
 
 const CourseDetail = () => {
@@ -22,63 +28,88 @@ const CourseDetail = () => {
   const [course, setCourse] = useState(null);
   const [assignedModules, setAssignedModules] = useState([]);
 
+  // State for course coordinator
+  const [courseCoordinator, setCourseCoordinator] = useState(null);
+
   // State for the "Add Module" modal
-  const [showModal, setShowModal] = useState(false);
+  const [showModuleModal, setShowModuleModal] = useState(false);
   const [allModules, setAllModules] = useState([]);
   const [selectedModules, setSelectedModules] = useState([]);
+
+  // State for the "Assign Coordinator" modal
+  const [showCoordinatorModal, setShowCoordinatorModal] = useState(false);
+  const [allActiveStaffs, setAllActiveStaffs] = useState([]);
+  const [selectedCoordinator, setSelectedCoordinator] = useState(null);
 
   // General loading and error state
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- 1. Fetch Course and Assigned Modules Data ---
+  // --- 1. Fetch Course, Assigned Modules, and Coordinator Data ---
   useEffect(() => {
-    const fetchCourseData = async () => {
+    const fetchCourseAndAssignmentsData = async () => {
       setLoading(true);
       setError(null);
 
-      const coursePromise = axios.get(
-        `http://localhost:8080/api/courses/${id}`
-      );
-      const assignedModulesPromise = axios.get(
-        `http://localhost:8080/api/course-modules/course/${id}`
-      );
+      try {
+        const [courseResult, assignedModulesResult, courseCoordinatorResult] =
+          await Promise.allSettled([
+            axios.get(`http://localhost:8080/api/courses/${id}`),
+            axios.get(`http://localhost:8080/api/course-modules/course/${id}`),
+            axios.get(
+              `http://localhost:8080/api/course-coordinators/course/${id}`
+            ), // Fetch coordinator
+          ]);
 
-      const [courseResult, assignedModulesResult] = await Promise.allSettled([
-        coursePromise,
-        assignedModulesPromise,
-      ]);
+        // Handle course data
+        if (courseResult.status === "fulfilled") {
+          setCourse(courseResult.value.data);
+        } else {
+          setError("Failed to load course details.");
+          console.error("Error fetching course:", courseResult.reason);
+          setLoading(false);
+          return;
+        }
 
-      // Handle course data
-      if (courseResult.status === "fulfilled") {
-        setCourse(courseResult.value.data);
-      } else {
-        setError("Failed to load course details.");
-        console.error("Error fetching course:", courseResult.reason);
+        // Handle assigned modules data
+        if (assignedModulesResult.status === "fulfilled") {
+          setAssignedModules(assignedModulesResult.value.data);
+        } else {
+          console.warn(
+            "Could not fetch assigned modules, treating as empty.",
+            assignedModulesResult.reason
+          );
+          setAssignedModules([]);
+        }
+
+        // Handle course coordinator data
+        if (courseCoordinatorResult.status === "fulfilled") {
+          // A course can have multiple coordinators but we want the currently active one
+          const activeCoordinator = courseCoordinatorResult.value.data.find(
+            (cc) => cc.isActive
+          );
+          setCourseCoordinator(activeCoordinator || null);
+        } else {
+          console.warn(
+            "Could not fetch course coordinator, treating as none.",
+            courseCoordinatorResult.reason
+          );
+          setCourseCoordinator(null);
+        }
+      } catch (err) {
+        console.error("Error in fetching course details and assignments:", err);
+        setError("An unexpected error occurred while loading course details.");
+      } finally {
         setLoading(false);
-        return;
       }
-
-      // Handle assigned modules data
-      if (assignedModulesResult.status === "fulfilled") {
-        setAssignedModules(assignedModulesResult.value.data);
-      } else {
-        console.warn(
-          "Could not fetch assigned modules, treating as empty.",
-          assignedModulesResult.reason
-        );
-        setAssignedModules([]);
-      }
-
-      setLoading(false);
     };
-    fetchCourseData();
+    fetchCourseAndAssignmentsData();
   }, [id]);
 
-  // --- 2. Handlers for Modal and Assignments ---
+  // --- 2. Handlers for Module Modal and Assignments ---
 
   // Fetch all available modules when the modal is opened
-  const handleShowModal = async () => {
+  const handleShowModuleModal = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/modules");
       // Filter out modules that are already assigned
@@ -89,7 +120,7 @@ const CourseDetail = () => {
         (module) => !assignedModuleIds.has(module.id)
       );
       setAllModules(availableModules);
-      setShowModal(true);
+      setShowModuleModal(true);
     } catch (err) {
       console.error("Failed to fetch modules:", err);
       alert("Could not load modules.");
@@ -126,7 +157,7 @@ const CourseDetail = () => {
       setAssignedModules(updatedModulesRes.data);
 
       alert("Modules assigned successfully!");
-      setShowModal(false);
+      setShowModuleModal(false);
       setSelectedModules([]);
     } catch (error) {
       console.error("Error assigning modules:", error);
@@ -157,11 +188,120 @@ const CourseDetail = () => {
     }
   };
 
+  // --- 3. Handlers for Coordinator Modal and Assignment ---
+
+  const handleShowCoordinatorModal = async () => {
+    try {
+      // 1. Fetch active staff and active coordinators in parallel
+      const [staffResponse, activeCoordinatorsResponse] = await Promise.all([
+        axios.get("http://localhost:8080/api/staffs/active"),
+        axios.get("http://localhost:8080/api/course-coordinators/active"),
+      ]);
+
+      const allActiveStaff = staffResponse.data;
+      const activeCoordinators = activeCoordinatorsResponse.data;
+
+      // 2. Create a Set of staff IDs who are active coordinators for fast lookups
+      const activeCoordinatorStaffIds = new Set(
+        activeCoordinators.map((assignment) => assignment.staffId)
+      );
+
+      // 3. Add an 'isAvailable' flag to each staff member instead of filtering the list
+      const staffWithAvailability = allActiveStaff.map((staff) => {
+        const isCurrentlyAssignedToThisCourse =
+          courseCoordinator && staff.id === courseCoordinator.staffId;
+
+        // A staff member is available if they are not an active coordinator,
+        // OR if they are the coordinator for THIS course.
+        const isAvailable =
+          !activeCoordinatorStaffIds.has(staff.id) ||
+          isCurrentlyAssignedToThisCourse;
+
+        return { ...staff, isAvailable };
+      });
+
+      // 4. Set the enriched list to state and open the modal
+      setAllActiveStaffs(staffWithAvailability);
+      setSelectedCoordinator(
+        courseCoordinator ? courseCoordinator.staffId : null
+      );
+      setShowCoordinatorModal(true);
+    } catch (err) {
+      console.error("Failed to fetch data for coordinator modal:", err);
+      alert("Could not load staff members.");
+    }
+  };
+
+  const handleCoordinatorSelect = (e) => {
+    setSelectedCoordinator(parseInt(e.target.value, 10));
+  };
+
+  const handleAssignCoordinator = async () => {
+    if (!selectedCoordinator) {
+      alert("Please select a staff member to assign as coordinator.");
+      return;
+    }
+
+    try {
+      // Deactivate existing coordinator if any
+      if (courseCoordinator) {
+        await axios.put(
+          `http://localhost:8080/api/course-coordinators/deactivate`,
+          {
+            courseId: course.id,
+            staffId: courseCoordinator.staffId,
+          }
+        );
+      }
+
+      // Assign the new coordinator
+      const payload = {
+        courseId: course.id,
+        staffId: selectedCoordinator,
+      };
+      const response = await axios.post(
+        "http://localhost:8080/api/course-coordinators",
+        payload
+      );
+
+      // Update the course coordinator state
+      setCourseCoordinator(response.data);
+
+      alert("Course coordinator assigned successfully!");
+      setShowCoordinatorModal(false);
+      setSelectedCoordinator(null); // Clear selection
+    } catch (error) {
+      console.error("Error assigning course coordinator:", error);
+      alert("Failed to assign course coordinator.");
+    }
+  };
+
+  const handleDeleteCoordinator = async () => {
+    if (
+      window.confirm("Are you sure you want to remove this course coordinator?")
+    ) {
+      try {
+        await axios.put(
+          `http://localhost:8080/api/course-coordinators/deactivate`,
+          {
+            courseId: course.id,
+            staffId: courseCoordinator.staffId,
+          }
+        );
+        setCourseCoordinator(null); // Clear coordinator from state
+        alert("Course coordinator removed successfully!");
+      } catch (error) {
+        console.error("Error removing course coordinator:", error);
+        alert("Failed to remove course coordinator.");
+      }
+    }
+  };
+
   if (loading) return <p>Loading course details...</p>;
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!course) return <Alert variant="warning">Course not found.</Alert>;
 
-  // --- 3. Render Component UI ---
+  // --- 4. Render Component UI ---
   return (
     <>
       <div className="list-container">
@@ -199,10 +339,41 @@ const CourseDetail = () => {
           </Card.Body>
         </Card>
 
+        {/* Course Coordinator Section */}
+        <div className="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <h4>Course Coordinator</h4>
+          <Button variant="info" onClick={handleShowCoordinatorModal}>
+            <FaUserPlus className="me-2" />{" "}
+            {courseCoordinator ? "Change Coordinator" : "Assign Coordinator"}
+          </Button>
+        </div>
+
+        <Card className="mb-4">
+          <ListGroup variant="flush">
+            {courseCoordinator ? (
+              <ListGroup.Item className="d-flex justify-content-between align-items-center">
+                <span>
+                  <FaUserTie className="me-2" /> {courseCoordinator.staffName}{" "}
+                  (Active)
+                </span>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={handleDeleteCoordinator}
+                >
+                  <FaTrash /> Remove
+                </Button>
+              </ListGroup.Item>
+            ) : (
+              <ListGroup.Item>No coordinator assigned.</ListGroup.Item>
+            )}
+          </ListGroup>
+        </Card>
+
         {/* Assigned Modules Section */}
-        <div className="d-flex justify-content-between align-items-center mb-3">
+        <div className="d-flex justify-content-between align-items-center mb-3 mt-4">
           <h4>Assigned Modules</h4>
-          <Button variant="success" onClick={handleShowModal}>
+          <Button variant="success" onClick={handleShowModuleModal}>
             <FaPlus className="me-2" /> Add Modules
           </Button>
         </div>
@@ -236,8 +407,8 @@ const CourseDetail = () => {
 
       {/* Modal for Adding Modules */}
       <Modal
-        show={showModal}
-        onHide={() => setShowModal(false)}
+        show={showModuleModal}
+        onHide={() => setShowModuleModal(false)}
         centered
         size="lg"
       >
@@ -266,7 +437,7 @@ const CourseDetail = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" onClick={() => setShowModuleModal(false)}>
             Cancel
           </Button>
           <Button
@@ -275,6 +446,62 @@ const CourseDetail = () => {
             disabled={selectedModules.length === 0}
           >
             Assign Selected
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal for Assigning Course Coordinator */}
+      <Modal
+        show={showCoordinatorModal}
+        onHide={() => setShowCoordinatorModal(false)}
+        centered
+        size="md"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Assign Coordinator for "{course.name}"</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {allActiveStaffs.length > 0 ? (
+            <Form>
+              <Form.Group>
+                <Form.Label>Select an active staff member:</Form.Label>
+                {allActiveStaffs.map((staff) => (
+                  <Form.Check
+                    key={staff.id}
+                    type="radio"
+                    id={`staff-${staff.id}`}
+                    // CHANGED: Label now indicates availability
+                    label={`${staff.firstName} ${staff.lastName} ${
+                      !staff.isAvailable ? "(Not Available)" : ""
+                    }`}
+                    name="coordinatorRadio"
+                    value={staff.id}
+                    checked={selectedCoordinator === staff.id}
+                    onChange={handleCoordinatorSelect}
+                    // CHANGED: Radio button is disabled if staff is not available
+                    disabled={!staff.isAvailable}
+                    className="mb-2"
+                  />
+                ))}
+              </Form.Group>
+            </Form>
+          ) : (
+            <p>No active staff members available to assign.</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowCoordinatorModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleAssignCoordinator}
+            disabled={!selectedCoordinator}
+          >
+            {courseCoordinator ? "Change Coordinator" : "Assign Coordinator"}
           </Button>
         </Modal.Footer>
       </Modal>
