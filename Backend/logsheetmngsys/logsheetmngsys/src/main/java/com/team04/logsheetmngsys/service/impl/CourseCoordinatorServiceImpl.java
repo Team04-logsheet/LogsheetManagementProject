@@ -30,8 +30,6 @@ public class CourseCoordinatorServiceImpl implements CourseCoordinatorService {
 		this.staffRepository = staffRepository;
 	}
 	
-	
-
 	@Override
 	@Transactional
 	public CourseCoordinatorResponseDTO assignCoordinatorToCourse(CourseCoordinatorDTO dto) {
@@ -59,6 +57,14 @@ public class CourseCoordinatorServiceImpl implements CourseCoordinatorService {
 	            .stream()
 	            .map(this::mapToDto)
 	            .toList(); 
+	}
+	
+	@Override
+	public List<CourseCoordinatorResponseDTO> getActiveCourseCoordinators() {
+		return courseCoordinatorRepository.findByIsActiveTrue()
+				.stream()
+				.map(this::mapToDto)
+				.toList();
 	}
 
 	@Override
@@ -115,6 +121,10 @@ public class CourseCoordinatorServiceImpl implements CourseCoordinatorService {
 	    return mapToDto(courseCoordinatorRepository.save(coordinator));	
 	}
 	
+    @Override
+    public boolean isStaffAnActiveCoordinator(Long staffId) {
+        return courseCoordinatorRepository.existsByStaffIdAndIsActiveTrue(staffId);
+    }
 	
 	private CourseCoordinatorResponseDTO mapToDto(CourseCoordinator entity) {
 	    return new CourseCoordinatorResponseDTO(

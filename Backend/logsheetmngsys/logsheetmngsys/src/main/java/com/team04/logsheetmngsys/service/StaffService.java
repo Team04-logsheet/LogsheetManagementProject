@@ -31,5 +31,7 @@ public interface StaffService {
 	void resetFailedAttempts(String email);
 	
 	void handleFailedLoginAttempt(String email);
+	
+	List<StaffResponseDTO> getAllActiveStaffs();
 
 }

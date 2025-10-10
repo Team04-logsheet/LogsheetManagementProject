@@ -347,4 +347,12 @@ public class StaffServiceImpl implements StaffService {
 			}
 		}
 		
+		@Override
+		public List<StaffResponseDTO> getAllActiveStaffs() {
+			return staffRepository.findByIsActiveTrueAndIsDeletedFalse()
+						.stream()
+						.map(this::convertToResponseDTO)
+						.collect(Collectors.toList());
+		}
+		
 }

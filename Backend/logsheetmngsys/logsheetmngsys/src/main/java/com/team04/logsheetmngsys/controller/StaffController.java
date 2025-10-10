@@ -87,4 +87,10 @@ public class StaffController {
 		return ResponseEntity.ok(response);
 	}
 	
+	@GetMapping("/active")
+	public ResponseEntity<List<StaffResponseDTO>> getAllActiveStaffs() {
+		List<StaffResponseDTO> response = staffService.getAllActiveStaffs();
+		return ResponseEntity.ok(response);
+	}
+	
 }
