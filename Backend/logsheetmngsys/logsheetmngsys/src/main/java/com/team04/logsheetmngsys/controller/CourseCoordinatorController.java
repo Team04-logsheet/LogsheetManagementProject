@@ -35,6 +35,11 @@ public class CourseCoordinatorController {
 	public ResponseEntity<List<CourseCoordinatorResponseDTO>> getAllCoordinators() {
 		return ResponseEntity.ok(courseCoordinatorService.getAllCourseCoordinators());
 	}
+	
+	@GetMapping("/active")
+	public ResponseEntity<List<CourseCoordinatorResponseDTO>> getActiveCoordinators() {
+		return ResponseEntity.ok(courseCoordinatorService.getActiveCourseCoordinators());
+	}
 
 	@GetMapping("/course/{courseId}")
 	public ResponseEntity<List<CourseCoordinatorResponseDTO>> getByCourse(@PathVariable Long courseId) {
@@ -68,5 +73,12 @@ public class CourseCoordinatorController {
 		String responseMsg = courseCoordinatorService.deleteCourseCoordinatorById(id);
 		return ResponseEntity.ok(responseMsg);
 	}
+	
+    @GetMapping("/is-active/staff/{staffId}")
+    public ResponseEntity<Boolean> isStaffAnActiveCoordinator(@PathVariable Long staffId) {
+        boolean isActive = courseCoordinatorService.isStaffAnActiveCoordinator(staffId);
+        return ResponseEntity.ok(isActive);
+    }
+    
 }
 

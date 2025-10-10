@@ -14,4 +14,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 	Optional<Staff> findByEmail(String email);
 	
 	List<Staff> findByIsDeletedTrue();	
+	
+	List<Staff> findByIsActiveTrueAndIsDeletedFalse();
 }

@@ -12,6 +12,8 @@ public interface CourseCoordinatorService {
 
 	List<CourseCoordinatorResponseDTO> getAllCourseCoordinators();
 
+	List<CourseCoordinatorResponseDTO> getActiveCourseCoordinators();
+
 	List<CourseCoordinatorResponseDTO> getCoordinatorsByCourseId(Long courseId);
 
 	List<CourseCoordinatorResponseDTO> getCoordinatorsByStaffId(Long staffId);
@@ -24,4 +26,6 @@ public interface CourseCoordinatorService {
 
 	CourseCoordinatorResponseDTO deactivateCoordinator(Long courseId, Long staffId);
 
+    boolean isStaffAnActiveCoordinator(Long staffId);
+	
 }

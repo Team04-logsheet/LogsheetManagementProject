@@ -26,6 +26,8 @@ public interface CourseCoordinatorRepository extends JpaRepository<CourseCoordin
     Optional<CourseCoordinator> findByCourseIdAndStaffId(Long courseId, Long staffId);
     // If duplicate entries exist,
     //"Query did not return a unique result: 2 results were returned"
-
+    boolean existsByStaffIdAndIsActiveTrue(Long staffId);
+    
+    List<CourseCoordinator> findByIsActiveTrue();
 }
 
