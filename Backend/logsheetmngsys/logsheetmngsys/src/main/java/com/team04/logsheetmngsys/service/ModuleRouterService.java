@@ -22,4 +22,8 @@ public interface ModuleRouterService {
     String deleteModuleRouterById(Long id);
 
     ModuleRouterResponseDTO deactivateRouter(Long moduleId, Long staffId);
+    
+    List<ModuleRouterResponseDTO> getActiveModuleRouters();
+
+    boolean isStaffAnActiveRouter(Long staffId);
 }
