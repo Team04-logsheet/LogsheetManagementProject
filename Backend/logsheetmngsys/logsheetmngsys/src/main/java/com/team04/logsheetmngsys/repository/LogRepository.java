@@ -9,10 +9,8 @@ import java.util.List;
 @Repository
 public interface LogRepository extends JpaRepository<Log, Long> {
 
-    // Example of a custom query: Find logs by staff ID
     List<Log> findByStaffId(Long staffId);
 
-    // Example: Find logs by course ID
     List<Log> findByCourseId(Long courseId);
     
     List<Log> findByLogsheetTypeId(Long logsheetTypeId);

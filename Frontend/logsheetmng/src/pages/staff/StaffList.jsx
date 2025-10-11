@@ -44,7 +44,7 @@ const StaffList = () => {
   };
 
   const handleViewDetails = (id) => {
-    navigate(`/staffs/${id}`);
+    navigate(`/staffs/view/${id}`);
   };
 
   if (loading) return <p>Loading staff members...</p>;
