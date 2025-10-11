@@ -16,7 +16,7 @@ const menuData = [
       { key: "subject", label: "Subject" },
       { key: "section", label: "Section" },
       { key: "Topic", label: "Topic" },
-      { key: "module", label: "Module"},
+      { key: "module", label: "Module" },
     ],
   },
   {
@@ -36,16 +36,17 @@ const menuData = [
     ],
   },
   {
-  key: "staffs",
-  label: "👤 User Management",
-  children: [
-    { key: "menu-item", label: "Menu Item" },
-    { key: "role", label: "Role" },
-    { key: "role-menu-item", label: "Assign Menu Items to Role" },
-    { key: "", label: "Staff" },                 // 👈 was "staff"; now empty so it becomes /staffs
-    { key: "course-coordinator", label: "Course Coordinator" },
-  ],
-},
+    key: "staffs",
+    label: "👤 User Management",
+    children: [
+      { key: "menu-item", label: "Menu Item" },
+      { key: "role", label: "Role" },
+      { key: "role-menu-item", label: "Assign Menu Items to Role" },
+      { key: "", label: "Staff" }, // 👈 was "staff"; now empty so it becomes /staffs
+      { key: "course-coordinator", label: "Course Coordinator" },
+      { key: "module-router", label: "Module Router" },
+    ],
+  },
 
   {
     key: "logsheet",

@@ -82,6 +82,11 @@ import AddCourseGroup from "../pages/coursegroup/AddCourseGroup";
 import EditCourseGroup from "../pages/coursegroup/EditCourseGroup";
 import CourseGroupList from "../pages/coursegroup/CourseGroupList";
 
+/* Log */
+import LogList from "../pages/log/LogList";
+import AddLog from "../pages/log/AddLog";
+import LogDetail from "../pages/log/LogDetail";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -207,6 +212,11 @@ const AppRoutes = () => {
           path="/groups/course-group/edit/:id"
           element={<EditCourseGroup />}
         />
+
+        {/* Log Routes */}
+        <Route path="/logsheet/logs" element={<LogList />} />
+        <Route path="/logsheet/logs/add" element={<AddLog />} />
+        <Route path="/logsheet/logs/:id" element={<LogDetail />} />
       </Route>
     </Routes>
   );
