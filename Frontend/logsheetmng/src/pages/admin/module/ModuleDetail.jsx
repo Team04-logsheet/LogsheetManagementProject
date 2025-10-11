@@ -11,74 +11,97 @@ import {
   Col,
   Alert,
 } from "react-bootstrap";
-import { FaArrowLeft, FaPlus, FaTrash } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaPlus,
+  FaTrash,
+  FaUserTie,
+  FaUserPlus,
+} from "react-icons/fa";
 import "../../../styles/listPage.css";
 
 const ModuleDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [module, setModule] = useState(null);
   const [assignedSubjects, setAssignedSubjects] = useState([]);
 
-  const [showModal, setShowModal] = useState(false);
+  const [moduleRouter, setModuleRouter] = useState(null);
+
+  const [showSubjectModal, setShowSubjectModal] = useState(false);
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubjects, setSelectedSubjects] = useState([]);
+
+  const [showRouterModal, setShowRouterModal] = useState(false);
+  const [allActiveStaffs, setAllActiveStaffs] = useState([]);
+
+  const [selectedRouter, setSelectedRouter] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- Fetch Module and Assigned Subjects Data ---
+  // --- 1. Fetch Module, Subjects, and Router Data ---
   useEffect(() => {
     const fetchModuleData = async () => {
       setLoading(true);
       setError(null);
+      try {
+        const [moduleResult, assignedSubjectsResult, moduleRouterResult] =
+          await Promise.allSettled([
+            axios.get(`http://localhost:8080/api/modules/${id}`),
+            axios.get(`http://localhost:8080/api/module-subjects/module/${id}`),
+            axios.get(`http://localhost:8080/api/module-routers/module/${id}`), // Fetch router
+          ]);
 
-      const modulePromise = axios.get(
-        `http://localhost:8080/api/modules/${id}`
-      );
-      const assignedSubjectsPromise = axios.get(
-        `http://localhost:8080/api/module-subjects/module/${id}`
-      );
+        // Handle module data
+        if (moduleResult.status === "fulfilled") {
+          setModule(moduleResult.value.data);
+        } else {
+          setError("Failed to load module details.");
+          console.error("Error fetching module:", moduleResult.reason);
+          setLoading(false);
+          return;
+        }
 
-      const [moduleResult, assignedSubjectsResult] = await Promise.allSettled([
-        modulePromise,
-        assignedSubjectsPromise,
-      ]);
+        // Handle assigned subjects data
+        if (assignedSubjectsResult.status === "fulfilled") {
+          setAssignedSubjects(assignedSubjectsResult.value.data);
+        } else {
+          console.warn(
+            "Could not fetch assigned subjects.",
+            assignedSubjectsResult.reason
+          );
+          setAssignedSubjects([]);
+        }
 
-      // Handle module data
-      if (moduleResult.status === "fulfilled") {
-        setModule(moduleResult.value.data);
-      } else {
-        setError("Failed to load module details.");
-        console.error("Error fetching module:", moduleResult.reason);
+        // Handle module router data
+        if (moduleRouterResult.status === "fulfilled") {
+          const activeRouter = moduleRouterResult.value.data.find(
+            (router) => router.isActive
+          );
+          setModuleRouter(activeRouter || null);
+        } else {
+          console.warn(
+            "Could not fetch module router.",
+            moduleRouterResult.reason
+          );
+          setModuleRouter(null);
+        }
+      } catch (err) {
+        console.error("An error occurred while fetching module data:", err);
+        setError("An unexpected error occurred.");
+      } finally {
         setLoading(false);
-        return;
       }
-
-      // Handle assigned subjects data
-      if (assignedSubjectsResult.status === "fulfilled") {
-        setAssignedSubjects(assignedSubjectsResult.value.data);
-      } else {
-        console.warn(
-          "Could not fetch assigned subjects, treating as empty.",
-          assignedSubjectsResult.reason
-        );
-        setAssignedSubjects([]);
-      }
-
-      setLoading(false);
     };
     fetchModuleData();
   }, [id]);
 
-  // --- Handlers for Modal and Assignments ---
-
-  // Fetch all available subjects when the modal is opened
-  const handleShowModal = async () => {
+  // --- 2. Handlers for Subject Modal and Assignments ---
+  const handleShowSubjectModal = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/subjects/all");
-
-      console.log("Subjects received from API:", response.data);
+      const response = await axios.get("http://localhost:8080/subjects/all"); // Assuming this is the correct endpoint
       const assignedSubjectIds = new Set(
         assignedSubjects.map((item) => item.subjectId)
       );
@@ -86,7 +109,7 @@ const ModuleDetail = () => {
         (subject) => !assignedSubjectIds.has(subject.id)
       );
       setAllSubjects(availableSubjects);
-      setShowModal(true);
+      setShowSubjectModal(true);
     } catch (err) {
       console.error("Failed to fetch subjects:", err);
       alert("Could not load subjects.");
@@ -103,7 +126,6 @@ const ModuleDetail = () => {
     }
   };
 
-  // Handle assigning selected subjects to the module
   const handleAssignSubjects = async () => {
     if (selectedSubjects.length === 0) {
       alert("Please select at least one subject.");
@@ -116,14 +138,13 @@ const ModuleDetail = () => {
       };
       await axios.post("http://localhost:8080/api/module-subjects", payload);
 
-      // Refresh assigned subjects list
       const updatedSubjectsRes = await axios.get(
         `http://localhost:8080/api/module-subjects/module/${id}`
       );
       setAssignedSubjects(updatedSubjectsRes.data);
 
       alert("Subjects assigned successfully!");
-      setShowModal(false);
+      setShowSubjectModal(false); // BUG FIX: Was setShowModal
       setSelectedSubjects([]);
     } catch (error) {
       console.error("Error assigning subjects:", error);
@@ -131,7 +152,6 @@ const ModuleDetail = () => {
     }
   };
 
-  // Handle deleting a subject from the module
   const handleDeleteSubject = async (subjectId) => {
     if (
       window.confirm(
@@ -142,7 +162,6 @@ const ModuleDetail = () => {
         await axios.delete(
           `http://localhost:8080/api/module-subjects/module/${module.id}/subjects/${subjectId}`
         );
-        // Update UI
         setAssignedSubjects(
           assignedSubjects.filter((item) => item.subjectId !== subjectId)
         );
@@ -150,6 +169,94 @@ const ModuleDetail = () => {
       } catch (error) {
         console.error("Error removing subject:", error);
         alert("Failed to remove subject.");
+      }
+    }
+  };
+
+  // --- 3. Handlers for Router Modal and Assignment ---
+
+  const handleShowRouterModal = async () => {
+    try {
+      const [staffResponse, activeRoutersResponse] = await Promise.all([
+        axios.get("http://localhost:8080/api/staffs/active"),
+        axios.get("http://localhost:8080/api/module-routers/active"),
+      ]);
+
+      const allActiveStaff = staffResponse.data;
+      const activeRouters = activeRoutersResponse.data;
+
+      const activeRouterStaffIds = new Set(
+        activeRouters.map((assignment) => assignment.staffId)
+      );
+
+      const staffWithAvailability = allActiveStaff.map((staff) => {
+        const isCurrentlyAssignedToThisModule =
+          moduleRouter && staff.id === moduleRouter.staffId;
+
+        const isAvailable =
+          !activeRouterStaffIds.has(staff.id) ||
+          isCurrentlyAssignedToThisModule;
+
+        return { ...staff, isAvailable };
+      });
+
+      setAllActiveStaffs(staffWithAvailability);
+      setSelectedRouter(moduleRouter ? moduleRouter.staffId : null);
+      setShowRouterModal(true);
+    } catch (err) {
+      console.error("Failed to fetch data for router modal:", err);
+      alert("Could not load staff members.");
+    }
+  };
+
+  const handleRouterSelect = (e) => {
+    setSelectedRouter(parseInt(e.target.value, 10));
+  };
+
+  const handleAssignRouter = async () => {
+    if (!selectedRouter) {
+      alert("Please select a staff member to assign as the router.");
+      return;
+    }
+    try {
+      if (moduleRouter) {
+        await axios.put(`http://localhost:8080/api/module-routers/deactivate`, {
+          moduleId: module.id,
+          staffId: moduleRouter.staffId,
+        });
+      }
+
+      const payload = {
+        moduleId: module.id,
+        staffId: selectedRouter,
+      };
+      const response = await axios.post(
+        "http://localhost:8080/api/module-routers",
+        payload
+      );
+      setModuleRouter(response.data);
+
+      alert("Module router assigned successfully!");
+      setShowRouterModal(false);
+      setSelectedRouter(null);
+    } catch (error) {
+      console.error("Error assigning module router:", error);
+      alert("Failed to assign module router.");
+    }
+  };
+
+  const handleDeleteRouter = async () => {
+    if (window.confirm("Are you sure you want to remove this module router?")) {
+      try {
+        await axios.put(`http://localhost:8080/api/module-routers/deactivate`, {
+          moduleId: module.id,
+          staffId: moduleRouter.staffId,
+        });
+        setModuleRouter(null);
+        alert("Module router removed successfully!");
+      } catch (error) {
+        console.error("Error removing module router:", error);
+        alert("Failed to remove module router.");
       }
     }
   };
@@ -190,10 +297,43 @@ const ModuleDetail = () => {
           </Card.Body>
         </Card>
 
+        {/* Module Router Section */}
+        <div className="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <h4>Module Router</h4>
+          <Button variant="info" onClick={handleShowRouterModal}>
+            <FaUserPlus className="me-2" />
+            {moduleRouter ? "Change Router" : "Assign Router"}
+          </Button>
+        </div>
+
+        <Card className="mb-4">
+          <ListGroup variant="flush">
+            {moduleRouter ? (
+              <ListGroup.Item className="d-flex justify-content-between align-items-center">
+                <span>
+                  <FaUserTie className="me-2" /> {moduleRouter.staffName}{" "}
+                  (Active)
+                </span>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={handleDeleteRouter}
+                >
+                  <FaTrash /> Remove
+                </Button>
+              </ListGroup.Item>
+            ) : (
+              <ListGroup.Item>
+                No router assigned to this module.
+              </ListGroup.Item>
+            )}
+          </ListGroup>
+        </Card>
+
         {/* Assigned Subjects Section */}
-        <div className="d-flex justify-content-between align-items-center mb-3">
+        <div className="d-flex justify-content-between align-items-center mb-3 mt-4">
           <h4>Assigned Subjects</h4>
-          <Button variant="success" onClick={handleShowModal}>
+          <Button variant="success" onClick={handleShowSubjectModal}>
             <FaPlus className="me-2" /> Add Subjects
           </Button>
         </div>
@@ -227,8 +367,10 @@ const ModuleDetail = () => {
 
       {/* Modal for Adding Subjects */}
       <Modal
-        show={showModal}
-        onHide={() => setShowModal(false)}
+        show={showSubjectModal} /* BUG FIX: Was showModal */
+        onHide={() =>
+          setShowSubjectModal(false)
+        } /* BUG FIX: Was setShowModal */
         centered
         size="lg"
       >
@@ -244,8 +386,6 @@ const ModuleDetail = () => {
                     <Form.Check
                       type="checkbox"
                       id={`subject-${subject.id}`}
-                      // --- THIS IS THE FIX ---
-                      // The label must use "subjectName" to match your API's DTO
                       label={subject.subjectName}
                       value={subject.id}
                       onChange={handleCheckboxChange}
@@ -259,7 +399,12 @@ const ModuleDetail = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() =>
+              setShowSubjectModal(false)
+            } /* BUG FIX: Was setShowModal */
+          >
             Cancel
           </Button>
           <Button
@@ -268,6 +413,57 @@ const ModuleDetail = () => {
             disabled={selectedSubjects.length === 0}
           >
             Assign Selected
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal for Assigning Module Router */}
+      <Modal
+        show={showRouterModal}
+        onHide={() => setShowRouterModal(false)}
+        centered
+        size="md"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Assign Router for "{module.title}"</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {allActiveStaffs.length > 0 ? (
+            <Form>
+              <Form.Group>
+                <Form.Label>Select an active staff member:</Form.Label>
+                {allActiveStaffs.map((staff) => (
+                  <Form.Check
+                    key={staff.id}
+                    type="radio"
+                    id={`staff-${staff.id}`}
+                    label={`${staff.firstName} ${staff.lastName} ${
+                      !staff.isAvailable ? "(Not Available)" : ""
+                    }`}
+                    name="routerRadio"
+                    value={staff.id}
+                    checked={selectedRouter === staff.id}
+                    onChange={handleRouterSelect}
+                    disabled={!staff.isAvailable}
+                    className="mb-2"
+                  />
+                ))}
+              </Form.Group>
+            </Form>
+          ) : (
+            <p>No active staff members available to assign.</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowRouterModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleAssignRouter}
+            disabled={!selectedRouter}
+          >
+            {moduleRouter ? "Change Router" : "Assign Router"}
           </Button>
         </Modal.Footer>
       </Modal>
