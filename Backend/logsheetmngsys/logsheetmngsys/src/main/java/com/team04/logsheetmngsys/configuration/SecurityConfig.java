@@ -1,9 +1,8 @@
 package com.team04.logsheetmngsys.configuration;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -14,9 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.team04.logsheetmngsys.security.JwtAuthenticationEntryPoint;
 import com.team04.logsheetmngsys.security.JwtRequestFilter;
@@ -58,64 +54,111 @@ public class SecurityConfig {
 	}
 	
 
-//	@Bean
-//	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//		http
-//		.cors()
-//		.and()
-//		.csrf(csrf -> csrf.disable())
-//				.authorizeHttpRequests(auth -> auth
-//						// -- Publicly Accessible Endpoints --
-//						.requestMatchers("/api/auth/login").permitAll()
-//
-//						// -- ROLE_ADMIN Access --
-//						.requestMatchers("/api/batch-cycles/**").hasRole("ADMIN")
-//						.requestMatchers("/api/premises/**").hasRole("ADMIN")
-//						.requestMatchers("/api/course-types/**").hasRole("ADMIN")
-//						.requestMatchers("/api/courses/**").hasRole("ADMIN")
-//						.requestMatchers("/subjects/**").hasRole("ADMIN")
-//						.requestMatchers("/sections/**").hasRole("ADMIN")
-//						.requestMatchers("/topics/**").hasRole("ADMIN")
-//						.requestMatchers("/api/groups/**").hasRole("ADMIN")
-//						.requestMatchers("/api/menu-items/**").hasRole("ADMIN")
-//						.requestMatchers("/api/roles/**").hasRole("ADMIN")
-//						.requestMatchers("/api/staffs/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/role-menu-items/**").hasRole("ADMIN")
-//						.requestMatchers("/api/logsheet-types/**").hasRole("ADMIN")
-//						// Add future ADMIN endpoints here (e.g., Reports)
-//
-//						// -- ROLE_COURSE_COORDINATOR Access --
-//						.requestMatchers("/modules/**").hasRole("COURSE_COORDINATOR")
-//						.requestMatchers("/api/course-groups/**").hasRole("COURSE_COORDINATOR")
-//						// Add future COURSE_COORDINATOR endpoints here (e.g., Reports, Log Approval)
-//
-//						// -- ROLE_STAFF Access (for future endpoints) --
-//						// .requestMatchers("/api/logs/add/**").hasAnyRole("STAFF", "COURSE_COORDINATOR", "ADMIN")
-//						// .requestMatchers("/api/logs/verify/**").hasAnyRole("STAFF", "COURSE_COORDINATOR", "ADMIN")
-//						
-//						// Fallback: Any other API request must be authenticated.
-//						.anyRequest().authenticated()
-//				)
-//				.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-//				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//
-//		// Add a filter to validate the tokens with every request
-//		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//		return http.build();
-//	}
+	@Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .cors()
+            .and()
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                // -- Publicly Accessible Endpoints --
+                .requestMatchers("/api/auth/login").permitAll()
+                
+                // Permit all GET requests for viewing data across all controllers
+                .requestMatchers(HttpMethod.GET,
+                    "/api/batch-cycles/**",
+                    "/api/courses/**",
+                    "/api/course-coordinators/**",
+                    "/api/course-groups/**",
+                    "/api/course-modules/**",
+                    "/api/course-types/**",
+                    "/api/groups/**",
+                    "/api/logs/**",
+                    "/api/logsheet-types/**",
+                    "/api/menu-items/**",
+                    "/api/modules/**",
+                    "/api/module-routers/**",
+                    "/api/module-subjects/**",
+                    "/api/premises/**",
+                    "/api/roles/**",
+                    "/api/role-menu-items/**",
+                    "/sections/**",
+                    "/api/staffs/**",
+                    "/subjects/**",
+                    "/topics/**"
+                ).permitAll()
+
+                // -- ROLE_ADMIN Access --
+                // Endpoints where only ADMIN can create, update, or delete
+                .requestMatchers(
+                    "/api/batch-cycles/**",
+                    "/api/courses/**",
+                    "/api/course-coordinators/**",
+                    "/api/course-types/**",
+                    "/api/groups/**",
+                    "/api/logsheet-types/**",
+                    "/api/menu-items/**",
+                    "/api/premises/**",
+                    "/api/roles/**",
+                    "/api/role-menu-items/**",
+                    "/sections/**",
+                    "/subjects/**",
+                    "/topics/**"
+                ).hasRole("ADMIN")
+                // Staff management is ADMIN-only, except for password change
+                .requestMatchers(HttpMethod.POST, "/api/staffs").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/api/staffs/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/staffs/**").hasRole("ADMIN")
+
+                // -- ROLE_COURSE_COORDINATOR Access --
+                .requestMatchers("/api/course-groups/**").hasRole("COURSE_COORDINATOR")
+                .requestMatchers("/api/modules/**").hasRole("COURSE_COORDINATOR")
+                .requestMatchers(HttpMethod.PATCH, "/api/logs/*/approve").hasRole("COURSE_COORDINATOR")
+
+                // -- ROLE_MODULE_ROUTER Access --
+                .requestMatchers(HttpMethod.PATCH, "/api/logs/*/verify").hasRole("MODULE_ROUTER")
+
+                // -- ADMIN or COURSE_COORDINATOR Access --
+                .requestMatchers(
+                    "/api/course-modules/**",
+                    "/api/module-routers/**",
+                    "/api/module-subjects/**"
+                ).hasAnyRole("ADMIN", "COURSE_COORDINATOR")
+
+                // -- Authenticated User Access (Multiple Roles) --
+                // Log creation, updating, and deletion by any valid role
+                .requestMatchers(HttpMethod.POST, "/api/logs").hasAnyRole("ADMIN", "MODULE_ROUTER", "COURSE_COORDINATOR", "STAFF", "MENTOR")
+                .requestMatchers(HttpMethod.PUT, "/api/logs/**").hasAnyRole("ADMIN", "MODULE_ROUTER", "COURSE_COORDINATOR", "STAFF", "MENTOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/logs/**").hasAnyRole("ADMIN", "MODULE_ROUTER", "COURSE_COORDINATOR", "STAFF", "MENTOR")
+                
+                // Any authenticated user can change their own password
+                .requestMatchers(HttpMethod.PUT, "/api/staffs/*/change-password").authenticated()
+
+                // -- Fallback Rule --
+                // Any other request not specified above must be authenticated.
+                .anyRequest().authenticated()
+//                .anyRequest().permitAll()
+            )
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // Add a filter to validate the tokens with every request
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 	
-	 @Bean
-	 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-	 http
-        .csrf().disable()
-        .authorizeHttpRequests()
-            .anyRequest().permitAll() // allow everything
-        .and()
-        .httpBasic().disable(); // disable basic auth too (optional)
-	
-	 return http.build();
-	 }
+//	 @Bean
+//	 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//	 http
+//        .csrf().disable()
+//        .authorizeHttpRequests()
+//            .anyRequest().permitAll() // allow everything
+//        .and()
+//        .httpBasic().disable(); // disable basic auth too (optional)
+//	
+//	 return http.build();
+//	 }
 	
 	
 	// ✅ Add this bean for CORS configuration
