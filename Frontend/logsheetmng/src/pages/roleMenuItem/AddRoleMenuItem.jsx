@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import "../../styles/addRoleMenuItem.css";
 
@@ -26,8 +26,8 @@ export default function AddRoleMenuItem() {
         setLoading(true);
         setErr("");
         const [rRes, mRes] = await Promise.allSettled([
-          axios.get(GET_ROLES),
-          axios.get(GET_MENU_ITEMS),
+          api.get(GET_ROLES),
+          api.get(GET_MENU_ITEMS),
         ]);
 
         if (cancelled) return;
@@ -53,17 +53,20 @@ export default function AddRoleMenuItem() {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!roleId) return alert("Please select a role.");
-    if (!selectedMenuItemIds.length) return alert("Please select at least one menu item.");
+    if (!selectedMenuItemIds.length)
+      return alert("Please select at least one menu item.");
 
     try {
       setLoading(true);
-      await axios.post(ASSIGN_MENU_ITEMS, {
+      await api.post(ASSIGN_MENU_ITEMS, {
         roleId: Number(roleId),
         menuItemIds: selectedMenuItemIds.map(Number),
       });
@@ -90,9 +93,18 @@ export default function AddRoleMenuItem() {
             <div className="card-body">
               <div className="row">
                 <label>Role</label>
-                <select value={roleId} onChange={(e) => setRoleId(e.target.value)}>
-                  <option value="">{roles.length ? "-- Select Role --" : "Loading roles…"}</option>
-                  {roles?.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                <select
+                  value={roleId}
+                  onChange={(e) => setRoleId(e.target.value)}
+                >
+                  <option value="">
+                    {roles.length ? "-- Select Role --" : "Loading roles…"}
+                  </option>
+                  {roles?.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -101,24 +113,45 @@ export default function AddRoleMenuItem() {
                 <select
                   multiple
                   value={selectedMenuItemIds}
-                  onChange={(e) => setSelectedMenuItemIds(Array.from(e.target.selectedOptions).map(o => o.value))}
+                  onChange={(e) =>
+                    setSelectedMenuItemIds(
+                      Array.from(e.target.selectedOptions).map((o) => o.value)
+                    )
+                  }
                 >
-                  {menuItems?.length
-                    ? menuItems.map(mi => <option key={mi.id} value={mi.id}>{mi.title}</option>)
-                    : <option disabled>Loading menu items…</option>}
+                  {menuItems?.length ? (
+                    menuItems.map((mi) => (
+                      <option key={mi.id} value={mi.id}>
+                        {mi.title}
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>Loading menu items…</option>
+                  )}
                 </select>
                 <div className="hint">Hold Ctrl/Cmd to select multiple</div>
               </div>
             </div>
 
             <div className="form-actions">
-              <button type="submit" className="btn btn-primary" disabled={loading}>Save</button>
-              <button type="button" className="btn btn-ghost" onClick={() => navigate("/staffs/role-menu-item")}>Cancel</button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading}
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => navigate("/staffs/role-menu-item")}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>
       </div>
     </div>
   );
-
 }

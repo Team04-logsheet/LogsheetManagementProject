@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../../utils/api";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import "../../../styles/sectionAdd.css";
 
@@ -13,19 +13,24 @@ const AddSection = () => {
   const [data, setData] = useState({ sectionName: "", subjectId: "" });
 
   useEffect(() => {
-    axios.get(`${BASE}/subjects/all`)
-      .then((r) => { setSubjects(r.data || []); setLoading(false); })
+    api
+      .get(`${BASE}/subjects/all`)
+      .then((r) => {
+        setSubjects(r.data || []);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, []);
 
-  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setData({ ...data, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${BASE}/sections/create`, {
+      await api.post(`${BASE}/sections/create`, {
         sectionName: data.sectionName.trim(),
-        subjectId: data.subjectId
+        subjectId: data.subjectId,
       });
       alert("Section created!");
       navigate("/modules/section");
@@ -34,7 +39,12 @@ const AddSection = () => {
     }
   };
 
-  if (loading) return <div className="form-wrap"><Spinner animation="border" /></div>;
+  if (loading)
+    return (
+      <div className="form-wrap">
+        <Spinner animation="border" />
+      </div>
+    );
 
   return (
     <div className="form-wrap">
@@ -51,7 +61,11 @@ const AddSection = () => {
                 required
               >
                 <option value="">-- Select Subject --</option>
-                {subjects.map((s) => <option key={s.id} value={s.id}>{s.subjectName}</option>)}
+                {subjects.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.subjectName}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
@@ -66,7 +80,9 @@ const AddSection = () => {
               />
             </Form.Group>
             <div className="form-actions">
-              <Button variant="secondary" onClick={() => navigate(-1)}>Cancel</Button>
+              <Button variant="secondary" onClick={() => navigate(-1)}>
+                Cancel
+              </Button>
               <Button type="submit">Create</Button>
             </div>
           </Form>

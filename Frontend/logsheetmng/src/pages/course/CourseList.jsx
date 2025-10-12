@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Button, Table } from "react-bootstrap";
 import { FaInfoCircle, FaPen, FaTrash } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -15,7 +15,7 @@ const CourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/courses");
+        const response = await api.get("http://localhost:8080/api/courses");
         setCourses(response.data);
         setLoading(false);
       } catch (err) {
@@ -34,7 +34,7 @@ const CourseList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this course?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/courses/${id}`);
+        await api.delete(`http://localhost:8080/api/courses/${id}`);
         alert("Course deleted successfully!");
         setCourses(courses.filter((course) => course.id !== id));
       } catch (error) {

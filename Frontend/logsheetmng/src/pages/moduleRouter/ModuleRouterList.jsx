@@ -1,22 +1,20 @@
 import React, { useEffect, useState, useMemo } from "react";
 import api from "../../utils/api";
-import { useNavigate } from "react-router-dom";
+// It's good practice to use a consistent CSS file for similar list pages
 import "../../styles/courseCoordinatorList.css";
 
 const API_BASE = "http://localhost:8080";
 
 const API_URLS = {
-  GET_ALL: `${API_BASE}/api/course-coordinators`,
-  DEACTIVATE: `${API_BASE}/api/course-coordinators/deactivate`,
-  DELETE_BY_ID: (id) => `${API_BASE}/api/course-coordinators/${id}`,
+  GET_ALL: `${API_BASE}/api/module-routers`,
+  DEACTIVATE: `${API_BASE}/api/module-routers/deactivate`,
+  DELETE_BY_ID: (id) => `${API_BASE}/api/module-routers/${id}`,
 };
 
-export default function CourseCoordinatorList() {
-  const navigate = useNavigate();
+export default function ModuleRouterList() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
-
   const [sortByActive, setSortByActive] = useState(true);
 
   const fetchData = async () => {
@@ -27,7 +25,7 @@ export default function CourseCoordinatorList() {
       setRows(Array.isArray(res.data) ? res.data : []);
     } catch (e) {
       console.error(e);
-      setErr(e?.response?.data?.message || "Failed to load coordinators.");
+      setErr(e?.response?.data?.message || "Failed to load module routers.");
     } finally {
       setLoading(false);
     }
@@ -41,18 +39,17 @@ export default function CourseCoordinatorList() {
     const sorted = [...rows];
     if (sortByActive) {
       // Sorts active (true) before inactive (false)
-      // Then sorts by course title as a secondary sort
       sorted.sort((a, b) => {
         if (a.isActive !== b.isActive) {
           return b.isActive - a.isActive;
         }
-        return (a.courseTitle || "").localeCompare(b.courseTitle || "");
+        return (a.moduleTitle || "").localeCompare(b.moduleTitle || "");
       });
     } else {
-      // Default sort by course title, then staff name
+      // Default sort by module title, then staff name
       sorted.sort(
         (a, b) =>
-          (a.courseTitle || "").localeCompare(b.courseTitle || "") ||
+          (a.moduleTitle || "").localeCompare(b.moduleTitle || "") ||
           (a.staffName || "").localeCompare(b.staffName || "")
       );
     }
@@ -61,28 +58,27 @@ export default function CourseCoordinatorList() {
 
   const handleDeactivate = async (row) => {
     if (!row.isActive) {
-      alert(`${row.staffName} is already inactive for this course.`);
+      alert(`${row.staffName} is already inactive for this module.`);
       return;
     }
     if (
       !window.confirm(
-        `Deactivate ${row.staffName} for course "${row.courseTitle}"?`
+        `Deactivate ${row.staffName} for module "${row.moduleTitle}"?`
       )
     ) {
       return;
     }
     try {
       setLoading(true);
-      // ✅ This API call is correct. It uses PUT to deactivate.
       await api.put(API_URLS.DEACTIVATE, {
-        courseId: row.courseId,
+        moduleId: row.moduleId,
         staffId: row.staffId,
       });
-      await fetchData(); // Refresh data from the server
-      alert("Coordinator deactivated successfully.");
+      await fetchData();
+      alert("Router deactivated successfully.");
     } catch (e) {
       console.error(e);
-      alert(e?.response?.data?.message || "Failed to deactivate coordinator.");
+      alert(e?.response?.data?.message || "Failed to deactivate router.");
     } finally {
       setLoading(false);
     }
@@ -91,20 +87,19 @@ export default function CourseCoordinatorList() {
   const handleDelete = async (row) => {
     if (
       !window.confirm(
-        `Permanently delete this coordinator mapping?\nCourse: ${row.courseTitle}\nStaff: ${row.staffName}`
+        `Permanently delete this router mapping?\nModule: ${row.moduleTitle}\nStaff: ${row.staffName}`
       )
     ) {
       return;
     }
     try {
       setLoading(true);
-      // ✅ This API call is correct. It uses DELETE with the mapping ID.
       await api.delete(API_URLS.DELETE_BY_ID(row.id));
-      await fetchData(); // Refresh data from the server
-      alert("Coordinator deleted successfully.");
+      await fetchData();
+      alert("Router deleted successfully.");
     } catch (e) {
       console.error(e);
-      alert(e?.response?.data?.message || "Failed to delete coordinator.");
+      alert(e?.response?.data?.message || "Failed to delete router.");
     } finally {
       setLoading(false);
     }
@@ -114,20 +109,13 @@ export default function CourseCoordinatorList() {
     <div className="cc-scope">
       <div className="cc-list-container">
         <div className="cc-list-header">
-          <h2>Course Coordinators</h2>
+          <h2>Module Routers</h2>
           <div className="cc-header-actions">
-            {/* ✅ New button to toggle sorting */}
             <button
               className="cc-btn cc-btn-secondary"
               onClick={() => setSortByActive(!sortByActive)}
             >
               {sortByActive ? "Sort Alphabetically" : "Sort by Status"}
-            </button>
-            <button
-              className="cc-btn cc-btn-primary"
-              onClick={() => navigate("/staffs/course-coordinator/add")}
-            >
-              + Assign Coordinator
             </button>
           </div>
         </div>
@@ -140,8 +128,8 @@ export default function CourseCoordinatorList() {
             <thead>
               <tr>
                 <th style={{ width: 60 }}>#</th>
-                <th>Course</th>
-                <th>Staff</th>
+                <th>Module</th>
+                <th>Staff (Router)</th>
                 <th style={{ width: 120 }}>Status</th>
                 <th className="cc-actions-col">Actions</th>
               </tr>
@@ -150,16 +138,14 @@ export default function CourseCoordinatorList() {
               {sortedRows.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="cc-empty">
-                    No coordinators found.
+                    No module routers found.
                   </td>
                 </tr>
               ) : (
                 sortedRows.map((row, idx) => (
                   <tr key={row.id}>
                     <td>{idx + 1}</td>
-                    {/* ✅ Change: Use courseTitle from the DTO */}
-                    <td>{row.courseTitle}</td>
-                    {/* ✅ Change: Use staffName from the DTO */}
+                    <td>{row.moduleTitle}</td>
                     <td>{row.staffName}</td>
                     <td>
                       <span
@@ -171,11 +157,10 @@ export default function CourseCoordinatorList() {
                       </span>
                     </td>
                     <td className="cc-actions">
-                      {/* ⛔️ Removed Edit Button as requested */}
                       <button
                         className="cc-btn cc-btn-warn"
                         onClick={() => handleDeactivate(row)}
-                        disabled={!row.isActive} // Disable if already inactive
+                        disabled={!row.isActive}
                       >
                         Deactivate
                       </button>

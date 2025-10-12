@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Button, Table, Badge } from "react-bootstrap";
 import { FaInfoCircle, FaPen, FaTrash } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -14,7 +14,7 @@ const StaffList = () => {
   useEffect(() => {
     const fetchStaffs = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/staffs");
+        const response = await api.get("http://localhost:8080/api/staffs");
         setStaffs(response.data);
         setLoading(false);
       } catch (err) {
@@ -33,7 +33,7 @@ const StaffList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this staff member?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/staffs/${id}`);
+        await api.delete(`http://localhost:8080/api/staffs/${id}`);
         alert("Staff member deleted successfully!");
         setStaffs(staffs.filter((staff) => staff.id !== id));
       } catch (error) {

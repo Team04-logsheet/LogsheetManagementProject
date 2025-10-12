@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import CourseTypeForm from "../../components/CourseTypeForm";
 
 const EditCourseType = () => {
@@ -13,7 +13,7 @@ const EditCourseType = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
+    api
       .get(`http://localhost:8080/api/course-types/${id}`)
       .then((res) => {
         setCourseType(res.data);
@@ -33,7 +33,7 @@ const EditCourseType = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .put(`http://localhost:8080/api/course-types/${id}`, courseType)
       .then(() => {
         alert("Course type updated successfully!");

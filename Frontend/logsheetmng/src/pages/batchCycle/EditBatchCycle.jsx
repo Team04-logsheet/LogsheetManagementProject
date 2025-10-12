@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import BatchCycleForm from "../../components/BatchCycleForm";
 
 const EditBatchCycle = () => {
@@ -17,7 +17,7 @@ const EditBatchCycle = () => {
 
   // 1. Preload data from backend
   useEffect(() => {
-    axios
+    api
       .get(`http://localhost:8080/api/batch-cycles/${id}`)
       .then((res) => {
         const data = res.data;
@@ -47,7 +47,7 @@ const EditBatchCycle = () => {
   // 3. Submit updated data
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .put(`http://localhost:8080/api/batch-cycles/${id}`, cycle)
       .then(() => {
         alert("Batch cycle updated successfully!");

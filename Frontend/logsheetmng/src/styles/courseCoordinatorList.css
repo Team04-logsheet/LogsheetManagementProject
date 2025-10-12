@@ -1,31 +1,118 @@
 /* Scope: only applies inside course coordinator pages */
-.cc-scope .cc-list-container { padding: 16px; }
+.cc-scope .cc-list-container {
+  padding: 16px;
+}
 
-.cc-scope .cc-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.cc-scope .cc-list-header h2 { margin: 0; font-weight: 700; }
+.cc-scope .cc-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.cc-scope .cc-list-header h2 {
+  margin: 0;
+  font-weight: 700;
+}
 
-.cc-scope .cc-list-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow-x: auto; }
-.cc-scope .cc-list-table { width: 100%; border-collapse: collapse; }
-.cc-scope .cc-list-table thead th { background: #f6f7f9; font-weight: 600; }
-.cc-scope .cc-list-table th, 
-.cc-scope .cc-list-table td { padding: 12px 14px; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
+.cc-scope .cc-list-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  overflow-x: auto;
+}
+.cc-scope .cc-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.cc-scope .cc-list-table thead th {
+  background: #f6f7f9;
+  font-weight: 600;
+}
+.cc-scope .cc-list-table th,
+.cc-scope .cc-list-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  vertical-align: top;
+}
 
-.cc-scope .cc-empty { text-align: center; color: #666; padding: 22px; }
-.cc-scope .cc-error { color: #c00; margin: 10px 0; }
-.cc-scope .cc-status { margin: 10px 0; color: #666; }
+.cc-scope .cc-empty {
+  text-align: center;
+  color: #666;
+  padding: 22px;
+}
+.cc-scope .cc-error {
+  color: #c00;
+  margin: 10px 0;
+}
+.cc-scope .cc-status {
+  margin: 10px 0;
+  color: #666;
+}
 
-.cc-scope .cc-actions-col { text-align: center; width: 240px; }
-.cc-scope .cc-actions { display: flex; gap: 8px; justify-content: center; }
+.cc-scope .cc-actions-col {
+  text-align: center;
+  width: 240px;
+}
+.cc-scope .cc-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
 
-.cc-scope .cc-btn { padding: 8px 12px; border-radius: 10px; border: 1px solid #e1e4ea; background: #fff; cursor: pointer; }
-.cc-scope .cc-btn:hover { background: #f5f6f8; }
-.cc-scope .cc-btn-primary { background: #2f7dff; border-color: #2f7dff; color: #fff; }
-.cc-scope .cc-btn-primary:hover { background: #246af0; }
-.cc-scope .cc-btn-warn { background: #fff6e5; border-color: #ffe2a9; color: #7a5300; }
-.cc-scope .cc-btn-warn:hover { background: #ffefd1; }
-.cc-scope .cc-btn-danger { background: #ffe9e9; border-color: #ffd0d0; color: #a40000; }
-.cc-scope .cc-btn-danger:hover { background: #ffdede; }
+.cc-scope .cc-btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #e1e4ea;
+  background: #fff;
+  cursor: pointer;
+}
+.cc-scope .cc-btn:hover {
+  background: #f5f6f8;
+}
+.cc-scope .cc-btn-primary {
+  background: #2f7dff;
+  border-color: #2f7dff;
+  color: #fff;
+}
+.cc-scope .cc-btn-primary:hover {
+  background: #246af0;
+}
 
-.cc-scope .cc-badge { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
-.cc-scope .cc-badge-success { background: #e8f7eb; color: #127a2d; }
-.cc-scope .cc-badge-muted { background: #f0f1f4; color: #4b5563; }
+.cc-btn-secondary {
+  background-color: #1cc633;
+  color: #08831b;
+  border: 1px solid #007bff;
+}
+
+.cc-scope .cc-btn-warn {
+  background: #fff6e5;
+  border-color: #ffe2a9;
+  color: #7a5300;
+}
+.cc-scope .cc-btn-warn:hover {
+  background: #ffefd1;
+}
+.cc-scope .cc-btn-danger {
+  background: #ffe9e9;
+  border-color: #ffd0d0;
+  color: #a40000;
+}
+.cc-scope .cc-btn-danger:hover {
+  background: #ffdede;
+}
+
+.cc-scope .cc-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.cc-scope .cc-badge-success {
+  background: #e8f7eb;
+  color: #127a2d;
+}
+.cc-scope .cc-badge-muted {
+  background: #f0f1f4;
+  color: #4b5563;
+}

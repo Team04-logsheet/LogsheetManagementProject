@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import BatchCycleForm from "../../components/BatchCycleForm";
 
 const AddBatchCycle = () => {
@@ -20,7 +20,7 @@ const AddBatchCycle = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/batch-cycles", cycle);
+      await api.post("http://localhost:8080/api/batch-cycles", cycle);
       alert("Batch cycle created successfully!");
       navigate("/courses/batch-cycle"); // go back to list
     } catch (error) {

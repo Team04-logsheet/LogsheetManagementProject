@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import LogForm from "../../components/LogForm"; // Assuming LogForm is in components folder
 
 const AddLog = () => {
@@ -24,7 +24,7 @@ const AddLog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/logs", log);
+      await api.post("http://localhost:8080/api/logs", log);
       alert("Log created successfully!");
       navigate("/logsheet/logs");
     } catch (error) {

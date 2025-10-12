@@ -40,7 +40,7 @@ const GroupTableForm = ({
           </Button>
           <Button
             variant="secondary"
-            onClick={() => navigate("/groups")}
+            onClick={() => navigate("/groups/groups")}
           >
             Cancel
           </Button>

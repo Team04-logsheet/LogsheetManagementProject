@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import {
   Card,
   Button,
@@ -37,8 +37,8 @@ const RoleDetail = () => {
       setLoading(true);
       setError(null); // Reset error on new fetch
 
-      const rolePromise = axios.get(`http://localhost:8080/api/roles/${id}`);
-      const itemsPromise = axios.get(
+      const rolePromise = api.get(`http://localhost:8080/api/roles/${id}`);
+      const itemsPromise = api.get(
         `http://localhost:8080/api/role-menu-items/role/${id}`
       );
 
@@ -79,7 +79,7 @@ const RoleDetail = () => {
   // Fetch all available menu items when the modal is opened
   const handleShowModal = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/menu-items");
+      const response = await api.get("http://localhost:8080/api/menu-items");
       // Filter out items that are already assigned to this role
       const assignedItemIds = new Set(
         assignedItems.map((item) => item.menuItem.id)
@@ -116,10 +116,10 @@ const RoleDetail = () => {
         roleId: role.id,
         menuItemIds: selectedItems,
       };
-      await axios.post("http://localhost:8080/api/role-menu-items", payload);
+      await api.post("http://localhost:8080/api/role-menu-items", payload);
 
       // Refresh assigned items list after successful assignment
-      const updatedItemsRes = await axios.get(
+      const updatedItemsRes = await api.get(
         `http://localhost:8080/api/role-menu-items/role/${id}`
       );
       setAssignedItems(updatedItemsRes.data);
@@ -141,7 +141,7 @@ const RoleDetail = () => {
       )
     ) {
       try {
-        await axios.delete(
+        await api.delete(
           `http://localhost:8080/api/role-menu-items/${role.id}/menu-items/${menuItemId}`
         );
         // Remove item from state to update UI instantly

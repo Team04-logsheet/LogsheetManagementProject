@@ -13,7 +13,6 @@ import {
   Title,
 } from "chart.js";
 
-// ensure bootstrap icons are available (safe to import multiple times)
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../styles/adminHome.css";
 

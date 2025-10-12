@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Button, Table } from "react-bootstrap";
 import { FaPen, FaTrash } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -13,7 +13,7 @@ const LogsheetTypeList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
+    api
       .get("http://localhost:8080/api/logsheet-types")
       .then((response) => {
         setLogsheetTypes(response.data);
@@ -33,7 +33,7 @@ const LogsheetTypeList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this logsheet type?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/logsheet-types/${id}`);
+        await api.delete(`http://localhost:8080/api/logsheet-types/${id}`);
         alert("Logsheet type deleted successfully!");
         setLogsheetTypes(logsheetTypes.filter((lt) => lt.id !== id));
       } catch (error) {

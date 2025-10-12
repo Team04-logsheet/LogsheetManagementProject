@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import MenuItemForm from "../../components/MenuItemForm";
 
 const AddMenuItem = () => {
@@ -20,7 +20,7 @@ const AddMenuItem = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/menu-items", menuItem);
+      await api.post("http://localhost:8080/api/menu-items", menuItem);
       alert("Menu item created successfully!");
       navigate("/staffs/menu-item");
     } catch (error) {

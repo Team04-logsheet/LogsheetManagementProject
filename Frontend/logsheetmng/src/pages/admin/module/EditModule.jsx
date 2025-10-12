@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./../../../utils/api";
 import ModuleForm from "../../../components/ModuleForm";
 
 const EditModule = () => {
@@ -15,7 +15,7 @@ const EditModule = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
+    api
       .get(`http://localhost:8080/api/modules/${id}`)
       .then((res) => {
         setModuleData(res.data);
@@ -35,7 +35,7 @@ const EditModule = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .put(`http://localhost:8080/api/modules/${id}`, moduleData)
       .then(() => {
         alert("Module updated successfully!");

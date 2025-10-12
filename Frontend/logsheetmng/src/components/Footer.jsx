@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css"; // ensure icons work
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "../styles/footer.css";
 
 export default function Footer() {

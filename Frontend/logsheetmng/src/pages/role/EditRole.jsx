@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import RoleForm from "../../components/RoleForm";
 
 const EditRole = () => {
@@ -13,7 +13,7 @@ const EditRole = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
+    api
       .get(`http://localhost:8080/api/roles/${id}`)
       .then((res) => {
         setRole(res.data);
@@ -33,7 +33,7 @@ const EditRole = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .put(`http://localhost:8080/api/roles/${id}`, role)
       .then(() => {
         alert("Role updated successfully!");

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import "../../styles/addCourseCoordinator.css";
 
@@ -29,8 +29,8 @@ export default function AddCourseCoordinator() {
         setLoading(true);
         setErr("");
         const [cRes, sRes] = await Promise.allSettled([
-          axios.get(GET_COURSES),
-          axios.get(GET_STAFFS),
+          api.get(GET_COURSES),
+          api.get(GET_STAFFS),
         ]);
 
         if (cancelled) return;
@@ -66,14 +66,14 @@ export default function AddCourseCoordinator() {
     try {
       setLoading(true);
       // Create (defaults to active=true in backend)
-      await axios.post(ASSIGN, {
+      await api.post(ASSIGN, {
         courseId: Number(courseId),
         staffId: Number(staffId),
       });
 
       // If user unchecked Active, immediately deactivate the fresh mapping
       if (!isActive) {
-        await axios.put(DEACTIVATE, {
+        await api.put(DEACTIVATE, {
           courseId: Number(courseId),
           staffId: Number(staffId),
         });

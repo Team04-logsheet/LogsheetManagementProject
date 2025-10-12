@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import GroupTableForm from "../../components/GroupTableForm";
 
 const EditGroupTable = () => {
@@ -13,7 +13,7 @@ const EditGroupTable = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
+    api
       .get(`http://localhost:8080/api/groups/${id}`)
       .then((res) => {
         setGroup(res.data);
@@ -33,7 +33,7 @@ const EditGroupTable = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .put(`http://localhost:8080/api/groups/${id}`, group)
       .then(() => {
         alert("Group updated successfully!");

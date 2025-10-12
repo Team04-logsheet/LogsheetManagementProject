@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import api from "../../utils/api";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/editRoleMenuItem.css";
 
 const API_BASE = "http://localhost:8080";
 const GET_ROLES = `${API_BASE}/api/roles`;
 const GET_MENU_ITEMS = `${API_BASE}/api/menu-items`;
-const GET_RMI_BY_ROLE = (roleId) => `${API_BASE}/api/role-menu-items/role/${roleId}`;
-const DELETE_ALL_FOR_ROLE = (roleId) => `${API_BASE}/api/role-menu-items/role/${roleId}/menu-items`;
+const GET_RMI_BY_ROLE = (roleId) =>
+  `${API_BASE}/api/role-menu-items/role/${roleId}`;
+const DELETE_ALL_FOR_ROLE = (roleId) =>
+  `${API_BASE}/api/role-menu-items/role/${roleId}/menu-items`;
 const ASSIGN_MENU_ITEMS = `${API_BASE}/api/role-menu-items`;
 
 export default function EditRoleMenuItem() {
@@ -21,7 +23,7 @@ export default function EditRoleMenuItem() {
   const [err, setErr] = useState("");
 
   const role = useMemo(
-    () => roles.find(r => String(r.id) === String(roleId)),
+    () => roles.find((r) => String(r.id) === String(roleId)),
     [roles, roleId]
   );
 
@@ -33,19 +35,29 @@ export default function EditRoleMenuItem() {
         setLoading(true);
         setErr("");
         const [rRes, mRes, mapRes] = await Promise.allSettled([
-          axios.get(GET_ROLES),
-          axios.get(GET_MENU_ITEMS),
-          axios.get(GET_RMI_BY_ROLE(roleId)),
+          api.get(GET_ROLES),
+          api.get(GET_MENU_ITEMS),
+          api.get(GET_RMI_BY_ROLE(roleId)),
         ]);
 
         if (cancelled) return;
 
-        setRoles(rRes.status === "fulfilled" && Array.isArray(rRes.value.data) ? rRes.value.data : []);
-        setMenuItems(mRes.status === "fulfilled" && Array.isArray(mRes.value.data) ? mRes.value.data : []);
+        setRoles(
+          rRes.status === "fulfilled" && Array.isArray(rRes.value.data)
+            ? rRes.value.data
+            : []
+        );
+        setMenuItems(
+          mRes.status === "fulfilled" && Array.isArray(mRes.value.data)
+            ? mRes.value.data
+            : []
+        );
 
         const ids =
           mapRes.status === "fulfilled" && Array.isArray(mapRes.value.data)
-            ? mapRes.value.data.filter(x => x?.menuItem?.id).map(x => String(x.menuItem.id))
+            ? mapRes.value.data
+                .filter((x) => x?.menuItem?.id)
+                .map((x) => String(x.menuItem.id))
             : [];
         setSelectedMenuItemIds(ids);
       } catch (e) {
@@ -57,7 +69,9 @@ export default function EditRoleMenuItem() {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [roleId]);
 
   const onSubmit = async (e) => {
@@ -65,8 +79,8 @@ export default function EditRoleMenuItem() {
     if (!roleId) return;
     try {
       setLoading(true);
-      await axios.delete(DELETE_ALL_FOR_ROLE(roleId));
-      await axios.post(ASSIGN_MENU_ITEMS, {
+      await api.delete(DELETE_ALL_FOR_ROLE(roleId));
+      await api.post(ASSIGN_MENU_ITEMS, {
         roleId: Number(roleId),
         menuItemIds: selectedMenuItemIds.map(Number),
       });
@@ -93,7 +107,11 @@ export default function EditRoleMenuItem() {
             <div className="card-body">
               <div className="row">
                 <label>Role</label>
-                <input type="text" value={role?.name || `Role ID: ${roleId}`} disabled />
+                <input
+                  type="text"
+                  value={role?.name || `Role ID: ${roleId}`}
+                  disabled
+                />
               </div>
 
               <div className="row">
@@ -101,10 +119,16 @@ export default function EditRoleMenuItem() {
                 <select
                   multiple
                   value={selectedMenuItemIds}
-                  onChange={(e) => setSelectedMenuItemIds(Array.from(e.target.selectedOptions).map(o => o.value))}
+                  onChange={(e) =>
+                    setSelectedMenuItemIds(
+                      Array.from(e.target.selectedOptions).map((o) => o.value)
+                    )
+                  }
                 >
-                  {menuItems?.map(mi => (
-                    <option key={mi.id} value={mi.id}>{mi.title}</option>
+                  {menuItems?.map((mi) => (
+                    <option key={mi.id} value={mi.id}>
+                      {mi.title}
+                    </option>
                   ))}
                 </select>
                 <div className="hint">Hold Ctrl/Cmd to select multiple</div>
@@ -112,13 +136,24 @@ export default function EditRoleMenuItem() {
             </div>
 
             <div className="form-actions">
-              <button type="submit" className="btn btn-primary" disabled={loading}>Update</button>
-              <button type="button" className="btn btn-ghost" onClick={() => navigate("/staffs/role-menu-item")}>Cancel</button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading}
+              >
+                Update
+              </button>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => navigate("/staffs/role-menu-item")}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>
       </div>
     </div>
   );
-
 }

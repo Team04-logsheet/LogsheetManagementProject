@@ -1,8 +1,20 @@
-import React from "react";
-
-const LogsheetTypeForm = ({ logsheetType, handleChange, handleSubmit, formTitle, buttonLabel }) => {
+const LogsheetTypeForm = ({
+  logsheetType,
+  handleChange,
+  handleSubmit,
+  formTitle,
+  buttonLabel,
+}) => {
   return (
-    <div style={{ maxWidth: "500px", margin: "50px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
+    <div
+      style={{
+        maxWidth: "500px",
+        margin: "50px auto",
+        padding: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+      }}
+    >
       <h2 style={{ textAlign: "center" }}>{formTitle}</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "15px" }}>
@@ -28,7 +40,17 @@ const LogsheetTypeForm = ({ logsheetType, handleChange, handleSubmit, formTitle,
             style={{ width: "100%", padding: "8px", marginTop: "5px" }}
           />
         </div>
-        <button type="submit" style={{ width: "100%", padding: "10px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "5px" }}>
+        <button
+          type="submit"
+          style={{
+            width: "100%",
+            padding: "10px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+          }}
+        >
           {buttonLabel}
         </button>
       </form>

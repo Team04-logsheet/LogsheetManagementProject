@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../../utils/api";
 import { Button, Table, Spinner, Form } from "react-bootstrap";
 import { FaPen, FaTrash } from "react-icons/fa";
 import "../../../styles/sectionList.css";
@@ -16,8 +16,8 @@ const SectionList = () => {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`${BASE}/sections/all`),
-      axios.get(`${BASE}/subjects/all`)
+      api.get(`${BASE}/sections/all`),
+      api.get(`${BASE}/subjects/all`),
     ])
       .then(([secRes, subRes]) => {
         setSections(secRes.data || []);
@@ -27,11 +27,14 @@ const SectionList = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  const subjectName = (id) => subjects.find((s) => String(s.id) === String(id))?.subjectName || "-";
+  const subjectName = (id) =>
+    subjects.find((s) => String(s.id) === String(id))?.subjectName || "-";
 
   const filtered = useMemo(() => {
     if (!subjectFilter) return sections;
-    return sections.filter((s) => String(s.subjectId) === String(subjectFilter));
+    return sections.filter(
+      (s) => String(s.subjectId) === String(subjectFilter)
+    );
   }, [sections, subjectFilter]);
 
   const handleEdit = (id) => navigate(`/modules/section/edit/${id}`);
@@ -39,7 +42,7 @@ const SectionList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this section? It may affect topics.")) return;
     try {
-      await axios.delete(`${BASE}/sections/delete/${id}`);
+      await api.delete(`${BASE}/sections/delete/${id}`);
       setSections((arr) => arr.filter((x) => x.id !== id));
       alert("Deleted");
     } catch {
@@ -47,7 +50,12 @@ const SectionList = () => {
     }
   };
 
-  if (loading) return <div className="list-container"><Spinner animation="border" /></div>;
+  if (loading)
+    return (
+      <div className="list-container">
+        <Spinner animation="border" />
+      </div>
+    );
 
   return (
     <div className="list-container">
@@ -60,9 +68,15 @@ const SectionList = () => {
             onChange={(e) => setSubjectFilter(e.target.value)}
           >
             <option value="">All Subjects</option>
-            {subjects.map((s) => <option key={s.id} value={s.id}>{s.subjectName}</option>)}
+            {subjects.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.subjectName}
+              </option>
+            ))}
           </Form.Select>
-          <Button onClick={() => navigate("/modules/section/add")}>+ Add</Button>
+          <Button onClick={() => navigate("/modules/section/add")}>
+            + Add
+          </Button>
         </div>
       </div>
 
@@ -85,10 +99,19 @@ const SectionList = () => {
                 <td>{sec.sectionName}</td>
                 <td>{subjectName(sec.subjectId)}</td>
                 <td className="actions">
-                  <Button variant="warning" size="sm" className="me-2" onClick={() => handleEdit(sec.id)}>
+                  <Button
+                    variant="warning"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => handleEdit(sec.id)}
+                  >
                     <FaPen />
                   </Button>
-                  <Button variant="danger" size="sm" onClick={() => handleDelete(sec.id)}>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(sec.id)}
+                  >
                     <FaTrash />
                   </Button>
                 </td>

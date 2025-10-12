@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./../../../utils/api";
 import ModuleForm from "../../../components/ModuleForm";
 
 const AddModule = () => {
@@ -20,7 +20,7 @@ const AddModule = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/modules", moduleData);
+      await api.post("http://localhost:8080/api/modules", moduleData);
       alert("Module created successfully!");
       navigate("/modules/module");
     } catch (error) {

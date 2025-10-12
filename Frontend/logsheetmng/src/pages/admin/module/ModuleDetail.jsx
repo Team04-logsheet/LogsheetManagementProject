@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./../../../utils/api";
 import {
   Card,
   Button,
@@ -49,9 +49,9 @@ const ModuleDetail = () => {
       try {
         const [moduleResult, assignedSubjectsResult, moduleRouterResult] =
           await Promise.allSettled([
-            axios.get(`http://localhost:8080/api/modules/${id}`),
-            axios.get(`http://localhost:8080/api/module-subjects/module/${id}`),
-            axios.get(`http://localhost:8080/api/module-routers/module/${id}`), // Fetch router
+            api.get(`http://localhost:8080/api/modules/${id}`),
+            api.get(`http://localhost:8080/api/module-subjects/module/${id}`),
+            api.get(`http://localhost:8080/api/module-routers/module/${id}`), // Fetch router
           ]);
 
         // Handle module data
@@ -101,7 +101,7 @@ const ModuleDetail = () => {
   // --- 2. Handlers for Subject Modal and Assignments ---
   const handleShowSubjectModal = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/subjects/all"); // Assuming this is the correct endpoint
+      const response = await api.get("http://localhost:8080/subjects/all"); // Assuming this is the correct endpoint
       const assignedSubjectIds = new Set(
         assignedSubjects.map((item) => item.subjectId)
       );
@@ -136,9 +136,9 @@ const ModuleDetail = () => {
         moduleId: module.id,
         subjectIds: selectedSubjects,
       };
-      await axios.post("http://localhost:8080/api/module-subjects", payload);
+      await api.post("http://localhost:8080/api/module-subjects", payload);
 
-      const updatedSubjectsRes = await axios.get(
+      const updatedSubjectsRes = await api.get(
         `http://localhost:8080/api/module-subjects/module/${id}`
       );
       setAssignedSubjects(updatedSubjectsRes.data);
@@ -159,7 +159,7 @@ const ModuleDetail = () => {
       )
     ) {
       try {
-        await axios.delete(
+        await api.delete(
           `http://localhost:8080/api/module-subjects/module/${module.id}/subjects/${subjectId}`
         );
         setAssignedSubjects(
@@ -178,8 +178,8 @@ const ModuleDetail = () => {
   const handleShowRouterModal = async () => {
     try {
       const [staffResponse, activeRoutersResponse] = await Promise.all([
-        axios.get("http://localhost:8080/api/staffs/active"),
-        axios.get("http://localhost:8080/api/module-routers/active"),
+        api.get("http://localhost:8080/api/staffs/active"),
+        api.get("http://localhost:8080/api/module-routers/active"),
       ]);
 
       const allActiveStaff = staffResponse.data;
@@ -220,7 +220,7 @@ const ModuleDetail = () => {
     }
     try {
       if (moduleRouter) {
-        await axios.put(`http://localhost:8080/api/module-routers/deactivate`, {
+        await api.put(`http://localhost:8080/api/module-routers/deactivate`, {
           moduleId: module.id,
           staffId: moduleRouter.staffId,
         });
@@ -230,7 +230,7 @@ const ModuleDetail = () => {
         moduleId: module.id,
         staffId: selectedRouter,
       };
-      const response = await axios.post(
+      const response = await api.post(
         "http://localhost:8080/api/module-routers",
         payload
       );
@@ -248,7 +248,7 @@ const ModuleDetail = () => {
   const handleDeleteRouter = async () => {
     if (window.confirm("Are you sure you want to remove this module router?")) {
       try {
-        await axios.put(`http://localhost:8080/api/module-routers/deactivate`, {
+        await api.put(`http://localhost:8080/api/module-routers/deactivate`, {
           moduleId: module.id,
           staffId: moduleRouter.staffId,
         });

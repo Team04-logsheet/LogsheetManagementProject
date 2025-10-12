@@ -1,24 +1,40 @@
-import React from "react";
 import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../utils/api"; // We will create this utility file next
+import api from "../utils/api";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      try {
+        const decodedToken = jwtDecode(storedToken);
+        // exp is in seconds, Date.now() is in milliseconds
+        if (decodedToken.exp * 1000 < Date.now()) {
+          console.log("Token expired, removing from storage.");
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          return null; // Token is expired
+        }
+        return storedToken; // Token is valid
+      } catch (error) {
+        console.error("Invalid token found in localStorage", error);
+        return null;
+      }
+    }
+    return null;
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
-      // If we have a token, we could validate it with the backend here
-      // For simplicity, we'll just parse the user info from localStorage
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   }, [token]);
 
@@ -37,18 +53,12 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", jwtToken);
       localStorage.setItem("user", JSON.stringify(userData));
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${jwtToken}`;
-
-      // Navigate to a protected route after login
       navigate("/home");
     } catch (error) {
       console.error("Login failed:", error);
-      // Check if the error has a response from the server and a data object
       if (error.response && error.response.data && error.response.data.error) {
-        // Re-throw the specific error message from our Spring Boot backend
         throw new Error(error.response.data.error);
       } else {
-        // Re-throw a generic error if the backend error format is unexpected
         throw new Error("An unexpected error occurred during login.");
       }
     }
@@ -59,7 +69,6 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    delete api.defaults.headers.common["Authorization"];
     navigate("/login");
   };
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import CourseTypeForm from "../../components/CourseTypeForm";
 
 const AddCourseType = () => {
@@ -18,7 +18,7 @@ const AddCourseType = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/course-types", courseType);
+      await api.post("http://localhost:8080/api/course-types", courseType);
       alert("Course type created successfully!");
       navigate("/courses/course-type");
     } catch (error) {

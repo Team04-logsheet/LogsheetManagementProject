@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
-import axios from "axios";
+import api from "../utils/api";
 import FormInputField from "./FormInputField";
 import "../styles/listPage.css";
 
@@ -28,11 +28,11 @@ const LogForm = ({
         // Using Promise.all to fetch concurrently
         const [staffRes, courseRes, moduleRes, topicRes, logsheetTypeRes] =
           await Promise.all([
-            axios.get("http://localhost:8080/api/staffs"),
-            axios.get("http://localhost:8080/api/courses"), // Assuming these endpoints exist
-            axios.get("http://localhost:8080/api/modules"),
-            axios.get("http://localhost:8080/topics/all"),
-            axios.get("http://localhost:8080/api/logsheet-types"),
+            api.get("http://localhost:8080/api/staffs"),
+            api.get("http://localhost:8080/api/courses"),
+            api.get("http://localhost:8080/api/modules"),
+            api.get("http://localhost:8080/topics/all"),
+            api.get("http://localhost:8080/api/logsheet-types"),
           ]);
         setStaffs(staffRes.data);
         setCourses(courseRes.data);
