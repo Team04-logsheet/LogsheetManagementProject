@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginResponse {
     private String jwtToken;
-    private String username; // e.g., user@example.com
-    private String fullName; // e.g., "John Doe"
-    private Collection<String> roles; // e.g., ["ROLE_ADMIN", "ROLE_USER"]
+    private String username; 
+    private String fullName; 
+    private Collection<String> roles; 
 }
