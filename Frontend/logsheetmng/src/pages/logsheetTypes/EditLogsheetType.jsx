@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import LogsheetTypeForm from "../../components/LogsheetTypeForm";
 
 const EditLogsheetType = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [logsheetType, setLogsheetType] = useState({ title: "", description: "" });
+  const [logsheetType, setLogsheetType] = useState({
+    title: "",
+    description: "",
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchLogsheetType = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/api/logsheet-types/${id}`);
+        const res = await api.get(
+          `http://localhost:8080/api/logsheet-types/${id}`
+        );
         setLogsheetType(res.data);
       } catch (err) {
         console.error("Error fetching logsheet type:", err);
@@ -35,18 +40,31 @@ const EditLogsheetType = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8080/api/logsheet-types/${id}`, logsheetType);
+      await api.put(
+        `http://localhost:8080/api/logsheet-types/${id}`,
+        logsheetType
+      );
       alert("Logsheet type updated successfully!");
       // FIX APPLIED HERE: Navigate to the correct list path
-      navigate("/logsheet/logsheet-type"); 
+      navigate("/logsheet/logsheet-type");
     } catch (err) {
       console.error("Error updating logsheet type:", err);
       alert("Failed to update logsheet type.");
     }
   };
 
-  if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>Loading logsheet type...</p>;
-  if (error) return <p style={{ textAlign: "center", marginTop: "50px", color: "red" }}>{error}</p>;
+  if (loading)
+    return (
+      <p style={{ textAlign: "center", marginTop: "50px" }}>
+        Loading logsheet type...
+      </p>
+    );
+  if (error)
+    return (
+      <p style={{ textAlign: "center", marginTop: "50px", color: "red" }}>
+        {error}
+      </p>
+    );
 
   return (
     <LogsheetTypeForm

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Button, Table } from "react-bootstrap";
 import { FaPen, FaTrash } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -13,7 +13,7 @@ const GroupTableList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
+    api
       .get("http://localhost:8080/api/groups")
       .then((response) => {
         setGroups(response.data);
@@ -28,12 +28,12 @@ const GroupTableList = () => {
 
   const handleEdit = (id) => {
     navigate(`/groups/edit/${id}`);
-    };
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this group?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/groups/${id}`);
+        await api.delete(`http://localhost:8080/api/groups/${id}`);
         alert("Group deleted successfully!");
         setGroups(groups.filter((group) => group.id !== id));
       } catch (error) {
@@ -50,10 +50,7 @@ const GroupTableList = () => {
     <div className="list-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Groups</h2>
-        <Button
-          variant="primary"
-          onClick={() => navigate("/groups/add")}
-        >
+        <Button variant="primary" onClick={() => navigate("/groups/add")}>
           + Add New
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import GroupTableForm from "../../components/GroupTableForm";
 
 const AddGroupTable = () => {
@@ -18,7 +18,7 @@ const AddGroupTable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/groups", group);
+      await api.post("http://localhost:8080/api/groups", group);
       alert("Group created successfully!");
       navigate("/groups/groups");
     } catch (error) {

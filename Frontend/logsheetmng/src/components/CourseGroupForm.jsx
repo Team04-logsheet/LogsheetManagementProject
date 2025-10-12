@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../styles/listPage.css"; 
+import api from "../utils/api";
+import "../styles/listPage.css";
 
 const CourseGroupForm = ({
   courseGroup,
@@ -22,8 +22,8 @@ const CourseGroupForm = ({
     const fetchDropdownData = async () => {
       try {
         const [courseRes, groupRes] = await Promise.all([
-          axios.get("http://localhost:8080/api/courses"),
-          axios.get("http://localhost:8080/api/groups"),
+          api.get("http://localhost:8080/api/courses"),
+          api.get("http://localhost:8080/api/groups"),
         ]);
         setCourses(courseRes.data || []);
         setGroups(groupRes.data || []);
@@ -35,12 +35,18 @@ const CourseGroupForm = ({
   }, []);
 
   useEffect(() => {
-    setSelectedGroups(Array.isArray(courseGroup.groupIds) ? courseGroup.groupIds.map(Number) : []);
+    setSelectedGroups(
+      Array.isArray(courseGroup.groupIds)
+        ? courseGroup.groupIds.map(Number)
+        : []
+    );
   }, [courseGroup.groupIds]);
 
   const handleGroupChange = (e) => {
     if (e.target.selectedOptions) {
-      const selected = Array.from(e.target.selectedOptions, (opt) => Number(opt.value));
+      const selected = Array.from(e.target.selectedOptions, (opt) =>
+        Number(opt.value)
+      );
       setSelectedGroups(selected);
       handleChange({ target: { name: "groupIds", value: selected } });
     } else {

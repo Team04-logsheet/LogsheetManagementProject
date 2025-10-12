@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import StaffForm from "../../components/StaffForm";
 
 const EditStaff = () => {
@@ -19,7 +19,7 @@ const EditStaff = () => {
   useEffect(() => {
     const fetchStaff = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8080/api/staffs/${id}`
         );
         const { roleId, ...rest } = response.data;
@@ -46,7 +46,7 @@ const EditStaff = () => {
     e.preventDefault();
     // Exclude read-only fields from the payload
     const { id: staffId, createdAt, updatedAt, ...payload } = staff;
-    axios
+    api
       .patch(`http://localhost:8080/api/staffs/${id}`, payload)
       .then(() => {
         alert("Staff member updated successfully!");

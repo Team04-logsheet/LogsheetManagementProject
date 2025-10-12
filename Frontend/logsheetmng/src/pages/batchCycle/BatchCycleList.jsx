@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Button, Table } from "react-bootstrap";
 import { FaPen, FaTrash } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -13,7 +13,7 @@ const BatchCycleList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
+    api
       .get("http://localhost:8080/api/batch-cycles")
       .then((response) => {
         setBatchCycles(response.data);
@@ -33,7 +33,7 @@ const BatchCycleList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this batch cycle?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/batch-cycles/${id}`);
+        await api.delete(`http://localhost:8080/api/batch-cycles/${id}`);
         alert("Batch cycle deleted successfully!");
         // Refresh list after deletion
         setBatchCycles(batchCycles.filter((cycle) => cycle.id !== id));

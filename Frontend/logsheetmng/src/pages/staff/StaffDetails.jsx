@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Card, Button, ListGroup, Badge } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -15,7 +15,7 @@ const StaffDetail = () => {
   useEffect(() => {
     const fetchStaff = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8080/api/staffs/${id}`
         );
         setStaff(response.data);

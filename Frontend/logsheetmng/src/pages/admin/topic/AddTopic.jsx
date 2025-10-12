@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../../utils/api";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import "../../../styles/topicAdd.css";
 
@@ -17,8 +17,8 @@ const AddTopic = () => {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`${BASE}/subjects/all`),
-      axios.get(`${BASE}/sections/all`),
+      api.get(`${BASE}/subjects/all`),
+      api.get(`${BASE}/sections/all`),
     ])
       .then(([subRes, secRes]) => {
         setSubjects(subRes.data || []);
@@ -33,12 +33,13 @@ const AddTopic = () => {
     return sections.filter((s) => String(s.subjectId) === String(subjectId));
   }, [sections, subjectId]);
 
-  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setData({ ...data, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${BASE}/topics/create`, {
+      await api.post(`${BASE}/topics/create`, {
         topicName: data.topicName.trim(),
         sectionId: data.sectionId,
       });
@@ -49,7 +50,12 @@ const AddTopic = () => {
     }
   };
 
-  if (loading) return <div className="form-wrap"><Spinner animation="border" /></div>;
+  if (loading)
+    return (
+      <div className="form-wrap">
+        <Spinner animation="border" />
+      </div>
+    );
 
   return (
     <div className="form-wrap">
@@ -61,10 +67,17 @@ const AddTopic = () => {
               <Form.Label>Subject</Form.Label>
               <Form.Select
                 value={subjectId}
-                onChange={(e) => { setSubjectId(e.target.value); setData({ ...data, sectionId: "" }); }}
+                onChange={(e) => {
+                  setSubjectId(e.target.value);
+                  setData({ ...data, sectionId: "" });
+                }}
               >
                 <option value="">All Subjects</option>
-                {subjects.map((s) => <option key={s.id} value={s.id}>{s.subjectName}</option>)}
+                {subjects.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.subjectName}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
@@ -76,7 +89,11 @@ const AddTopic = () => {
                 required
               >
                 <option value="">-- Select Section --</option>
-                {filteredSections.map((sec) => <option key={sec.id} value={sec.id}>{sec.sectionName}</option>)}
+                {filteredSections.map((sec) => (
+                  <option key={sec.id} value={sec.id}>
+                    {sec.sectionName}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
@@ -91,7 +108,9 @@ const AddTopic = () => {
               />
             </Form.Group>
             <div className="form-actions">
-              <Button variant="secondary" onClick={() => navigate(-1)}>Cancel</Button>
+              <Button variant="secondary" onClick={() => navigate(-1)}>
+                Cancel
+              </Button>
               <Button type="submit">Create</Button>
             </div>
           </Form>

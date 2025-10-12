@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import "../../styles/listRoleMenuItem.css";
 
 const API_BASE = "http://localhost:8080";
 const GET_ALL_RMI = `${API_BASE}/api/role-menu-items`;
-const DELETE_ALL_FOR_ROLE = (roleId) => `${API_BASE}/api/role-menu-items/role/${roleId}/menu-items`;
+const DELETE_ALL_FOR_ROLE = (roleId) =>
+  `${API_BASE}/api/role-menu-items/role/${roleId}/menu-items`;
 
 export default function ListRoleMenuItem() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function ListRoleMenuItem() {
     try {
       setLoading(true);
       setErr("");
-      const res = await axios.get(GET_ALL_RMI).catch(() => ({ data: [] }));
+      const res = await api.get(GET_ALL_RMI).catch(() => ({ data: [] }));
       setData(Array.isArray(res.data) ? res.data : []);
     } catch (e) {
       console.error(e);
@@ -27,7 +28,9 @@ export default function ListRoleMenuItem() {
     }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const grouped = useMemo(() => {
     const map = new Map();
@@ -47,7 +50,7 @@ export default function ListRoleMenuItem() {
     if (!window.confirm("Remove ALL menu items for this role?")) return;
     try {
       setLoading(true);
-      await axios.delete(DELETE_ALL_FOR_ROLE(roleId));
+      await api.delete(DELETE_ALL_FOR_ROLE(roleId));
       await fetchData();
       alert("All menu items removed for the role.");
     } catch (e) {
@@ -63,7 +66,10 @@ export default function ListRoleMenuItem() {
       <div className="list-container">
         <div className="list-header">
           <h2>Assign Menu Items to Role</h2>
-          <button className="btn btn-primary" onClick={() => navigate("/staffs/role-menu-item/add")}>
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate("/staffs/role-menu-item/add")}
+          >
             + Add Mapping
           </button>
         </div>
@@ -83,15 +89,39 @@ export default function ListRoleMenuItem() {
               </thead>
               <tbody>
                 {grouped.length === 0 ? (
-                  <tr><td colSpan="3" className="empty">No mappings found.</td></tr>
+                  <tr>
+                    <td colSpan="3" className="empty">
+                      No mappings found.
+                    </td>
+                  </tr>
                 ) : (
                   grouped.map(({ role, menuItems }) => (
                     <tr key={role.id}>
-                      <td><strong>{role.name}</strong></td>
-                      <td>{menuItems?.length ? menuItems.map(mi => mi.title).join(", ") : <em>— None —</em>}</td>
+                      <td>
+                        <strong>{role.name}</strong>
+                      </td>
+                      <td>
+                        {menuItems?.length ? (
+                          menuItems.map((mi) => mi.title).join(", ")
+                        ) : (
+                          <em>— None —</em>
+                        )}
+                      </td>
                       <td className="actions">
-                        <button className="btn" onClick={() => navigate(`/staffs/role-menu-item/edit/${role.id}`)}>Edit</button>
-                        <button className="btn btn-danger" onClick={() => handleDeleteAllForRole(role.id)}>Delete</button>
+                        <button
+                          className="btn"
+                          onClick={() =>
+                            navigate(`/staffs/role-menu-item/edit/${role.id}`)
+                          }
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDeleteAllForRole(role.id)}
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -103,5 +133,4 @@ export default function ListRoleMenuItem() {
       </div>
     </div>
   );
-
 }

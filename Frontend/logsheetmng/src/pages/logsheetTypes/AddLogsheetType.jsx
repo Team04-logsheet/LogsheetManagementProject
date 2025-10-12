@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 
 const AddLogsheetType = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const AddLogsheetType = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/logsheet-types", logsheetType);
+      await api.post("http://localhost:8080/api/logsheet-types", logsheetType);
       alert("Logsheet type created successfully!");
       navigate("/logsheet/logsheet-type");
     } catch (error) {

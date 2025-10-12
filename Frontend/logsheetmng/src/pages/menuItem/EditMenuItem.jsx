@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import MenuItemForm from "../../components/MenuItemForm";
 
 const EditMenuItem = () => {
@@ -15,7 +15,7 @@ const EditMenuItem = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
+    api
       .get(`http://localhost:8080/api/menu-items/${id}`)
       .then((res) => {
         setMenuItem(res.data);
@@ -35,7 +35,7 @@ const EditMenuItem = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .put(`http://localhost:8080/api/menu-items/${id}`, menuItem)
       .then(() => {
         alert("Menu item updated successfully!");

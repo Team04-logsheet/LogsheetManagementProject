@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../../utils/api";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import "../../../styles/subjectEdit.css";
 
@@ -13,17 +13,25 @@ const EditSubject = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${BASE}/subjects/get/${id}`)
-      .then((r) => { setData({ subjectName: r.data.subjectName || "" }); setLoading(false); })
-      .catch(() => { alert("Failed to load subject"); setLoading(false); });
+    api
+      .get(`${BASE}/subjects/get/${id}`)
+      .then((r) => {
+        setData({ subjectName: r.data.subjectName || "" });
+        setLoading(false);
+      })
+      .catch(() => {
+        alert("Failed to load subject");
+        setLoading(false);
+      });
   }, [id]);
 
-  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setData({ ...data, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${BASE}/subjects/update/${id}`, { id, ...data });
+      await api.put(`${BASE}/subjects/update/${id}`, { id, ...data });
       alert("Subject updated!");
       navigate("/modules/subject");
     } catch (e) {
@@ -31,7 +39,12 @@ const EditSubject = () => {
     }
   };
 
-  if (loading) return <div className="form-wrap"><Spinner animation="border" /></div>;
+  if (loading)
+    return (
+      <div className="form-wrap">
+        <Spinner animation="border" />
+      </div>
+    );
 
   return (
     <div className="form-wrap">
@@ -51,7 +64,9 @@ const EditSubject = () => {
               />
             </Form.Group>
             <div className="form-actions">
-              <Button variant="secondary" onClick={() => navigate(-1)}>Cancel</Button>
+              <Button variant="secondary" onClick={() => navigate(-1)}>
+                Cancel
+              </Button>
               <Button type="submit">Save</Button>
             </div>
           </Form>

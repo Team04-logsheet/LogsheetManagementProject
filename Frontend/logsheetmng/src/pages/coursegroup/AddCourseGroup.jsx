@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import CourseGroupForm from "../../components/CourseGroupForm";
 
 const AddCourseGroup = () => {
@@ -21,7 +21,11 @@ const AddCourseGroup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!courseGroup.courseId || !courseGroup.groupIds || courseGroup.groupIds.length === 0) {
+    if (
+      !courseGroup.courseId ||
+      !courseGroup.groupIds ||
+      courseGroup.groupIds.length === 0
+    ) {
       alert("Please select a course and at least one group.");
       return;
     }
@@ -32,12 +36,15 @@ const AddCourseGroup = () => {
     };
 
     try {
-      await axios.post("http://localhost:8080/api/course-groups", payload);
+      await api.post("http://localhost:8080/api/course-groups", payload);
       alert("Groups assigned successfully!");
       navigate("/groups/course-group");
     } catch (err) {
       console.error("Error assigning groups:", err);
-      alert(err.response?.data?.message || "Failed to assign groups. Check backend logs.");
+      alert(
+        err.response?.data?.message ||
+          "Failed to assign groups. Check backend logs."
+      );
     }
   };
 

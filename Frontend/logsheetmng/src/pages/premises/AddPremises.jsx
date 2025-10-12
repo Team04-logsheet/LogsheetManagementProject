@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import PremisesForm from "../../components/PremisesForm";
 
 const AddPremises = () => {
@@ -19,7 +19,7 @@ const AddPremises = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/premises", premises);
+      await api.post("http://localhost:8080/api/premises", premises);
       alert("Premise created successfully!");
       navigate("/courses/premises");
     } catch (error) {

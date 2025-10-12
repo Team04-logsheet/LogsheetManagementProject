@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import PremisesForm from "../../components/PremisesForm";
 
 const EditPremises = () => {
@@ -14,7 +14,7 @@ const EditPremises = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
+    api
       .get(`http://localhost:8080/api/premises/${id}`)
       .then((res) => {
         setPremises(res.data);
@@ -34,7 +34,7 @@ const EditPremises = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .put(`http://localhost:8080/api/premises/${id}`, premises)
       .then(() => {
         alert("Premise updated successfully!");

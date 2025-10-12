@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import RoleForm from "../../components/RoleForm";
 
 const AddRole = () => {
@@ -18,7 +18,7 @@ const AddRole = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/roles", role);
+      await api.post("http://localhost:8080/api/roles", role);
       alert("Role created successfully!");
       navigate("/staffs/role");
     } catch (error) {

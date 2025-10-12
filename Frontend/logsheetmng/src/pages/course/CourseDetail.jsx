@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import {
   Card,
   Button,
@@ -54,9 +54,9 @@ const CourseDetail = () => {
       try {
         const [courseResult, assignedModulesResult, courseCoordinatorResult] =
           await Promise.allSettled([
-            axios.get(`http://localhost:8080/api/courses/${id}`),
-            axios.get(`http://localhost:8080/api/course-modules/course/${id}`),
-            axios.get(
+            api.get(`http://localhost:8080/api/courses/${id}`),
+            api.get(`http://localhost:8080/api/course-modules/course/${id}`),
+            api.get(
               `http://localhost:8080/api/course-coordinators/course/${id}`
             ), // Fetch coordinator
           ]);
@@ -111,7 +111,7 @@ const CourseDetail = () => {
   // Fetch all available modules when the modal is opened
   const handleShowModuleModal = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/modules");
+      const response = await api.get("http://localhost:8080/api/modules");
       // Filter out modules that are already assigned
       const assignedModuleIds = new Set(
         assignedModules.map((item) => item.moduleId)
@@ -148,10 +148,10 @@ const CourseDetail = () => {
         courseId: course.id,
         moduleIds: selectedModules,
       };
-      await axios.post("http://localhost:8080/api/course-modules", payload);
+      await api.post("http://localhost:8080/api/course-modules", payload);
 
       // Refresh assigned modules list after successful assignment
-      const updatedModulesRes = await axios.get(
+      const updatedModulesRes = await api.get(
         `http://localhost:8080/api/course-modules/course/${id}`
       );
       setAssignedModules(updatedModulesRes.data);
@@ -173,7 +173,7 @@ const CourseDetail = () => {
       )
     ) {
       try {
-        await axios.delete(
+        await api.delete(
           `http://localhost:8080/api/course-modules/course/${course.id}/modules/${moduleId}`
         );
         // Remove module from state to update UI instantly
@@ -194,8 +194,8 @@ const CourseDetail = () => {
     try {
       // 1. Fetch active staff and active coordinators in parallel
       const [staffResponse, activeCoordinatorsResponse] = await Promise.all([
-        axios.get("http://localhost:8080/api/staffs/active"),
-        axios.get("http://localhost:8080/api/course-coordinators/active"),
+        api.get("http://localhost:8080/api/staffs/active"),
+        api.get("http://localhost:8080/api/course-coordinators/active"),
       ]);
 
       const allActiveStaff = staffResponse.data;
@@ -245,7 +245,7 @@ const CourseDetail = () => {
     try {
       // Deactivate existing coordinator if any
       if (courseCoordinator) {
-        await axios.put(
+        await api.put(
           `http://localhost:8080/api/course-coordinators/deactivate`,
           {
             courseId: course.id,
@@ -259,7 +259,7 @@ const CourseDetail = () => {
         courseId: course.id,
         staffId: selectedCoordinator,
       };
-      const response = await axios.post(
+      const response = await api.post(
         "http://localhost:8080/api/course-coordinators",
         payload
       );
@@ -281,7 +281,7 @@ const CourseDetail = () => {
       window.confirm("Are you sure you want to remove this course coordinator?")
     ) {
       try {
-        await axios.put(
+        await api.put(
           `http://localhost:8080/api/course-coordinators/deactivate`,
           {
             courseId: course.id,

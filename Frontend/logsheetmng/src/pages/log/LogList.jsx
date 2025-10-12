@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Button, Table, Badge, Form, Row, Col } from "react-bootstrap";
 import { FaInfoCircle, FaTrash, FaSort } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -18,7 +18,7 @@ const LogList = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/logs");
+        const response = await api.get("http://localhost:8080/api/logs");
         setLogs(response.data);
         setLoading(false);
       } catch (err) {
@@ -61,7 +61,7 @@ const LogList = () => {
     }
     if (window.confirm("Are you sure you want to delete this log?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/logs/${log.id}`);
+        await api.delete(`http://localhost:8080/api/logs/${log.id}`);
         alert("Log deleted successfully!");
         setLogs(logs.filter((l) => l.id !== log.id));
       } catch (error) {

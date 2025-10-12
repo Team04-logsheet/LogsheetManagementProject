@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Card, Button, ListGroup, Badge, Alert } from "react-bootstrap";
 import { FaArrowLeft, FaCheckCircle, FaThumbsUp } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -15,7 +15,7 @@ const LogDetail = () => {
 
   const fetchLog = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/logs/${id}`);
+      const response = await api.get(`http://localhost:8080/api/logs/${id}`);
       setLog(response.data);
     } catch (err) {
       setError("Failed to load log details.");
@@ -31,7 +31,7 @@ const LogDetail = () => {
 
   const handleVerify = async () => {
     try {
-      await axios.patch(`http://localhost:8080/api/logs/${id}/verify`);
+      await api.patch(`http://localhost:8080/api/logs/${id}/verify`);
       setActionMessage("Log verified successfully!");
       fetchLog(); // Re-fetch to get updated state
     } catch (err) {
@@ -42,7 +42,7 @@ const LogDetail = () => {
 
   const handleApprove = async () => {
     try {
-      await axios.patch(`http://localhost:8080/api/logs/${id}/approve`);
+      await api.patch(`http://localhost:8080/api/logs/${id}/approve`);
       setActionMessage("Log approved successfully!");
       fetchLog(); // Re-fetch to get updated state
     } catch (err) {

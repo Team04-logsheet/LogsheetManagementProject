@@ -6,7 +6,7 @@ import AuthContext from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [userid, setUserid] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -19,7 +19,7 @@ export default function Login() {
     setError("");
 
     try {
-      await login(userid, password);
+      await login(email, password);
       // Navigation will be handled by the AuthContext
     } catch (err) {
       setError(err.message);
@@ -43,8 +43,8 @@ export default function Login() {
               type="text"
               className="form-control"
               placeholder="Email or User ID"
-              value={userid}
-              onChange={(e) => setUserid(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -58,6 +58,9 @@ export default function Login() {
               required
             />
           </div>
+
+          {error && <div className="alert alert-danger">{error}</div>}
+
           <button
             className="btn btn-primary w-100"
             type="submit"

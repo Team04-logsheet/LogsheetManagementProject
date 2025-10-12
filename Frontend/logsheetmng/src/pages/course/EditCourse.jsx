@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import CourseForm from "../../components/CourseForm";
 
 const EditCourse = () => {
@@ -20,7 +20,7 @@ const EditCourse = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8080/api/courses/${id}`
         );
         const { batchCycleId, premiseId, courseTypeId, ...rest } =
@@ -48,7 +48,7 @@ const EditCourse = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .put(`http://localhost:8080/api/courses/${id}`, course)
       .then(() => {
         alert("Course updated successfully!");

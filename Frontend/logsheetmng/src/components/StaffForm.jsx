@@ -1,9 +1,7 @@
-// src/components/StaffForm.jsx
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
-import axios from "axios";
+import api from "../utils/api";
 import FormInputField from "./FormInputField";
 import "../styles/listPage.css";
 
@@ -18,10 +16,9 @@ const StaffForm = ({
   const [roles, setRoles] = useState([]);
 
   useEffect(() => {
-    // Assuming an endpoint /api/roles to fetch all available roles
     const fetchRoles = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/roles");
+        const response = await api.get("http://localhost:8080/api/roles");
         setRoles(response.data);
       } catch (err) {
         console.error("Failed to fetch roles:", err);
@@ -92,7 +89,7 @@ const StaffForm = ({
             <option value="">Select a Role</option>
             {roles.map((role) => (
               <option key={role.id} value={role.id}>
-                {role.name} {/* Assuming role object has 'id' and 'name' */}
+                {role.name}
               </option>
             ))}
           </Form.Select>

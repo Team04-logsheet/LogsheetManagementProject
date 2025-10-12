@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import StaffForm from "../../components/StaffForm";
 
 const AddStaff = () => {
@@ -22,7 +22,7 @@ const AddStaff = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/staffs", staff);
+      await api.post("http://localhost:8080/api/staffs", staff);
       alert("Staff member created successfully!");
       navigate("/staffs");
     } catch (error) {

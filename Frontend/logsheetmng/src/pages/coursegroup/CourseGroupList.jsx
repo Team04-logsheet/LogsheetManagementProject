@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { FaPlus, FaPen, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import "../../styles/listPage.css";
 
 const CourseGroupList = () => {
   const [courses, setCourses] = useState([]);
-  const [courseGroups, setCourseGroups] = useState([]); 
+  const [courseGroups, setCourseGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -15,8 +15,8 @@ const CourseGroupList = () => {
     const fetchAll = async () => {
       try {
         const [courseRes, cgRes] = await Promise.all([
-          axios.get("http://localhost:8080/api/courses"),
-          axios.get("http://localhost:8080/api/course-groups"),
+          api.get("http://localhost:8080/api/courses"),
+          api.get("http://localhost:8080/api/course-groups"),
         ]);
         setCourses(courseRes.data || []);
         setCourseGroups(cgRes.data || []);
@@ -32,7 +32,7 @@ const CourseGroupList = () => {
   const handleDeleteMappingById = async (mappingId) => {
     if (!window.confirm("Delete this mapping?")) return;
     try {
-      await axios.delete(`http://localhost:8080/api/course-groups/${mappingId}`);
+      await api.delete(`http://localhost:8080/api/course-groups/${mappingId}`);
       alert("Deleted successfully.");
       setCourseGroups((prev) => prev.filter((cg) => cg.id !== mappingId));
     } catch (err) {
@@ -44,9 +44,13 @@ const CourseGroupList = () => {
   const handleDeleteAllForCourse = async (courseId) => {
     if (!window.confirm("Remove all groups from this course?")) return;
     try {
-      await axios.delete(`http://localhost:8080/api/course-groups/course/${courseId}/groups`);
+      await api.delete(
+        `http://localhost:8080/api/course-groups/course/${courseId}/groups`
+      );
       alert("All groups removed for course.");
-      setCourseGroups((prev) => prev.filter((cg) => cg.courseId !== Number(courseId)));
+      setCourseGroups((prev) =>
+        prev.filter((cg) => cg.courseId !== Number(courseId))
+      );
     } catch (err) {
       console.error("Error deleting course groups:", err);
       alert("Failed to remove groups for course.");
@@ -58,11 +62,14 @@ const CourseGroupList = () => {
   const grouped = {};
   courseGroups.forEach((cg) => {
     const cid = String(cg.courseId);
-    if (!grouped[cid]) grouped[cid] = { courseName: null, groupNames: [], mappingIds: [] };
-    grouped[cid].courseName = courses.find((c) => Number(c.id) === Number(cg.courseId))?.name || `Course ${cg.courseId}`;
+    if (!grouped[cid])
+      grouped[cid] = { courseName: null, groupNames: [], mappingIds: [] };
+    grouped[cid].courseName =
+      courses.find((c) => Number(c.id) === Number(cg.courseId))?.name ||
+      `Course ${cg.courseId}`;
     const gName = cg.group?.name ?? `Group ${cg.group?.id ?? "?"}`;
     grouped[cid].groupNames.push(gName);
-    grouped[cid].mappingIds.push(cg.id); 
+    grouped[cid].mappingIds.push(cg.id);
   });
 
   const courseRows = courses.map((c) => {
@@ -79,7 +86,10 @@ const CourseGroupList = () => {
     <div className="list-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Course Groups</h2>
-        <Button variant="primary" onClick={() => navigate("/groups/course-group/add")}>
+        <Button
+          variant="primary"
+          onClick={() => navigate("/groups/course-group/add")}
+        >
           <FaPlus className="me-2" /> Assign Groups
         </Button>
       </div>
@@ -96,20 +106,28 @@ const CourseGroupList = () => {
         <tbody>
           {courseRows.length === 0 ? (
             <tr>
-              <td colSpan={4} className="text-center">No courses found</td>
+              <td colSpan={4} className="text-center">
+                No courses found
+              </td>
             </tr>
           ) : (
             courseRows.map((row, idx) => (
               <tr key={row.courseId}>
                 <td>{idx + 1}</td>
                 <td>{row.courseName}</td>
-                <td>{row.groupNames.length ? row.groupNames.join(", ") : "No groups assigned"}</td>
+                <td>
+                  {row.groupNames.length
+                    ? row.groupNames.join(", ")
+                    : "No groups assigned"}
+                </td>
                 <td>
                   <Button
                     variant="warning"
                     size="sm"
                     className="me-2"
-                    onClick={() => navigate(`/groups/course-group/edit/${row.courseId}`)}
+                    onClick={() =>
+                      navigate(`/groups/course-group/edit/${row.courseId}`)
+                    }
                   >
                     <FaPen />
                   </Button>

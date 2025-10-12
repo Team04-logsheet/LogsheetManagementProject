@@ -1,12 +1,14 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
+import Login from "../pages/Login";
+import Layout from "../Layout";
+import ProtectedRoute from "./ProtectedRoute";
+import AdminHome from "../pages/admin/AdminHome";
+
+/* Batch Cycle */
 import BatchCycleList from "../pages/batchCycle/BatchCycleList";
 import EditBatchCycle from "../pages/batchCycle/EditBatchCycle";
 import AddBatchCycle from "../pages/batchCycle/AddBatchCycle";
-
-import Login from "../pages/Login";
-import AdminHome from "../pages/admin/AdminHome";
-import Layout from "../Layout";
 
 /* Menu Item */
 import MenuItemList from "../pages/menuItem/MenuItemList";
@@ -62,6 +64,7 @@ import ModuleList from "../pages/admin/module/ModuleList";
 import AddModule from "../pages/admin/module/AddModule";
 import EditModule from "../pages/admin/module/EditModule";
 import ModuleDetail from "../pages/admin/module/ModuleDetail";
+import ModuleRouterList from "../pages/moduleRouter/ModuleRouterList";
 
 /* Role ↔ Menu Item */
 import ListRoleMenuItem from "../pages/roleMenuItem/ListRoleMenuItem";
@@ -75,7 +78,6 @@ import LogsheetTypeList from "../pages/logsheetTypes/LogsheetTypeList";
 /* Course Coordinator */
 import CourseCoordinatorList from "../pages/courseCoordinator/CourseCoordinatorList";
 import AddCourseCoordinator from "../pages/courseCoordinator/AddCourseCoordinator";
-import EditCourseCoordinator from "../pages/courseCoordinator/EditCourseCoordinator";
 
 /*CourseGroup */
 import AddCourseGroup from "../pages/coursegroup/AddCourseGroup";
@@ -93,130 +95,133 @@ const AppRoutes = () => {
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
 
-      <Route element={<Layout />}>
-        <Route path="/home" element={<AdminHome />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Layout />}>
+          <Route path="/home" element={<AdminHome />} />
 
-        {/* Batch Cycle */}
-        <Route path="/courses/batch-cycle/add" element={<AddBatchCycle />} />
-        <Route
-          path="/courses/batch-cycle/edit/:id"
-          element={<EditBatchCycle />}
-        />
-        <Route path="/courses/batch-cycle" element={<BatchCycleList />} />
+          {/* Batch Cycle */}
+          <Route path="/courses/batch-cycle/add" element={<AddBatchCycle />} />
+          <Route
+            path="/courses/batch-cycle/edit/:id"
+            element={<EditBatchCycle />}
+          />
+          <Route path="/courses/batch-cycle" element={<BatchCycleList />} />
 
-        {/* Premises */}
-        <Route path="/courses/premises/add" element={<AddPremises />} />
-        <Route path="/courses/premises/edit/:id" element={<EditPremises />} />
-        <Route path="/courses/premises" element={<PremisesList />} />
+          {/* Premises */}
+          <Route path="/courses/premises/add" element={<AddPremises />} />
+          <Route path="/courses/premises/edit/:id" element={<EditPremises />} />
+          <Route path="/courses/premises" element={<PremisesList />} />
 
-        {/* Course Types */}
-        <Route path="/courses/course-type/add" element={<AddCourseType />} />
-        <Route
-          path="/courses/course-type/edit/:id"
-          element={<EditCourseType />}
-        />
-        <Route path="/courses/course-type" element={<CourseTypeList />} />
+          {/* Course Types */}
+          <Route path="/courses/course-type/add" element={<AddCourseType />} />
+          <Route
+            path="/courses/course-type/edit/:id"
+            element={<EditCourseType />}
+          />
+          <Route path="/courses/course-type" element={<CourseTypeList />} />
 
-        {/* Courses */}
-        <Route path="/courses/add" element={<AddCourse />} />
-        <Route path="/courses/edit/:id" element={<EditCourse />} />
-        <Route path="/courses" element={<CourseList />} />
-        <Route path="/courses/:id" element={<CourseDetail />} />
+          {/* Courses */}
+          <Route path="/courses/add" element={<AddCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses" element={<CourseList />} />
+          <Route path="/courses/:id" element={<CourseDetail />} />
 
-        {/* Role-Menu-Item (keep BEFORE any staff routes) */}
-        <Route path="/staffs/role-menu-item" element={<ListRoleMenuItem />} />
-        <Route
-          path="/staffs/role-menu-item/add"
-          element={<AddRoleMenuItem />}
-        />
-        <Route
-          path="/staffs/role-menu-item/edit/:roleId"
-          element={<EditRoleMenuItem />}
-        />
+          {/* Role-Menu-Item (keep BEFORE any staff routes) */}
+          <Route path="/staffs/role-menu-item" element={<ListRoleMenuItem />} />
+          <Route
+            path="/staffs/role-menu-item/add"
+            element={<AddRoleMenuItem />}
+          />
+          <Route
+            path="/staffs/role-menu-item/edit/:roleId"
+            element={<EditRoleMenuItem />}
+          />
 
-        {/* Menu Item */}
-        <Route path="/staffs/menu-item" element={<MenuItemList />} />
-        <Route path="/staffs/menu-item/add" element={<AddMenuItem />} />
-        <Route path="/staffs/menu-item/edit/:id" element={<EditMenuItem />} />
+          {/* Menu Item */}
+          <Route path="/staffs/menu-item" element={<MenuItemList />} />
+          <Route path="/staffs/menu-item/add" element={<AddMenuItem />} />
+          <Route path="/staffs/menu-item/edit/:id" element={<EditMenuItem />} />
 
-        {/* Role */}
-        <Route path="/staffs/role" element={<RoleList />} />
-        <Route path="/staffs/role/add" element={<AddRole />} />
-        <Route path="/staffs/role/edit/:id" element={<EditRole />} />
-        <Route path="/staffs/role/:id" element={<RoleDetail />} />
+          {/* Role */}
+          <Route path="/staffs/role" element={<RoleList />} />
+          <Route path="/staffs/role/add" element={<AddRole />} />
+          <Route path="/staffs/role/edit/:id" element={<EditRole />} />
+          <Route path="/staffs/role/:id" element={<RoleDetail />} />
 
-        {/* Course Coordinator */}
-        <Route
-          path="/staffs/course-coordinator"
-          element={<CourseCoordinatorList />}
-        />
-        <Route
-          path="/staffs/course-coordinator/add"
-          element={<AddCourseCoordinator />}
-        />
-        <Route
-          path="/staffs/course-coordinator/edit/:id"
-          element={<EditCourseCoordinator />}
-        />
+          {/* Course Coordinator */}
+          <Route
+            path="/staffs/course-coordinator"
+            element={<CourseCoordinatorList />}
+          />
+          <Route
+            path="/staffs/course-coordinator/add"
+            element={<AddCourseCoordinator />}
+          />
 
-        {/* Redirect to fix bad sidebar link /staffs/staff → /staffs */}
-        <Route
-          path="/staffs/staff"
-          element={<Navigate to="/staffs" replace />}
-        />
+          {/* Redirect to fix bad sidebar link /staffs/staff → /staffs */}
+          <Route
+            path="/staffs/staff"
+            element={<Navigate to="/staffs" replace />}
+          />
 
-        {/* Staff */}
-        <Route path="/staffs" element={<StaffList />} />
-        <Route path="/staffs/add" element={<AddStaff />} />
-        <Route path="/staffs/edit/:id" element={<EditStaff />} />
-        {/* Unambiguous detail route so it never conflicts */}
-        <Route path="/staffs/view/:id" element={<StaffDetail />} />
+          {/* Staff */}
+          <Route path="/staffs" element={<StaffList />} />
+          <Route path="/staffs/add" element={<AddStaff />} />
+          <Route path="/staffs/edit/:id" element={<EditStaff />} />
+          {/* Unambiguous detail route so it never conflicts */}
+          <Route path="/staffs/view/:id" element={<StaffDetail />} />
 
-        {/* Groups */}
-        <Route path="/groups/groups" element={<GroupTableList />} />
-        <Route path="/groups/add" element={<AddGroupTable />} />
-        <Route path="/groups/edit/:id" element={<EditGroupTable />} />
+          {/* Groups */}
+          <Route path="/groups/groups" element={<GroupTableList />} />
+          <Route path="/groups/add" element={<AddGroupTable />} />
+          <Route path="/groups/edit/:id" element={<EditGroupTable />} />
 
-        {/* Modules */}
-        <Route path="/modules/subject" element={<SubjectList />} />
-        <Route path="/modules/subject/add" element={<AddSubject />} />
-        <Route path="/modules/subject/edit/:id" element={<EditSubject />} />
+          {/* Modules */}
+          <Route path="/modules/subject" element={<SubjectList />} />
+          <Route path="/modules/subject/add" element={<AddSubject />} />
+          <Route path="/modules/subject/edit/:id" element={<EditSubject />} />
 
-        <Route path="/modules/section" element={<SectionList />} />
-        <Route path="/modules/section/add" element={<AddSection />} />
-        <Route path="/modules/section/edit/:id" element={<EditSection />} />
+          <Route path="/modules/section" element={<SectionList />} />
+          <Route path="/modules/section/add" element={<AddSection />} />
+          <Route path="/modules/section/edit/:id" element={<EditSection />} />
 
-        <Route path="/modules/topic" element={<TopicList />} />
-        <Route path="/modules/topic/add" element={<AddTopic />} />
+          <Route path="/modules/topic" element={<TopicList />} />
+          <Route path="/modules/topic/add" element={<AddTopic />} />
 
-        <Route path="/modules/module" element={<ModuleList />} />
-        <Route path="/modules/module/add" element={<AddModule />} />
-        <Route path="/modules/module/edit/:id" element={<EditModule />} />
-        <Route path="/modules/module/:id" element={<ModuleDetail />} />
+          <Route path="/modules/module" element={<ModuleList />} />
+          <Route path="/modules/module/add" element={<AddModule />} />
+          <Route path="/modules/module/edit/:id" element={<EditModule />} />
+          <Route path="/modules/module/:id" element={<ModuleDetail />} />
 
-        {/* Logsheet Type Routes */}
-        <Route
-          path="/logsheet/logsheet-type/add"
-          element={<AddLogsheetType />}
-        />
-        <Route
-          path="/logsheet/logsheet-type/edit/:id"
-          element={<EditLogsheetType />}
-        />
-        <Route path="/logsheet/logsheet-type" element={<LogsheetTypeList />} />
+          <Route path="/staffs/module-router" element={<ModuleRouterList />} />
 
-        {/*CourseGroup Route */}
-        <Route path="/groups/course-group" element={<CourseGroupList />} />
-        <Route path="/groups/course-group/add" element={<AddCourseGroup />} />
-        <Route
-          path="/groups/course-group/edit/:id"
-          element={<EditCourseGroup />}
-        />
+          {/* Logsheet Type Routes */}
+          <Route
+            path="/logsheet/logsheet-type/add"
+            element={<AddLogsheetType />}
+          />
+          <Route
+            path="/logsheet/logsheet-type/edit/:id"
+            element={<EditLogsheetType />}
+          />
+          <Route
+            path="/logsheet/logsheet-type"
+            element={<LogsheetTypeList />}
+          />
 
-        {/* Log Routes */}
-        <Route path="/logsheet/logs" element={<LogList />} />
-        <Route path="/logsheet/logs/add" element={<AddLog />} />
-        <Route path="/logsheet/logs/:id" element={<LogDetail />} />
+          {/*CourseGroup Route */}
+          <Route path="/groups/course-group" element={<CourseGroupList />} />
+          <Route path="/groups/course-group/add" element={<AddCourseGroup />} />
+          <Route
+            path="/groups/course-group/edit/:id"
+            element={<EditCourseGroup />}
+          />
+
+          {/* Log Routes */}
+          <Route path="/logsheet/logs" element={<LogList />} />
+          <Route path="/logsheet/logs/add" element={<AddLog />} />
+          <Route path="/logsheet/logs/:id" element={<LogDetail />} />
+        </Route>
       </Route>
     </Routes>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Button, Table } from "react-bootstrap";
 import { FaPen, FaTrash, FaInfoCircle } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -15,7 +15,7 @@ const RoleList = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/roles");
+        const response = await api.get("http://localhost:8080/api/roles");
         setRoles(response.data);
       } catch (err) {
         setError("Failed to fetch roles.");
@@ -34,7 +34,7 @@ const RoleList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this role?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/roles/${id}`);
+        await api.delete(`http://localhost:8080/api/roles/${id}`);
         alert("Role deleted successfully!");
         setRoles(roles.filter((role) => role.id !== id));
       } catch (error) {

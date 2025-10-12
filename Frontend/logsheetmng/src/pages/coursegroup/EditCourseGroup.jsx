@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import CourseGroupForm from "../../components/CourseGroupForm";
 
 const EditCourseGroup = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
   const [courseGroup, setCourseGroup] = useState({
     courseId: id,
@@ -15,7 +15,9 @@ const EditCourseGroup = () => {
   useEffect(() => {
     const fetchAssigned = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/api/course-groups/course/${id}`);
+        const res = await api.get(
+          `http://localhost:8080/api/course-groups/course/${id}`
+        );
         const data = res.data || [];
         const groupIds = data.map((cg) => Number(cg.group?.id)).filter(Boolean);
         setCourseGroup({ courseId: id, groupIds });
@@ -41,19 +43,25 @@ const EditCourseGroup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!courseGroup.courseId || !courseGroup.groupIds || courseGroup.groupIds.length === 0) {
+    if (
+      !courseGroup.courseId ||
+      !courseGroup.groupIds ||
+      courseGroup.groupIds.length === 0
+    ) {
       alert("Please select at least one group.");
       return;
     }
 
     try {
-      await axios.delete(`http://localhost:8080/api/course-groups/course/${id}/groups`);
+      await api.delete(
+        `http://localhost:8080/api/course-groups/course/${id}/groups`
+      );
 
       const payload = {
         courseId: Number(courseGroup.courseId),
         groupIds: courseGroup.groupIds.map(Number),
       };
-      await axios.post("http://localhost:8080/api/course-groups", payload);
+      await api.post("http://localhost:8080/api/course-groups", payload);
 
       alert("Course groups updated successfully!");
       navigate("/groups/course-group");

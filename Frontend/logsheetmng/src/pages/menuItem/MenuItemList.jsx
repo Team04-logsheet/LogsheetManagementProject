@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import { Button, Table } from "react-bootstrap";
 import { FaPen, FaTrash } from "react-icons/fa";
 import "../../styles/listPage.css";
@@ -14,7 +14,7 @@ const MenuItemList = () => {
 
   useEffect(() => {
     // Fetch menu items from the backend
-    axios
+    api
       .get("http://localhost:8080/api/menu-items")
       .then((response) => {
         setMenuItems(response.data);
@@ -34,7 +34,7 @@ const MenuItemList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this menu item?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/menu-items/${id}`);
+        await api.delete(`http://localhost:8080/api/menu-items/${id}`);
         alert("Menu item deleted successfully!");
         setMenuItems(menuItems.filter((item) => item.id !== id));
       } catch (error) {

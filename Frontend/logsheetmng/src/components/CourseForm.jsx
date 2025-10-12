@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
-import axios from "axios";
 import FormInputField from "./FormInputField";
 import "../styles/listPage.css";
+import api from "../utils/api";
 
 const CourseForm = ({
   course,
@@ -18,14 +18,13 @@ const CourseForm = ({
   const [courseTypes, setCourseTypes] = useState([]);
 
   useEffect(() => {
-    // Fetch dropdown data
     const fetchDropdownData = async () => {
       try {
         const [batchCyclesRes, premisesRes, courseTypesRes] = await Promise.all(
           [
-            axios.get("http://localhost:8080/api/batch-cycles"),
-            axios.get("http://localhost:8080/api/premises"),
-            axios.get("http://localhost:8080/api/course-types"),
+            api.get("http://localhost:8080/api/batch-cycles"),
+            api.get("http://localhost:8080/api/premises"),
+            api.get("http://localhost:8080/api/course-types"),
           ]
         );
         setBatchCycles(batchCyclesRes.data);

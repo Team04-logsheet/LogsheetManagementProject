@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../../utils/api";
 import { Button, Table, Spinner } from "react-bootstrap";
 import { FaPen, FaTrash } from "react-icons/fa";
 import "../../../styles/subjectList.css";
@@ -11,20 +11,28 @@ const SubjectList = () => {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]   = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    axios.get(`${BASE}/subjects/all`)
-      .then((r) => { setSubjects(r.data || []); setLoading(false); })
-      .catch(() => { setError("Failed to fetch subjects"); setLoading(false); });
+    api
+      .get(`${BASE}/subjects/all`)
+      .then((r) => {
+        setSubjects(r.data || []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Failed to fetch subjects");
+        setLoading(false);
+      });
   }, []);
 
   const handleEdit = (id) => navigate(`/modules/subject/edit/${id}`);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this subject? It may affect sections/topics.")) return;
+    if (!window.confirm("Delete this subject? It may affect sections/topics."))
+      return;
     try {
-      await axios.delete(`${BASE}/subjects/delete/${id}`);
+      await api.delete(`${BASE}/subjects/delete/${id}`);
       setSubjects((arr) => arr.filter((x) => x.id !== id));
       alert("Deleted");
     } catch (e) {
@@ -32,7 +40,12 @@ const SubjectList = () => {
     }
   };
 
-  if (loading) return <div className="list-container"><Spinner animation="border" /></div>;
+  if (loading)
+    return (
+      <div className="list-container">
+        <Spinner animation="border" />
+      </div>
+    );
   if (error) return <div className="list-container error">{error}</div>;
 
   return (
@@ -59,10 +72,19 @@ const SubjectList = () => {
                 <td>{idx + 1}</td>
                 <td>{s.subjectName}</td>
                 <td className="actions">
-                  <Button variant="warning" size="sm" className="me-2" onClick={() => handleEdit(s.id)}>
+                  <Button
+                    variant="warning"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => handleEdit(s.id)}
+                  >
                     <FaPen />
                   </Button>
-                  <Button variant="danger" size="sm" onClick={() => handleDelete(s.id)}>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(s.id)}
+                  >
                     <FaTrash />
                   </Button>
                 </td>

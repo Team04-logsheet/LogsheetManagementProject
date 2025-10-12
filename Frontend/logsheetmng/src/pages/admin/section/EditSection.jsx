@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../../utils/api";
 import { Button, Card, Form, Spinner } from "react-bootstrap";
 import "../../../styles/sectionEdit.css";
 
@@ -15,27 +15,34 @@ const EditSection = () => {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`${BASE}/sections/get/${id}`),
-      axios.get(`${BASE}/subjects/all`)
+      api.get(`${BASE}/sections/get/${id}`),
+      api.get(`${BASE}/subjects/all`),
     ])
       .then(([secRes, subRes]) => {
         const s = secRes.data;
-        setData({ sectionName: s.sectionName || "", subjectId: s.subjectId || "" });
+        setData({
+          sectionName: s.sectionName || "",
+          subjectId: s.subjectId || "",
+        });
         setSubjects(subRes.data || []);
         setLoading(false);
       })
-      .catch(() => { alert("Failed to load"); setLoading(false); });
+      .catch(() => {
+        alert("Failed to load");
+        setLoading(false);
+      });
   }, [id]);
 
-  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setData({ ...data, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${BASE}/sections/update/${id}`, {
+      await api.put(`${BASE}/sections/update/${id}`, {
         id,
         sectionName: data.sectionName.trim(),
-        subjectId: data.subjectId
+        subjectId: data.subjectId,
       });
       alert("Section updated!");
       navigate("/modules/section");
@@ -44,7 +51,12 @@ const EditSection = () => {
     }
   };
 
-  if (loading) return <div className="form-wrap"><Spinner animation="border" /></div>;
+  if (loading)
+    return (
+      <div className="form-wrap">
+        <Spinner animation="border" />
+      </div>
+    );
 
   return (
     <div className="form-wrap">
@@ -61,7 +73,11 @@ const EditSection = () => {
                 required
               >
                 <option value="">-- Select Subject --</option>
-                {subjects.map((s) => <option key={s.id} value={s.id}>{s.subjectName}</option>)}
+                {subjects.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.subjectName}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
@@ -76,7 +92,9 @@ const EditSection = () => {
               />
             </Form.Group>
             <div className="form-actions">
-              <Button variant="secondary" onClick={() => navigate(-1)}>Cancel</Button>
+              <Button variant="secondary" onClick={() => navigate(-1)}>
+                Cancel
+              </Button>
               <Button type="submit">Save</Button>
             </div>
           </Form>
